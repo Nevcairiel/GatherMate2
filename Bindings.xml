@@ -1,0 +1,7 @@
+<Bindings>
+	<Binding name="TOGGLE_GATHERMATE2_MINIMAPICONS" header="GatherMate2">
+		GatherMate2.db.profile["showMinimap"] = not GatherMate2.db.profile["showMinimap"]
+		GatherMate2:GetModule("Config"):UpdateConfig()
+		--LibStub("AceConfigRegistry-3.0"):NotifyChange("GatherMate2")
+	</Binding>
+</Bindings>
