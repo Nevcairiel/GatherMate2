@@ -34,6 +34,5 @@ externals:
 		tag: latest
     Libs/LibStub:
 		url: svn://svn.wowace.com/wow/libstub/mainline/tags/1.0
-		tag: latest
     Libs/LibMapData-1.0:
 		url: svn://svn.wowace.com/wow/libmapdata-1-0/mainline/branches/cataclysm
