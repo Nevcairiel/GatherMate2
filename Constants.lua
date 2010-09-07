@@ -14,6 +14,7 @@ local L = LibStub("AceLocale-3.0"):GetLocale("GatherMate2")
 	this allows Gathermate to be expanded a little easier by updating libmapdata new zones just come into play automatically.
 	it already stores off the localized name keyed to either the map file or area id.
 ]]
+
 local zone_data = { -- {width, height, zoneID}
 	Arathi = {3599.78645678886,2399.85763785924,1,},
 	Ogrimmar = {1402.563051365538,935.042034243692,2,},
@@ -190,6 +191,8 @@ specialZones[L["The Frozen Sea"]] = true
 specialZones[L["The North Sea"]] = true
 zoneList[L["The Frozen Sea"]] = zone_data["Northrend"]
 zoneList[L["The North Sea"]] = zone_data["Northrend"]
+
+GatherMate.mapData = LibStub("LibMapData-1.0")
 
 GatherMate.zoneData = zoneList
 GatherMate.continentData = continentList
@@ -444,7 +447,13 @@ Collector.specials = nodeRemap
 local Display = GatherMate:GetModule("Display")
 local icon_path = "Interface\\AddOns\\GatherMate\\Artwork\\"
 Display.trackingCircle = icon_path.."track_circle.tga"
-
+--[[
+local count = GetNumTrackingTypes();
+local info;
+for id=1, count do
+	name, texture, active, category  = GetTrackingInfo(id);
+end
+--]]
 Display:SetSkillTracking("Mining", "Interface\\Icons\\Spell_Nature_Earthquake")
 Display:SetSkillTracking("Herb Gathering", "Interface\\Icons\\INV_Misc_Flower_02")
 Display:SetSkillTracking("Fishing", "Interface\\Icons\\INV_Misc_Fish_02")

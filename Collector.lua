@@ -217,7 +217,8 @@ function Collector:addItem(skill,what)
 	--self:GatherCompleted()
 	-- TODO: Reimplement to use AreaID, if we get World/Consmic area id, we switch back to zones
 	-- name and put our special mappins into play.
-	local zone = GetRealZoneText()
+	local zoneID = GetCurrentMapAreaID()
+	local level = GetCurrentDungeonMapLevel()
 	local node_type = spells[skill]
 	if not node_type or not what then return end
 	-- db lock check
@@ -227,7 +228,7 @@ function Collector:addItem(skill,what)
 	local range = GatherMate.db.profile.cleanupRange[node_type]
 	-- special case for fishing and gas extraction guage the pointing direction
 	if node_type == fishSpell or node_type == gasSpell then
-		local yw, yh = GatherMate:GetZoneSize(zone)
+		local yw, yh = GatherMate:GetZoneSize(zoneID)
 		if yw == 0 or yh == 0 then return end -- No zone size data
 		x,y = self:GetFloatingNodeLocation(x, y, yw, yh)
 	end
@@ -237,8 +238,8 @@ function Collector:addItem(skill,what)
 	local rares = self.rareNodes
 	-- run through the nearby's
 	local skip = false
-	local zoneID = GatherMate:GetZoneID(zone)
-	local foundCoord = GatherMate:getID(x, y)
+	--local zoneID = GatherMate:GetZoneID(zone)
+	local foundCoord = GatherMate:getID(x, y, level)
 	local specialNode = false
 	local specialWhat = what
 	if foundCoord == lastNodeCoords and what == lastNode then return end
@@ -247,22 +248,23 @@ function Collector:addItem(skill,what)
 	--	specialWhat = GatherMate:GetNameForNode(node_type,self.specials[zoneID][node_type])
 	--	specialNode = true
 	--end
-	for coord, nodeID in GatherMate:FindNearbyNode(zone, x, y, node_type, range, true) do
-		if nodeID == nid or rares[nodeID] and rares[nodeID][nid]  then
+	for coord, nodeID in GatherMate:FindNearbyNode(zoneID, x, y, level, node_type, range, true) do
+		local xx,yy, llevel = GatherMate.mapData:DecodeLoc(coord)
+		if nodeID == nid or rares[nodeID] and rares[nodeID][nid]  and level ~= llevel then
 			GatherMate:RemoveNodeByID(zone, node_type, coord)
 		-- we're trying to add a rare node, but there is already a normal node present, skip the adding
-		elseif rares[nid] and rares[nid][nodeID] then
+		elseif rares[nid] and rares[nid][nodeID] and level ~= llevel then
 			skip = true
-		elseif specialNode then -- handle special case zone mappings
+		elseif specialNode and level ~= llevel then -- handle special case zone mappings
 			skip = false
 			GatherMate:RemoveNodeByID(zone, node_type, coord)
 		end
 	end
 	if not skip then
 		if specialNode then
-			GatherMate:AddNode(zone, x, y, node_type, specialWhat)
+			GatherMate:AddNode(zone, x, y, level, node_type, specialWhat)
 		else
-			GatherMate:AddNode(zone, x, y, node_type, what)
+			GatherMate:AddNode(zone, x, y, level, node_type, what)
 		end
 		lastNode = what
 		lastNodeCoords = foundCoord

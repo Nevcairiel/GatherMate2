@@ -148,15 +148,15 @@ end
 --[[
 	create an ID for an x, y coordinate to save space, we use a very simple format: xxxxyyyy
 ]]
-function GatherMate:getID(x, y)
-	return floor(x * 10000 + 0.5) * 10000 + floor(y * 10000 + 0.5)
-end
+--function GatherMate:getID(x, y)
+--	return floor(x * 10000 + 0.5) * 10000 + floor(y * 10000 + 0.5)
+--end
 --[[
 	create X,Y from an ID
 ]]
-function GatherMate:getXY(id)
-	return floor(id / 10000) / 10000, (id % 10000) / 10000
-end
+--function GatherMate:getXY(id)
+--	return floor(id / 10000) / 10000, (id % 10000) / 10000
+--end
 
 --[[
 	how big is the zone
@@ -169,21 +169,20 @@ end
 --[[
 	Convert a zone name to id
 ]]
-function GatherMate:GetZoneID(zone)
-	return self.zoneData[zone][3]
-end
+--function GatherMate:GetZoneID(zone)
+--	return self.zoneData[zone][3]
+--end
 --[[
 	Add an item to the DB
 ]]
-function GatherMate:AddNode(zone, x, y, nodeType, name)
+function GatherMate:AddNode(zoneID, x, y, level, nodeType, name)
 	local db = gmdbs[nodeType]
 	local id = self:getID(x, y)
-	local zoneID = self.zoneData[zone][3]
+	--local zoneID = self.zoneData[zone][3]
 	-- db lock check
 	if GatherMate.db.profile.dbLocks[nodeType] then
 		return
 	end
-	--LibStub("AceConsole-3.0"):Print("Type "..nodeType.." at "..x.." and "..y.. " as "..id.." :: "..name)
 	db[zoneID] = db[zoneID] or {}
 	db[zoneID][id] = self.nodeIDs[nodeType][name]
 	self:SendMessage("GatherMate2NodeAdded", zone, nodeType, id, name)
@@ -223,14 +222,15 @@ do
 		local data = t.data
 		local state, value = next(data, prestate)
 		local xLocal, yLocal, yw, yh = t.xLocal, t.yLocal, t.yw, t.yh
+		local lLevel = t.lLevel
 		local radiusSquared, filterTable, ignoreFilter = t.radiusSquared, t.filterTable, t.ignoreFilter
 		while state do
 			if filterTable[value] or ignoreFilter then
 				-- inline the :getXY() here in critical minimap update loop
-				local x2, y2 = floor(state / 10000) / 10000, (state % 10000) / 10000
+				local x2, y2, level2 = GatherMate.mapData:DecodeLoc(state)
 				local x = (x2 - xLocal) * yw
 				local y = (y2 - yLocal) * yh
-				if x*x + y*y <= radiusSquared then
+				if x*x + y*y <= radiusSquared and level2 == lLevel then
 					return state, value
 				end
 			end
@@ -244,14 +244,14 @@ do
 		Find all nearby nodes within the radius of the given (x,y) for a nodeType and zone
 		this function returns an iterator
 	]]
-	function GatherMate:FindNearbyNode(zone, x, y, nodeType, radius, ignoreFilter)
+	function GatherMate:FindNearbyNode(zone, x, y, level, nodeType, radius, ignoreFilter)
 		local tbl = next(tablestack) or {}
 		tablestack[tbl] = nil
-
 		tbl.data = gmdbs[nodeType][self.zoneData[zone][3]] or emptyTbl
 		tbl.yw, tbl.yh = self.zoneData[zone][1], self.zoneData[zone][2]
 		tbl.radiusSquared = radius * radius
 		tbl.xLocal, tbl.yLocal = x, y
+		tbl.lLocal = level
 		tbl.filterTable = filter[nodeType]
 		tbl.ignoreFilter = ignoreFilter
 		return dbCoordIterNearby, tbl, nil
@@ -297,8 +297,9 @@ end
 --[[
 	convert a point on the map to yard values
 ]]
-function GatherMate:PointToYards(x,y,zone)
-	return self.zoneData[zone][1] * x, self.zoneData[zone][2] * y
+function GatherMate:PointToYards(x,y,zone,level)
+	--return self.mapData:PointToYards(zone,level,x,y)
+	return 0,0
 end
 --[[
 	Distance squared between 2 nodes in the same zone

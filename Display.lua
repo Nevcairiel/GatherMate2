@@ -34,7 +34,8 @@ local minimapStrata, worldmapStrata, minimapFrameLevel, worldmapFrameLevel
 local math_sin, math_cos, abs, max = math.sin, math.cos, math.abs, math.max
 local sin, cos
 -- API function cache
-local GetRealZoneText, GetPlayerMapPosition = GetRealZoneText, GetPlayerMapPosition
+local GetRealZoneText, GetPlayerMapPosition, GetCurrentMapAreaID = GetRealZoneText, GetPlayerMapPosition, GetCurrentMapAreaID
+local GetProfessionInfo, GetCurrentMapDungeonLevel = GetProfessionInfo, GetCurrentMapDungeonLevel
 local strfind, format = string.find, string.format
 local trackingCircle, nodeTextures
 local db
@@ -48,7 +49,7 @@ local trackShow = {}
 local profession_to_skill = {}
 local have_prof_skill = {}
 
-local active_tracking
+local active_tracking = {}
 local texture_to_skill = {}
 
 --[[
@@ -152,17 +153,7 @@ local function pinClick(self, button)
 		end
 	end
 end
---[[
-	Add pin location to Cartographer_Waypoints
-]]
-local function addCartWaypoint(button,pin)
-	if Cartographer and Cartographer.HasModule and Cartographer:HasModule("Waypoints") and Cartographer:IsModuleActive("Waypoints") then
-		local x, y = GatherMate:getXY(pin.coords)
-		local cartCoordID = floor(x*10000 + 0.5) + floor(y*10000 + 0.5)*10001
-		local BZR = LibStub("LibBabble-Zone-3.0"):GetReverseLookupTable()
-		Cartographer_Waypoints:AddRoutesWaypoint(BZR[pin.zone], cartCoordID, pin.title)
-	end
-end
+
 --[[
 	Add pin location to TomTom waypoints
 ]]
@@ -198,15 +189,6 @@ local function generatePinMenu(self,level)
 				info.arg1 = pin
 				UIDropDownMenu_AddButton(info, level);
 			end
-		end
-
-		-- Cartographer_Waypoints menu item
-		if Cartographer and Cartographer.HasModule and Cartographer:HasModule("Waypoints") and Cartographer:IsModuleActive("Waypoints") then
-			info.text = L["Add this location to Cartographer_Waypoints"]
-			info.icon = nil
-			info.func = addCartWaypoint
-			info.arg1 = pinClickedOn
-			UIDropDownMenu_AddButton(info, level)
 		end
 
 		if TomTom then
@@ -319,14 +301,10 @@ function Display:SKILL_LINES_CHANGED()
 		have_prof_skill[k] = nil
 	end
 
-	for i = 1, GetNumSkillLines() do
-		skillname, isHeader = GetSkillLineInfo(i)
-		if not isHeader and skillname then
-			for prof, skill in pairs(profession_to_skill) do
-				if strfind(skillname, prof, 1, true) then
-					have_prof_skill[skill] = true
-				end
-			end
+	for index, key in ipairs({GetProfessions()}) do
+		name, icon, rank, maxrank, numspells, spelloffset, skillline = GetProfessionInfo(key)
+		if profession_to_skill[name] then
+			have_prof_skill[profession_to_skill[name]] = true
 		end
 	end
 	self:UpdateVisibility()
@@ -334,7 +312,18 @@ function Display:SKILL_LINES_CHANGED()
 end
 
 function Display:MINIMAP_UPDATE_TRACKING()
-	active_tracking = texture_to_skill[GetTrackingTexture()]
+	local count = GetNumTrackingTypes();
+	local info;
+	for id=1, count do
+		name, texture, active, category  = GetTrackingInfo(id);
+		if texture_to_skill[texture] and active then
+			active_tracking[texture_to_skill[texture]] = true
+		else
+			if texture_to_skill[texture] then
+				active_tracking[texture_to_skill[texture]] = false
+			end
+		end
+	end
 	self:UpdateVisibility()
 	self:UpdateMaps()
 end
@@ -454,13 +443,14 @@ end
 --[[
 	Add a new pin to the minimap
 ]]
-function Display:getMiniPin(coord, nodeID, nodeType, zone, index)
+function Display:getMiniPin(coord, nodeID, nodeType, zone, level, index)
 	local pin = minimapPins[index]
 	if not pin then
 		pin = self:getMapPin()
 		pin.coords = coord
 		pin.title = GatherMate:GetNameForNode(nodeType, nodeID)
 		pin.zone = zone
+		pin.lvel = level
 		pin.nodeID = nodeID
 		pin.nodeType = nodeType
 		pin.worldmap = false
@@ -476,7 +466,7 @@ function Display:getMiniPin(coord, nodeID, nodeType, zone, index)
 		pin.texture:SetTexCoord(0, 1, 0, 1)
 		pin.texture:SetVertexColor(1, 1, 1, 1)
 		pin.x, pin.y = GatherMate:getXY(coord)
-		pin.x1, pin.y1 = GatherMate:PointToYards(pin.x,pin.y,zone)
+		pin.x1, pin.y1 = GatherMate:PointToYards(pin.x,pin.y,zone,level)
 		minimapPins[index] = pin
 	end
 	return pin
@@ -617,6 +607,7 @@ function Display:UpdateIconPositions()
 
 	-- get current player position
 	local x, y = GetPlayerMapPosition("player")
+	local level = GetcurrentMapDungeonLevel()
 	-- if position is 0, the player changed the worldmap to another zone, just keep the old values
 	if (x == 0 or y == 0 or GetCurrentMapZone() == 0) and not specialZones[zone] then
 		x, y = lastX, lastY
@@ -648,7 +639,7 @@ function Display:UpdateIconPositions()
 		mapRadius = self.minimapSize[indoors][zoom] / 2
 
 		-- we calculate the distance to the node in yards
-		local _x, _y =  GatherMate:PointToYards(x, y, zone)
+		local _x, _y =  GatherMate:PointToYards(x, y, zone, level)
 		-- update upvalues for icon placement
 		lastX, lastY = x, y
 		lastXY, lastYY = _x, _y
@@ -676,7 +667,8 @@ function Display:UpdateMiniMap(force)
 
 	-- update our zone info
 	zone = GetRealZoneText()
-	if not zone or zone == "" or not rawget(zoneData, zone) then
+	local level = GetCurrentMapDungeonLevel()
+	if not zone or zone == "" then
 		zone = nil
 		return
 	end
@@ -722,7 +714,7 @@ function Display:UpdateMiniMap(force)
 		minimapFrameLevel = Minimap:GetFrameLevel() + 5
 
 		-- calculate distance in yards
-		local _x, _y =  GatherMate:PointToYards(x, y, zone)
+		local _x, _y =  GatherMate:PointToYards(x, y, zone,level)
 
 		-- update upvalues for icon placement
 		lastX, lastY = x, y
@@ -736,15 +728,15 @@ function Display:UpdateMiniMap(force)
 		end
 
 		-- iterate the node databases and add the nodes
-		for i,db_type in pairs(GatherMate.db_types) do
-			if GatherMate.Visible[db_type] then
-				for coord, nodeID in GatherMate:FindNearbyNode(zone, x, y, db_type, mapRadius*nodeRange) do
-					local pin = self:getMiniPin(coord, nodeID, db_type, zone, (i * 1e9) + coord)
-					pin.keep = true
-					self:addMiniPin(pin, force)
-				end
-			end
-		end
+		--for i,db_type in pairs(GatherMate.db_types) do
+		--	if GatherMate.Visible[db_type] then
+		--		for coord, nodeID in GatherMate:FindNearbyNode(zone, x, y, db_type, mapRadius*nodeRange) do
+		--			local pin = self:getMiniPin(coord, nodeID, db_type, zone, (i * 1e9) + coord)
+		--			pin.keep = true
+		--			self:addMiniPin(pin, force)
+		--		end
+		--	end
+		--end
 
 		minimapPinCount = 0
 		for k,v in pairs(minimapPins) do
@@ -784,13 +776,13 @@ function Display:UpdateWorldMap(force)
 	worldmapStrata = WorldMapButton:GetFrameStrata()
 	worldmapFrameLevel = WorldMapButton:GetFrameLevel() + 5
 
-	for i,db_type in pairs(GatherMate.db_types) do
-		if GatherMate.Visible[db_type] then
-			for coord, nodeID in GatherMate:GetNodesForZone(zname, db_type) do
-				self:addWorldPin(coord, nodeID, db_type, zname, (i * 1e9) + coord).keep = true
-			end
-		end
-	end
+--	for i,db_type in pairs(GatherMate.db_types) do
+--		if GatherMate.Visible[db_type] then
+--			for coord, nodeID in GatherMate:GetNodesForZone(zname, db_type) do
+--				self:addWorldPin(coord, nodeID, db_type, zname, (i * 1e9) + coord).keep = true
+--			end
+--		end
+--	end
 
 	for index, pin in pairs(worldmapPins) do
 		if pin.keep then
