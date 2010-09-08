@@ -245,13 +245,12 @@ function Collector:addItem(skill,what)
 	end
 	--]]
 	for coord, nodeID in GatherMate:FindNearbyNode(zone, x, y, level, node_type, range, true) do
-		local xx,yy, llevel = GatherMate.mapData:DecodeLoc(coord)
-		if (nodeID == nid or rares[nodeID] and rares[nodeID][nid]) and level == llevel then
+		if (nodeID == nid or rares[nodeID] and rares[nodeID][nid]) then
 			GatherMate:RemoveNodeByID(zone, node_type, coord)
 		-- we're trying to add a rare node, but there is already a normal node present, skip the adding
-		elseif rares[nid] and rares[nid][nodeID] and level == llevel then
+		elseif rares[nid] and rares[nid][nodeID] then
 			skip = true
-		elseif specialNode and level == llevel then -- handle special case zone mappings
+		elseif specialNode then -- handle special case zone mappings
 			skip = false
 			GatherMate:RemoveNodeByID(zone, node_type, coord)
 		end
