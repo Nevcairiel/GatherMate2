@@ -209,26 +209,22 @@ local lastNodeCoords = 0
 function Collector:addItem(skill,what)
 	local x, y = GetPlayerMapPosition("player")
 	if x == 0 and y == 0 then return end
-
 	-- Temporary fix, the map "ScarletEnclave" and "EasternPlaguelands"
 	-- both have the same English display name as "Eastern Plaguelands"
 	-- so we ignore the new Death Knight starting zone for now.
 	if GetMapInfo() == "ScarletEnclave" then return end
 	--self:GatherCompleted()
-	-- TODO: Reimplement to use AreaID, if we get World/Consmic area id, we switch back to zones
-	-- name and put our special mappins into play.
-	local zoneID = GetCurrentMapAreaID()
-	local level = GetCurrentDungeonMapLevel()
+	local zone = GetCurrentMapAreaID()
+	local level = GetCurrentMapDungeonLevel()
 	local node_type = spells[skill]
 	if not node_type or not what then return end
 	-- db lock check
-	if GatherMate.db.profile.dbLocks[node_type] then
-		return
-	end
+	if GatherMate.db.profile.dbLocks[node_type] then return	end
+
 	local range = GatherMate.db.profile.cleanupRange[node_type]
 	-- special case for fishing and gas extraction guage the pointing direction
 	if node_type == fishSpell or node_type == gasSpell then
-		local yw, yh = GatherMate:GetZoneSize(zoneID)
+		local yw, yh = GatherMate:GetZoneSize(zone,level)
 		if yw == 0 or yh == 0 then return end -- No zone size data
 		x,y = self:GetFloatingNodeLocation(x, y, yw, yh)
 	end
@@ -238,28 +234,30 @@ function Collector:addItem(skill,what)
 	local rares = self.rareNodes
 	-- run through the nearby's
 	local skip = false
-	--local zoneID = GatherMate:GetZoneID(zone)
-	local foundCoord = GatherMate:getID(x, y, level)
+	local foundCoord = GatherMate.mapData:EncodeLoc(x, y, level)
 	local specialNode = false
 	local specialWhat = what
 	if foundCoord == lastNodeCoords and what == lastNode then return end
-	-- DISABLE SPECIAL NODE PROCESSING FOR HERBS
-	--if self.specials[zoneID] and self.specials[zoneID][node_type] ~= nil then
-	--	specialWhat = GatherMate:GetNameForNode(node_type,self.specials[zoneID][node_type])
-	--	specialNode = true
-	--end
-	for coord, nodeID in GatherMate:FindNearbyNode(zoneID, x, y, level, node_type, range, true) do
+	--[[ DISABLE SPECIAL NODE PROCESSING FOR HERBS
+	if self.specials[zone] and self.specials[zone][node_type] ~= nil then
+		specialWhat = GatherMate:GetNameForNode(node_type,self.specials[zone][node_type])
+		specialNode = true
+	end
+	--]]
+--[[	for coord, nodeID in GatherMate:FindNearbyNode(zone, x, y, level, node_type, range, true) do
 		local xx,yy, llevel = GatherMate.mapData:DecodeLoc(coord)
 		if nodeID == nid or rares[nodeID] and rares[nodeID][nid]  and level ~= llevel then
 			GatherMate:RemoveNodeByID(zone, node_type, coord)
 		-- we're trying to add a rare node, but there is already a normal node present, skip the adding
 		elseif rares[nid] and rares[nid][nodeID] and level ~= llevel then
+			print("skipping")
 			skip = true
 		elseif specialNode and level ~= llevel then -- handle special case zone mappings
 			skip = false
 			GatherMate:RemoveNodeByID(zone, node_type, coord)
 		end
 	end
+--]]
 	if not skip then
 		if specialNode then
 			GatherMate:AddNode(zone, x, y, level, node_type, specialWhat)

@@ -72,18 +72,18 @@ local next = next
 	:OnInitialize() is called at ADDON_LOADED so savedvariables are loaded
 ]]
 function GatherMate:OnInitialize()
-	self.db = LibStub("AceDB-3.0"):New("GatherMateDB", defaults, "Default")
+	self.db = LibStub("AceDB-3.0"):New("GatherMate2DB", defaults, "Default")
 	self.db.RegisterCallback(self, "OnProfileChanged", "OnProfileChanged")
 	self.db.RegisterCallback(self, "OnProfileCopied", "OnProfileChanged")
 	self.db.RegisterCallback(self, "OnProfileReset", "OnProfileChanged")
 
 	-- Setup our saved vars, we dont use AceDB, cause it over kills
 	-- These 4 savedvars are global and doesnt need char specific stuff in it
-	GatherMateHerbDB = GatherMateHerbDB or {}
-	GatherMateMineDB = GatherMateMineDB or {}
-	GatherMateGasDB = GatherMateGasDB or {}
-	GatherMateFishDB = GatherMateFishDB or {}
-	GatherMateTreasureDB = GatherMateTreasureDB or {}
+	GatherMate2HerbDB = GatherMate2HerbDB or {}
+	GatherMate2MineDB = GatherMate2MineDB or {}
+	GatherMate2GasDB = GatherMate2GasDB or {}
+	GatherMate2FishDB = GatherMate2FishDB or {}
+	GatherMate2TreasureDB = GatherMate2TreasureDB or {}
 	self.gmdbs = {}
 	self.db_types = {}
 	gmdbs = self.gmdbs
@@ -161,9 +161,10 @@ end
 --[[
 	how big is the zone
 ]]
-function GatherMate:GetZoneSize(zone)
-	local x = self.zoneData[zone]
-	if x then return x[1], x[2]	else return 0, 0 end
+function GatherMate:GetZoneSize(zone,level)
+	return self.mapData:MapArea(zone,level)
+	--local x = self.zoneData[zone]
+	--if x then return x[1], x[2]	else return 0, 0 end
 end
 
 --[[
@@ -176,8 +177,9 @@ end
 	Add an item to the DB
 ]]
 function GatherMate:AddNode(zoneID, x, y, level, nodeType, name)
+	print("Addind "..name..":"..nodeType.." to "..x..","..y.." zone "..zoneID.." level "..level)
 	local db = gmdbs[nodeType]
-	local id = self:getID(x, y)
+	local id = self.mapData:EncodeLoc(x,y,level) --self:getID(x, y)
 	--local zoneID = self.zoneData[zone][3]
 	-- db lock check
 	if GatherMate.db.profile.dbLocks[nodeType] then
@@ -185,7 +187,7 @@ function GatherMate:AddNode(zoneID, x, y, level, nodeType, name)
 	end
 	db[zoneID] = db[zoneID] or {}
 	db[zoneID][id] = self.nodeIDs[nodeType][name]
-	self:SendMessage("GatherMate2NodeAdded", zone, nodeType, id, name)
+	self:SendMessage("GatherMate2NodeAdded", zone, level, nodeType, id, name)
 end
 
 --[[
