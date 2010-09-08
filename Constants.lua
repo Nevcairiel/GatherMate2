@@ -445,7 +445,7 @@ Collector.specials = nodeRemap
 	Below are Display Module Constants
 ]]
 local Display = GatherMate:GetModule("Display")
-local icon_path = "Interface\\AddOns\\GatherMate\\Artwork\\"
+local icon_path = "Interface\\AddOns\\GatherMate2\\Artwork\\"
 Display.trackingCircle = icon_path.."track_circle.tga"
 --[[
 local count = GetNumTrackingTypes();

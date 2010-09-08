@@ -61,8 +61,7 @@ end
 	Enable the collector
 ]]
 function Collector:OnEnable()
-	self:RegisterEvent("PLAYER_ENTERING_WORLD", "ZoneChange")
-	self:ZoneChange()
+	self:RegisterGatherEvents()
 end
 
 --[[
@@ -97,20 +96,8 @@ function Collector:UnregisterGatherEvents()
 end
 
 --[[
-	Change of Zone event
-]]
-function Collector:ZoneChange()
-	local inInstance, instanceType = IsInInstance()
-	if inInstance and gatherEvents then
-		self:UnregisterGatherEvents()
-	elseif not gatherEvents then
-		self:RegisterGatherEvents()
-	end
-end
---[[
 	This is a hack for scanning mote extraction, hopefully blizz will make the mote mobs visible so we can mouse over
 	or get a better event instead of cha msg parsing
-	!! I have changed some places in this funktion and added with it mine is implemented funktion and this the gas seem, they an event UNIT_DIED have here are immediately processed.  Devil™ @malfurion
 	UNIT_DISSIPATES,0x0000000000000000,nil,0x80000000,0xF1307F0A00002E94,"Cinder Cloud",0xa28 now fires in cataclysm so hack not needed any more
 ]]
 function Collector:GasBuffDetector(b,timestamp, eventType, srcGUID, srcName, srcFlags, dstGUID, dstName, dstFlags, spellId,spellName,spellSchool,auraType)

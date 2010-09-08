@@ -145,70 +145,48 @@ function GatherMate:ClearDB(dbx)
 		end
 	end
 end
---[[
-	create an ID for an x, y coordinate to save space, we use a very simple format: xxxxyyyy
-]]
---function GatherMate:getID(x, y)
---	return floor(x * 10000 + 0.5) * 10000 + floor(y * 10000 + 0.5)
---end
---[[
-	create X,Y from an ID
-]]
---function GatherMate:getXY(id)
---	return floor(id / 10000) / 10000, (id % 10000) / 10000
---end
 
 --[[
 	how big is the zone
 ]]
 function GatherMate:GetZoneSize(zone,level)
 	return self.mapData:MapArea(zone,level)
-	--local x = self.zoneData[zone]
-	--if x then return x[1], x[2]	else return 0, 0 end
 end
 
 --[[
-	Convert a zone name to id
-]]
---function GatherMate:GetZoneID(zone)
---	return self.zoneData[zone][3]
---end
---[[
 	Add an item to the DB
 ]]
-function GatherMate:AddNode(zoneID, x, y, level, nodeType, name)
-	print("Addind "..name..":"..nodeType.." to "..x..","..y.." zone "..zoneID.." level "..level)
+function GatherMate:AddNode(zone, x, y, level, nodeType, name)
 	local db = gmdbs[nodeType]
-	local id = self.mapData:EncodeLoc(x,y,level) --self:getID(x, y)
-	--local zoneID = self.zoneData[zone][3]
+	local id = self.mapData:EncodeLoc(x,y,level)
 	-- db lock check
 	if GatherMate.db.profile.dbLocks[nodeType] then
 		return
 	end
-	db[zoneID] = db[zoneID] or {}
-	db[zoneID][id] = self.nodeIDs[nodeType][name]
-	self:SendMessage("GatherMate2NodeAdded", zone, level, nodeType, id, name)
+	db[zone] = db[zone] or {}
+	db[zone][id] = self.nodeIDs[nodeType][name]
+	self:SendMessage("GatherMate2NodeAdded", zone, nodeType, id, name)
 end
 
 --[[
 	These 2 functions are only called by the importer/sharing. These
 	do NOT fire GatherMateNodeAdded or GatherMateNodeDeleted messages.
 ]]
-function GatherMate:InjectNode(zoneID, coords, nodeType, nodeID)
+function GatherMate:InjectNode(zone, coords, nodeType, nodeID)
 	local db = gmdbs[nodeType]
 	-- db lock check
 	if GatherMate.db.profile.dbLocks[nodeType] then
 		return
 	end
-	db[zoneID] = db[zoneID] or {}
+	db[zoneID] = db[zone] or {}
 	db[zoneID][coords] = nodeID
 end
-function GatherMate:DeleteNode(zoneID, coords, nodeType)
+function GatherMate:DeleteNode(zone, coords, nodeType)
 	-- db lock check
 	if GatherMate.db.profile.dbLocks[nodeType] then
 		return
 	end
-	local db = gmdbs[nodeType][zoneID]
+	local db = gmdbs[nodeType][zone]
 	if db then
 		db[coords] = nil
 	end
@@ -249,11 +227,11 @@ do
 	function GatherMate:FindNearbyNode(zone, x, y, level, nodeType, radius, ignoreFilter)
 		local tbl = next(tablestack) or {}
 		tablestack[tbl] = nil
-		tbl.data = gmdbs[nodeType][self.zoneData[zone][3]] or emptyTbl
-		tbl.yw, tbl.yh = self.zoneData[zone][1], self.zoneData[zone][2]
+		tbl.data = gmdbs[nodeType][zone] or emptyTbl
+		tbl.yw, tbl.yh =  self.mapData:MapArea(zone,level)
 		tbl.radiusSquared = radius * radius
 		tbl.xLocal, tbl.yLocal = x, y
-		tbl.lLocal = level
+		tbl.lLevel = level
 		tbl.filterTable = filter[nodeType]
 		tbl.ignoreFilter = ignoreFilter
 		return dbCoordIterNearby, tbl, nil
@@ -278,7 +256,7 @@ do
 		This function returns an iterator for the given zone and nodeType
 	]]
 	function GatherMate:GetNodesForZone(zone, nodeType, ignoreFilter)
-		local t = gmdbs[nodeType][self.zoneData[zone][3]] or emptyTbl
+		local t = gmdbs[nodeType][zone] or emptyTbl
 		if ignoreFilter then
 			return pairs(t)
 		else
@@ -293,24 +271,24 @@ end
 --[[
 	Get the distance between 2 points in a zone
 ]]
-function GatherMate:Distance(...)
-	return self:NodeDistanceSquared(...) ^ 0.5
+function GatherMate:Distance(zone,floor,x1,y1,x2,y2)
+	local distance,xdelta,ydelta = self.mapData:Distance(zone,floor, x1,y1,x2,y2)
+	return distance
 end
 --[[
 	convert a point on the map to yard values
 ]]
 function GatherMate:PointToYards(x,y,zone,level)
-	--return self.mapData:PointToYards(zone,level,x,y)
-	return 0,0
+	return self.mapData:PointToYards(zone,level,x,y)
 end
 --[[
 	Distance squared between 2 nodes in the same zone
 ]]
-function GatherMate:NodeDistanceSquared(x1, y1, x2, y2, zone)
-	local x = (x2 - x1) * self.zoneData[zone][1]
-	local y = (y2 - y1) * self.zoneData[zone][2]
-	return x*x + y*y
-end
+--function GatherMate:NodeDistanceSquared(x1, y1, x2, y2, zone, level)
+--	local x = (x2 - x1) * self.zoneData[zone][1]
+--	local y = (y2 - y1) * self.zoneData[zone][2]
+--	return x*x + y*y
+--end
 --[[
 	Node id function forward and reverse
 ]]
@@ -326,10 +304,9 @@ end
 --[[
 	Remove an item from the DB
 ]]
-function GatherMate:RemoveNode(zone, x, y, nodeType)
-	local zoneID = self.zoneData[zone][3]
-	local db = gmdbs[nodeType][zoneID]
-	local coord = self:getID(x,y)
+function GatherMate:RemoveNode(zone, x, y, level, nodeType)
+	local db = gmdbs[nodeType][zone]
+	local coord = self.mapData:EncodeLoc(x,y,level)
 	if db[coord] then
 		local t = self.reverseNodeIDs[nodeType][db[coord]]
 		db[coord] = nil
@@ -340,12 +317,11 @@ end
 	Remove an item from the DB by node ID and type
 ]]
 function GatherMate:RemoveNodeByID(zone, nodeType, coord)
-	local zoneID = self.zoneData[zone][3]
 	-- db lock check
 	if GatherMate.db.profile.dbLocks[nodeType] then
 		return
 	end
-	local db = gmdbs[nodeType][zoneID]
+	local db = gmdbs[nodeType][zone]
 	if db[coord] then
 		local t = self.reverseNodeIDs[nodeType][db[coord]]
 		db[coord] = nil
@@ -359,13 +335,14 @@ end
 function GatherMate:CleanupDB()
 	local Collector = GatherMate:GetModule("Collector")
 	local rares = Collector.rareNodes
-	for zone,v in pairs(GatherMate.zoneData) do
+	-- Need to iterate list of zones here
+	for zone,v in pairs(GatherMate.mapData:GetAllMapsIDs()) do
 		--self:Print(L["Processing "]..zone)
 		for profession in pairs(gmdbs) do
 			local range = db.cleanupRange[profession]
 			for coord, nodeID in self:GetNodesForZone(zone, profession, true) do
-				local x,y = self:getXY(coord)
-				for _coord, _nodeID in self:FindNearbyNode(zone, x, y, profession, range, true) do
+				local x,y,level = self.mapData:DecodeLoc(coord)
+				for _coord, _nodeID in self:FindNearbyNode(zone, x, y, level, profession, range, true) do
 					if coord ~= _coord and (nodeID == _nodeID or (rares[_nodeID] and rares[_nodeID][nodeID])) then
 						self:RemoveNodeByID(zone, profession, _coord)
 					end
@@ -381,8 +358,7 @@ end
 	Function to delete all of a specified node from a specific zone
 ]]
 function GatherMate:DeleteNodeFromZone(nodeType, nodeID, zone)
-	local zoneID = self.zoneData[zone][3]
-	local db = gmdbs[nodeType][zoneID]
+	local db = gmdbs[nodeType][zone]
 	if db then
 		for coord, node in pairs(db) do
 			if node == nodeID then
