@@ -6,8 +6,6 @@ local L = LibStub("AceLocale-3.0"):GetLocale("GatherMate2")
 local minimapPins, minimapPinCount = {}, 0
 -- Current worldmap pin set
 local worldmapPins = {}
--- cache of zones names by continent and zoned id from WowAPI
-local zoneData, continentData, specialZones
 -- table for UIDropdownMenu info
 local info = {}
 -- cache of pins
@@ -19,7 +17,7 @@ local lastLevel = 0
 -- reference to the pin generating the UIDropDown
 local pinClickedOn
 -- our current zone
-local zone = ""
+local zone = -1
 -- cache of table insert functions
 local tinsert, tremove, next, pairs = tinsert, tremove, next, pairs
 -- minimap rotation
@@ -145,7 +143,7 @@ end
 local function pinClick(self, button)
 	if button == "RightButton" and self.worldmap then
 		pinClickedOn = self
-		ToggleDropDownMenu(1, nil, GatherMate_GenericDropDownMenu, self:GetName(), 0, 0)
+		ToggleDropDownMenu(1, nil, GatherMate2_GenericDropDownMenu, self:GetName(), 0, 0)
 	elseif self.worldmap == false then
 		-- This "simulates" clickthru on the minimap to ping the minimap, by roughknight
 		if Minimap:GetObjectType() == "Minimap" then -- This is for SexyMap's HudMap, which reparents to a hud frame that isn't a minimap
@@ -213,9 +211,9 @@ end
 --[[
 	Setup the dropdown menu
 ]]
-local GatherMate_GenericDropDownMenu = CreateFrame("Frame", "GatherMate2_GenericDropDownMenu")
-GatherMate_GenericDropDownMenu.displayMode = "MENU"
-GatherMate_GenericDropDownMenu.initialize = generatePinMenu
+local GatherMate2_GenericDropDownMenu = CreateFrame("Frame", "GatherMate2_GenericDropDownMenu")
+GatherMate2_GenericDropDownMenu.displayMode = "MENU"
+GatherMate2_GenericDropDownMenu.initialize = generatePinMenu
 local last_update = 0
 local listening = false
 --[[
@@ -227,9 +225,6 @@ function Display:OnEnable()
 
 	trackingCircle = self.trackingCircle
 	nodeTextures = GatherMate.nodeTextures
-	--continentData = GatherMate.continentData
-	--zoneData = GatherMate.zoneData
-	--specialZones = GatherMate.specialZones
 	-- Recheck cvars after all addons are loaded.
 	rotateMinimap = GetCVar("rotateMinimap") == "1"
 	if not self.updateFrame then
@@ -451,7 +446,6 @@ function Display:getMiniPin(coord, nodeID, nodeType, zone, index)
 		pin.coords = coord
 		pin.title = GatherMate:GetNameForNode(nodeType, nodeID)
 		pin.zone = zone
-		pin.lvel = level
 		pin.nodeID = nodeID
 		pin.nodeType = nodeType
 		pin.worldmap = false
@@ -467,7 +461,7 @@ function Display:getMiniPin(coord, nodeID, nodeType, zone, index)
 		pin.texture:SetTexCoord(0, 1, 0, 1)
 		pin.texture:SetVertexColor(1, 1, 1, 1)
 		pin.x, pin.y, pin.level = GatherMate.mapData:DecodeLoc(coord)
-		pin.x1, pin.y1 = GatherMate:PointToYards(pin.x,pin.y,zone,level)
+		pin.x1, pin.y1 = GatherMate:PointToYards(pin.x,pin.y,zone,pin.level)
 		minimapPins[index] = pin
 	end
 	return pin
@@ -585,7 +579,7 @@ function Display:UpdateMaps()
 end
 
 function Display:UpdateIconPositions()
-	if not db.showMinimap or not Minimap:IsVisible() or inInstance or not zone then return end
+	if not db.showMinimap or not Minimap:IsVisible() or  not zone then return end
 
 	-- get the current map  zoom
 	local zoom = Minimap:GetZoom()
@@ -603,8 +597,9 @@ function Display:UpdateIconPositions()
 	local x, y = GetPlayerMapPosition("player")
 	local level = GetCurrentMapDungeonLevel()
 	-- if position is 0, the player changed the worldmap to another zone, just keep the old values
-	if (x == 0 or y == 0 or GetCurrentMapZone() == 0) and not specialZones[zone] then
+	if (x == 0 or y == 0 or GatherMate.mapData:MapLocalize(zone) ~= GetRealZoneText()) then
 		x, y = lastX, lastY
+		level = lastLevel
 	end
 
 	-- for rotating minimap support
@@ -658,7 +653,7 @@ end
 	we only care about nodes 1000 yards away
 ]]
 function Display:UpdateMiniMap(force)
-	if not db.showMinimap or not Minimap:IsVisible() or inInstance then return end
+	if not db.showMinimap or not Minimap:IsVisible() then return end
 
 	-- update our zone info
 	zone = GetCurrentMapAreaID()
@@ -671,8 +666,10 @@ function Display:UpdateMiniMap(force)
 	-- get current player position
 	local x, y = GetPlayerMapPosition("player")
 	-- if position is 0, the player changed the worldmap to another zone, just keep the old values
-	if (x == 0 or y == 0 or GetCurrentMapZone() == 0) then
+	-- GetCurrentMapZone now changes when you changes maps
+	if (x == 0 or y == 0 or GatherMate.mapData:MapLocalize(zone) ~= GetRealZoneText()) then
 		x, y = lastX, lastY
+		level = lastLevel
 	end
 
 	-- get data from the API for calculations
@@ -697,6 +694,10 @@ function Display:UpdateMiniMap(force)
 		force = true
 	end
 
+	--DEBUG
+	if level ~= lastLevel then
+		print("Level changed")
+	end
 
 	-- if the player moved, the zoom changed, or changed the facing (rotating map) - update nodes
 	if x ~= lastX or y ~= lastY or diffZoom or facing ~= lastFacing or level ~= lastLevel or force then
@@ -710,7 +711,6 @@ function Display:UpdateMiniMap(force)
 
 		-- calculate distance in yards
 		local _x, _y =  GatherMate:PointToYards(x, y, zone, level)
-
 		-- update upvalues for icon placement
 		lastX, lastY = x, y
 		lastZoom = zoom
@@ -722,12 +722,11 @@ function Display:UpdateMiniMap(force)
 			sin = math_sin(facing)
 			cos = math_cos(facing)
 		end
-
 		-- iterate the node databases and add the nodes
 		for i,db_type in pairs(GatherMate.db_types) do
 			if GatherMate.Visible[db_type] then
 				for coord, nodeID in GatherMate:FindNearbyNode(zone, x, y, level, db_type, mapRadius*nodeRange) do
-					local pin = self:getMiniPin(coord, nodeID, db_type, zone, (i * 1e9) + coord)
+					local pin = self:getMiniPin(coord, nodeID, db_type, zone, (i * 1e14) + coord)
 					pin.keep = true
 					self:addMiniPin(pin, force)
 				end
@@ -762,9 +761,9 @@ function Display:UpdateWorldMap(force)
 	local zone = GetCurrentMapAreaID()
 	local level = GetCurrentMapDungeonLevel()
 	if not zone or zone == -1 then clearpins(worldmapPins) return end -- player is not viewing a zone map of a continent
-	if not rememberForce and lastDrawnWorldMap == zone then return end -- already drawn last time, and not forced
-	if lastDrawnWorldMap ~= zone then
-		clearpins(worldmapPins) -- viewing different zone, so clear all the pins, else don't clear and just do pin deltas
+	if not rememberForce and (lastDrawnWorldMap == zone and level == lastLevel) then return end -- already drawn last time, and not forced
+	if lastDrawnWorldMap ~= zone or level ~= lastLevel then
+		clearpins(worldmapPins) -- viewing different zone or level, so clear all the pins, else don't clear and just do pin deltas
 	end
 	worldmapWidth = WorldMapButton:GetWidth()
 	worldmapHeight = WorldMapButton:GetHeight()
@@ -776,7 +775,7 @@ function Display:UpdateWorldMap(force)
 			for coord, nodeID in GatherMate:GetNodesForZone(zone, db_type) do
 				local nx,ny,nlevel = GatherMate.mapData:DecodeLoc(coord)
 				if nlevel == level then
-					self:addWorldPin(coord, nodeID, db_type, zname, (i * 1e9) + coord).keep = true
+					self:addWorldPin(coord, nodeID, db_type, zone, (i * 1e9) + coord).keep = true
 				end
 			end
 		end
@@ -800,6 +799,7 @@ function Display:UpdateWorldMap(force)
 		lastScale, lastAlphaPref = scale, alpha
 	end
 	lastDrawnWorldMap = zone -- record last drawn zone name
+	lastLevel = level
 	rememberForce = false
 end
 

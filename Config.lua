@@ -315,7 +315,8 @@ options.args.display.args.general = {
 local sortedFilter = setmetatable({}, {__index = function(t, k)
 	local new = {}
 	if k == "zones" then
-		for name, zonetable in pairs(GatherMate.zoneData) do
+		for index, zoneID in pairs(GatherMate.mapData:GetAllMapIDs()) do
+			local name = GatherMate.mapData:MapLocalize(zoneID)
 			new[name] = name
 		end
 	else

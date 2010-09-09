@@ -15,6 +15,7 @@ local L = LibStub("AceLocale-3.0"):GetLocale("GatherMate2")
 	it already stores off the localized name keyed to either the map file or area id.
 ]]
 
+--[[
 local zone_data = { -- {width, height, zoneID}
 	Arathi = {3599.78645678886,2399.85763785924,1,},
 	Ogrimmar = {1402.563051365538,935.042034243692,2,},
@@ -163,41 +164,42 @@ local zone_data = { -- {width, height, zoneID}
 	TheArgentColiseum2 = { 493.330017089844, 739.996017456055, 142},
 	HrothgarsLanding = { 3677.08312988281, 2452.083984375, 143},
 }
+--]]
 -- meta table to return 0 for all unknown zones, instances, and what not
-local emptyZoneTbl = {0,0,0}
-setmetatable(zone_data, { __index = function(t, k) ChatFrame1:AddMessage("GatherMate is missing data for "..k); return emptyZoneTbl end })
+--local emptyZoneTbl = {0,0,0}
+--setmetatable(zone_data, { __index = function(t, k) ChatFrame1:AddMessage("GatherMate is missing data for "..k); return emptyZoneTbl end })
 
 
 -- empty continents include -1 for the universe, and 0 for eastern kingdoms (meta continents so to speak)
-local emptyCont = {}
-local continentList = setmetatable({ GetMapContinents() }, {__index = function() return emptyCont end})
-local zoneList = setmetatable({}, { __index = function() return emptyZoneTbl end})
-for continent in pairs(continentList) do
-	local zones = { GetMapZones(continent) }
-	continentList[continent] = zones
-	for zone, name in pairs(zones) do
-		SetMapZoom(continent, zone)
-		local mapFile = GetMapInfo()
-		zoneList[name] = zone_data[mapFile]
-		if mapFile == "Elwynn" then continentList[continent][0] = "EasternKingdoms"
-		elseif mapFile == "Mulgore" then continentList[continent][0] = "Kalimdor"
-		elseif mapFile == "Hellfire" then continentList[continent][0] = "Expansion01"
-		elseif mapFile == "ZulDrak" then continentList[continent][0] = "Northrend" end
-	end
-end
+--local emptyCont = {}
+--local continentList = setmetatable({ GetMapContinents() }, {__index = function() return emptyCont end})
+--local zoneList = setmetatable({}, { __index = function() return emptyZoneTbl end})
+--for continent in pairs(continentList) do
+--	local zones = { GetMapZones(continent) }
+--	continentList[continent] = zones
+--	for zone, name in pairs(zones) do
+--		SetMapZoom(continent, zone)
+--		local mapFile = GetMapInfo()
+--		zoneList[name] = zone_data[mapFile]
+--		if mapFile == "Elwynn" then continentList[continent][0] = "EasternKingdoms"
+--		elseif mapFile == "Mulgore" then continentList[continent][0] = "Kalimdor"
+--		elseif mapFile == "Hellfire" then continentList[continent][0] = "Expansion01"
+--		elseif mapFile == "ZulDrak" then continentList[continent][0] = "Northrend" end
+--	end
+--end
 -- Special zones workaround, so that fishing in these zones work
-local specialZones = {}
-specialZones[L["The Frozen Sea"]] = true
-specialZones[L["The North Sea"]] = true
-zoneList[L["The Frozen Sea"]] = zone_data["Northrend"]
-zoneList[L["The North Sea"]] = zone_data["Northrend"]
+--local specialZones = {}
+--specialZones[L["The Frozen Sea"]] = true
+--specialZones[L["The North Sea"]] = true
+--zoneList[L["The Frozen Sea"]] = zone_data["Northrend"]
+--zoneList[L["The North Sea"]] = zone_data["Northrend"]
 
 GatherMate.mapData = LibStub("LibMapData-1.0")
 
-GatherMate.zoneData = zoneList
-GatherMate.continentData = continentList
-GatherMate.specialZones = specialZones
-zone_data = nil
+--GatherMate.zoneData = zoneList
+--GatherMate.continentData = continentList
+--GatherMate.specialZones = specialZones
+--zone_data = nil
 
 --[[
 	Node Identifiers
