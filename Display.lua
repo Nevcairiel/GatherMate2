@@ -775,7 +775,7 @@ function Display:UpdateWorldMap(force)
 			for coord, nodeID in GatherMate:GetNodesForZone(zone, db_type) do
 				local nx,ny,nlevel = GatherMate.mapData:DecodeLoc(coord)
 				if nlevel == level then
-					self:addWorldPin(coord, nodeID, db_type, zone, (i * 1e9) + coord).keep = true
+					self:addWorldPin(coord, nodeID, db_type, zone, (i * 1e14) + coord).keep = true
 				end
 			end
 		end
