@@ -165,7 +165,6 @@ function GatherMate:AddNode(zone, x, y, level, nodeType, name)
 	end
 	db[zone] = db[zone] or {}
 	db[zone][id] = self.nodeIDs[nodeType][name]
-	print("Added node")
 	self:SendMessage("GatherMate2NodeAdded", zone, nodeType, id, name)
 end
 
@@ -311,7 +310,6 @@ end
 	Remove an item from the DB by node ID and type
 ]]
 function GatherMate:RemoveNodeByID(zone, nodeType, coord)
-	print("Trying to delete node "..zone.." type "..nodeType.." coord "..coord)
 	-- db lock check
 	if GatherMate.db.profile.dbLocks[nodeType] then
 		return
