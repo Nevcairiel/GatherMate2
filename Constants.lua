@@ -91,14 +91,20 @@ local node_ids = {
 		[NL["Adamantite Deposit"]] 				= 222,
 		[NL["Rich Adamantite Deposit"]] 		= 223,
 		[NL["Khorium Vein"]] 					= 224,
-		--[NL["Large Obsidian Chunk"]] 			= 225, -- found only in AQ20/40
-		--[NL["Small Obsidian Chunk"]] 			= 226, -- found only in AQ20/40
+		[NL["Large Obsidian Chunk"]] 			= 225, -- found only in AQ20/40
+		[NL["Small Obsidian Chunk"]] 			= 226, -- found only in AQ20/40
 		[NL["Nethercite Deposit"]] 				= 227,
 		[NL["Cobalt Deposit"]]					= 228,
 		[NL["Rich Cobalt Deposit"]]				= 229,
 		[NL["Titanium Vein"]]					= 230,
 		[NL["Saronite Deposit"]]				= 231,
 		[NL["Rich Saronite Deposit"]]			= 232,
+-- Cata nodes
+		[NL["Obsidian Chunk"]]					= 233,
+		[NL["Huge Obsidian Slab"]]				= 234,
+		[NL["Pure Saronite Deposit"]] 			= 235,
+		[NL["Elementium Vein"]]					= 236,
+		[NL["Rish Elementium Vein"]]			= 237,
 	},
 	["Extract Gas"] = {
 		[NL["Windy Cloud"]] 					= 301,
@@ -139,12 +145,12 @@ local node_ids = {
 		[NL["Mountain Silversage"]] 			= 427,
 		[NL["Plaguebloom"]] 					= 428,
 		[NL["Icecap"]] 							= 429,
-		--[NL["Bloodvine"]] 					= 430, -- zg bush loot
+		[NL["Bloodvine"]] 						= 430, -- zg bush loot
 		[NL["Black Lotus"]] 					= 431,
 		[NL["Felweed"]] 						= 432,
 		[NL["Dreaming Glory"]] 					= 433,
 		[NL["Terocone"]] 						= 434,
-		--[NL["Ancient Lichen"]] 				= 435, -- instance only node
+		[NL["Ancient Lichen"]] 					= 435, -- instance only node
 		[NL["Bloodthistle"]] 					= 436,
 		[NL["Mana Thistle"]] 					= 437,
 		[NL["Netherbloom"]] 					= 438,
@@ -163,6 +169,14 @@ local node_ids = {
 		[NL["Firethorn"]]						= 451,
 		[NL["Frozen Herb"]]						= 452,
 		[NL["Frost Lotus"]]						= 453, -- found in lake wintergrasp only
+-- cata nodes
+		[NL["Dragon's Teeth"]]					= 454,
+		[NL["Sorrowmoss"]]						= 455,
+		[NL["Azshara's Veil"]]					= 456,
+		[NL["Cinderbloom"]]						= 457,
+		[NL["Stormvine"]]						= 458,
+		[NL["Heartblossom"]]					= 459,
+		[NL["Twilight Jasmine"]]				= 460,
 	},
 	["Treasure"] = {
 		[NL["Giant Clam"]] 						= 501,
@@ -194,10 +208,11 @@ local node_ids = {
 		[NL["Primitive Chest"]] 				= 527,
 		[NL["Solid Fel Iron Chest"]] 			= 528,
 		[NL["Bound Fel Iron Chest"]] 			= 529,
-		--[NL["Bound Adamantite Chest"]] 		= 530, -- instance only node
+		[NL["Bound Adamantite Chest"]] 		= 530, -- instance only node
 		[NL["Netherwing Egg"]] 					= 531,
 		[NL["Everfrost Chip"]]					= 532,
 		[NL["Brightly Colored Egg"]]			= 533,
+-- cata treasure
 	},
 }
 GatherMate.nodeIDs = node_ids
