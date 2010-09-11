@@ -694,11 +694,6 @@ function Display:UpdateMiniMap(force)
 		force = true
 	end
 
-	--DEBUG
-	if level ~= lastLevel then
-		print("Level changed")
-	end
-
 	-- if the player moved, the zoom changed, or changed the facing (rotating map) - update nodes
 	if x ~= lastX or y ~= lastY or diffZoom or facing ~= lastFacing or level ~= lastLevel or force then
 		-- set upvalues to new settings
@@ -758,11 +753,11 @@ function Display:UpdateWorldMap(force)
 	if not WorldMapFrame:IsVisible() then return end
 	if not db.showWorldMap then clearpins(worldmapPins) return end
 
-	local zone = GetCurrentMapAreaID()
-	local level = GetCurrentMapDungeonLevel()
-	if not zone or zone == -1 then clearpins(worldmapPins) return end -- player is not viewing a zone map of a continent
-	if not rememberForce and (lastDrawnWorldMap == zone and level == lastLevel) then return end -- already drawn last time, and not forced
-	if lastDrawnWorldMap ~= zone or level ~= lastLevel then
+	local zoneid = GetCurrentMapAreaID()
+	local mapLevel = GetCurrentMapDungeonLevel()
+	if not zoneid or zoneid == -1 then clearpins(worldmapPins) return end -- player is not viewing a zone map of a continent
+	if not rememberForce and (lastDrawnWorldMap == zoneid and mapLevel == lastLevel) then return end -- already drawn last time, and not forced
+	if lastDrawnWorldMap ~= zoneid or mapLevel ~= lastLevel then
 		clearpins(worldmapPins) -- viewing different zone or level, so clear all the pins, else don't clear and just do pin deltas
 	end
 	worldmapWidth = WorldMapButton:GetWidth()
@@ -772,10 +767,10 @@ function Display:UpdateWorldMap(force)
 
 	for i,db_type in pairs(GatherMate.db_types) do
 		if GatherMate.Visible[db_type] then
-			for coord, nodeID in GatherMate:GetNodesForZone(zone, db_type) do
+			for coord, nodeID in GatherMate:GetNodesForZone(zoneid, db_type) do
 				local nx,ny,nlevel = GatherMate.mapData:DecodeLoc(coord)
-				if nlevel == level then
-					self:addWorldPin(coord, nodeID, db_type, zone, (i * 1e14) + coord).keep = true
+				if nlevel == mapLevel then
+					self:addWorldPin(coord, nodeID, db_type, zoneid, (i * 1e14) + coord).keep = true
 				end
 			end
 		end
@@ -798,8 +793,8 @@ function Display:UpdateWorldMap(force)
 		end
 		lastScale, lastAlphaPref = scale, alpha
 	end
-	lastDrawnWorldMap = zone -- record last drawn zone name
-	lastLevel = level
+	lastDrawnWorldMap = zoneid -- record last drawn zone name
+	lastLevel = mapLevel
 	rememberForce = false
 end
 
