@@ -104,7 +104,7 @@ local node_ids = {
 		[NL["Huge Obsidian Slab"]]				= 234,
 		[NL["Pure Saronite Deposit"]] 			= 235,
 		[NL["Elementium Vein"]]					= 236,
-		[NL["Rish Elementium Vein"]]			= 237,
+		[NL["Rich Elementium Vein"]]			= 237,
 	},
 	["Extract Gas"] = {
 		[NL["Windy Cloud"]] 					= 301,
