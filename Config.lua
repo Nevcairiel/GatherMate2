@@ -47,6 +47,11 @@ local prof_options3 = {
 	["active"]          = L["Only while tracking"],
 	["never"]           = L["Never show"],
 }
+local prof_options4 = { -- For Archaeology, which doesn't have tracking as a skill
+	["always"]           = L["Always show"],
+	["with_profession"]  = L["Only with profession"],
+	["never"]            = L["Never show"],
+}
 
 local options = {}
 local db
@@ -124,6 +129,14 @@ options.args.display.args.general = {
 					values = prof_options3,
 					arg = "Treasure"
 				},
+				showArchaeology = {
+					order = 6,
+					name = L["Show Archaeology Nodes"],
+					desc = L["Toggle showing treasure nodes."],
+					type = "select",
+					values = prof_options4,
+					arg = "Archaeology"
+				}
 			},
 		},
 		iconGroup = {
@@ -277,6 +290,14 @@ options.args.display.args.general = {
 							type = "color",
 							hasAlpha = true,
 							arg = "Treasure",
+						},
+						trackingColorArchaelogy = {
+							order = 7,
+							name = L["Archaeology"],
+							desc = L["Color of the tracking circle."],
+							type = "color",
+							hasAlpha = true,
+							arg = "Archaeology",
 						},
 						space = {
 							order = 7,
@@ -577,6 +598,39 @@ options.args.display.args.filters.args.treasure = {
 		},
 	},
 }
+options.args.display.args.filters.args.archaeology = {
+	type = "group",
+	name = L["Archaeology filter"],
+	args = {
+		desc = commonFiltersDescTable,
+		select_all = {
+			order = 1,
+			name = L["Select All"],
+			desc = L["Select all nodes"],
+			type = "execute",
+			func = "SelectAll",
+			arg = "Archaeology",
+		},
+		select_none = {
+			order = 2,
+			name = L["Select None"],
+			desc = L["Clear node selections"],
+			type = "execute",
+			func = "SelectNone",
+			arg = "Archaeology",
+		},
+		gaslist = {
+			order = 3,
+			name = L["Treasure"],
+			desc = L["Select the archaeology you wish to display."],
+			type = "multiselect",
+			values = sortedFilter["Treasure"],
+			set = "SetState",
+			get = "GetState",
+			arg = "Archaeology",
+		},
+	},
+}
 
 local selectedDatabase, selectedNode, selectedZone = "Extract Gas", 0, nil
 
@@ -634,6 +688,7 @@ options.args.cleanup = {
 								["Herb Gathering"] = L["Herb Bushes"],
 								["Mining"] = L["Mineral Veins"],
 								["Extract Gas"] = L["Gas Clouds"],
+								["Archaeology"] = L["Archaeology"],
 							},
 							get = function() return selectedDatabase end,
 							set = function(k, v)
@@ -738,6 +793,15 @@ options.args.cleanup = {
 							confirm = true,
 							confirmText = L["Are you sure you want to delete all nodes from this database?"],
 						},
+						Archaeology = {
+							order = 5,
+							name = L["Archaeology"],
+							desc = L["Delete Entire Database"],
+							type = "execute",
+							arg = "Archaeology",
+							confirm = true,
+							confirmText = L["Are you sure you want to delete all nodes from this database?"],
+						},
 					},
 				},
 			},
@@ -804,6 +868,14 @@ options.args.cleanup = {
 					min = 0, max = 30, step = 1,
 					arg = "Treasure",
 				}
+				Archaeology = {
+					order = 5,
+					name = L["Archaeology"],
+					desc = L["Cleanup radius"],
+					type = "range",
+					min = 0, max = 30, step = 1,
+					arg = "Treasure",
+				}
 			},
 		},
 		dblocking = {
@@ -858,6 +930,13 @@ options.args.cleanup = {
 					type = "toggle",
 					arg = "Treasure",
 				}
+				Archaeology = {
+					order = 5,
+					name = L["Archaeology"],
+					desc = L["Database locking"],
+					type = "toggle",
+					arg = "Archaeology",
+				}
 			}
 		},
 	},
@@ -881,6 +960,7 @@ ImportHelper.db_tables = {
 	["Gases"] = L["Gas Clouds"],
 	["Fish"] = L["Fishing"],
 	["Treasure"] = L["Treasure"],
+	["Archaeology"] = L["Archaeology"],
 }
 ImportHelper.expac_data = {
 	["TBC"] = L["The Burning Crusades"],
@@ -990,6 +1070,7 @@ options.args.importing.args.GatherMateData = {
 				if db["importers"]["GatherMate2_Data"].Databases["Gases"] then cm = 1 end
 				if db["importers"]["GatherMate2_Data"].Databases["Fish"] then cm = 1 end
 				if db["importers"]["GatherMate2_Data"].Databases["Treasure"] then cm = 1 end
+				if db["importers"]["GatherMate2_Data"].Databases["Archaeology"] then cm = 1 end
 				return imported["GatherMate2_Data"] or (cm == 0 and not imported["GatherMate2_Data"])
 			end,
 		}

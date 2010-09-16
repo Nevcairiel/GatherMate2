@@ -214,6 +214,9 @@ local node_ids = {
 		[NL["Brightly Colored Egg"]]			= 533,
 -- cata treasure
 	},
+	["Archaeology"] = {
+		-- cata archeolgy objects
+	}
 }
 GatherMate.nodeIDs = node_ids
 local reverse = {}
@@ -289,6 +292,8 @@ Display:SetSkillProfession("Herb Gathering", L["Herbalism"])
 Display:SetSkillProfession("Mining", L["Mining"])
 Display:SetSkillProfession("Fishing", L["Fishing"])
 Display:SetSkillProfession("Extract Gas", L["Engineering"])
+Display:SetSkillProfession("Archaeology", L["Archaeology"])
+
 --[[
 	Textures for display
 ]]
@@ -478,6 +483,9 @@ local node_textures = {
 		[532] = icon_path.."Treasure\\everfrost.tga",
 		[533] = icon_path.."Treasure\\egg.tga",
 	},
+	["Archaeology"] = {
+
+	},
 }
 GatherMate.nodeTextures = node_textures
 --[[
@@ -585,6 +593,9 @@ local node_minharvest = {
 		[452] = 425,
 	},
 	["Treasure"] = {
+	},
+	["Archaeology"] = {
+
 	},
 }
 GatherMate.nodeMinHarvest = node_minharvest
