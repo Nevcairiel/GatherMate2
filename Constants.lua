@@ -208,7 +208,7 @@ local node_ids = {
 		[NL["Primitive Chest"]] 				= 527,
 		[NL["Solid Fel Iron Chest"]] 			= 528,
 		[NL["Bound Fel Iron Chest"]] 			= 529,
-		[NL["Bound Adamantite Chest"]] 		= 530, -- instance only node
+		[NL["Bound Adamantite Chest"]] 		    = 530, -- instance only node
 		[NL["Netherwing Egg"]] 					= 531,
 		[NL["Everfrost Chip"]]					= 532,
 		[NL["Brightly Colored Egg"]]			= 533,
@@ -216,6 +216,16 @@ local node_ids = {
 	},
 	["Archaeology"] = {
 		-- cata archeolgy objects
+		[NL["Night Elf Archaeology Find"]]      = 601,
+		[NL["Troll Archaeology Find"]]          = 602,
+		[NL["Dwarf Archaeology Find"]]          = 603,
+		[NL["Fossil Archaeology Find"]]         = 604,
+		[NL["Draenei Archaeology Find"]]        = 605,
+		[NL["Orc Archaeology Find"]]            = 606,
+		[NL["Nerubian Archaeology Find"]]       = 607,
+		[NL["Vrykul Archaeology Find"]]         = 608,
+		[NL["Tol'vir Archaeology Find"]]        = 609,
+		[NL["Other Archaeology Find"]]          = 610,
 	}
 }
 GatherMate.nodeIDs = node_ids
@@ -484,7 +494,16 @@ local node_textures = {
 		[533] = icon_path.."Treasure\\egg.tga",
 	},
 	["Archaeology"] = {
-
+		[601] = icon_path.."Treasure\\soil.tga",
+		[602] = icon_path.."Treasure\\soil.tga",
+		[603] = icon_path.."Treasure\\soil.tga",
+		[604] = icon_path.."Treasure\\soil.tga",
+		[605] = icon_path.."Treasure\\soil.tga",
+		[606] = icon_path.."Treasure\\soil.tga",
+		[607] = icon_path.."Treasure\\soil.tga",
+		[608] = icon_path.."Treasure\\soil.tga",
+		[609] = icon_path.."Treasure\\soil.tga",
+		[610] = icon_path.."Treasure\\soil.tga",
 	},
 }
 GatherMate.nodeTextures = node_textures
@@ -595,7 +614,6 @@ local node_minharvest = {
 	["Treasure"] = {
 	},
 	["Archaeology"] = {
-
 	},
 }
 GatherMate.nodeMinHarvest = node_minharvest

@@ -19,7 +19,7 @@ local gasSpell = (GetSpellInfo(30427))
 local openSpell = (GetSpellInfo(3365))
 local openNoTextSpell = (GetSpellInfo(22810))
 local pickSpell = (GetSpellInfo(1804))
-local archSpell = (GetSpellInfo(80451)) -- Survey spell
+local archSpell = (GetSpellInfo(73979)) -- Searching for Artifacts spell
 
 local spells = { -- spellname to "database name"
 	[miningSpell] = "Mining",

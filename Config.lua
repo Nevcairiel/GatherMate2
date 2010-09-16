@@ -867,7 +867,7 @@ options.args.cleanup = {
 					type = "range",
 					min = 0, max = 30, step = 1,
 					arg = "Treasure",
-				}
+				},
 				Archaeology = {
 					order = 5,
 					name = L["Archaeology"],
@@ -929,7 +929,7 @@ options.args.cleanup = {
 					desc = L["Database locking"],
 					type = "toggle",
 					arg = "Treasure",
-				}
+				},
 				Archaeology = {
 					order = 5,
 					name = L["Archaeology"],
