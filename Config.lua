@@ -132,7 +132,7 @@ options.args.display.args.general = {
 				showArchaeology = {
 					order = 6,
 					name = L["Show Archaeology Nodes"],
-					desc = L["Toggle showing treasure nodes."],
+					desc = L["Toggle showing archaeology nodes."],
 					type = "select",
 					values = prof_options4,
 					arg = "Archaeology"
@@ -622,7 +622,7 @@ options.args.display.args.filters.args.archaeology = {
 		gaslist = {
 			order = 3,
 			name = L["Treasure"],
-			desc = L["Select the archaeology you wish to display."],
+			desc = L["Select the archaeology nodes you wish to display."],
 			type = "multiselect",
 			values = sortedFilter["Treasure"],
 			set = "SetState",
@@ -970,10 +970,10 @@ ImportHelper.expac_data = {
 imported["GatherMate_Data"] = false
 options.args.importing.args.GatherMateData = {
 	type = "group",
-	name = "GatherMateData", -- addon name to import from, don't localize
+	name = "GatherMate2Data", -- addon name to import from, don't localize
 	handler = ImportHelper,
 	disabled = function()
-		local name, title, notes, enabled, loadable, reason, security = GetAddOnInfo("GatherMate_Data")
+		local name, title, notes, enabled, loadable, reason, security = GetAddOnInfo("GatherMate2_Data")
 		-- disable if the addon is not enabled, or
 		-- disable if there is a reason why it can't be loaded ("MISSING" or "DISABLED")
 		return not enabled or (reason ~= nil)
@@ -987,7 +987,7 @@ options.args.importing.args.GatherMateData = {
 		loadType = {
 			order = 1,
 			name = L["Import Style"],
-			desc = L["Merge will add GatherMateData to your database. Overwrite will replace your database with the data in GatherMateData"],
+			desc = L["Merge will add GatherMate2Data to your database. Overwrite will replace your database with the data in GatherMate2Data"],
 			type = "select",
 			values = ImportHelper.db_options,
 			set = "SetImportStyle",
@@ -1002,7 +1002,7 @@ options.args.importing.args.GatherMateData = {
 			values = ImportHelper.db_tables,
 			set = "SetImportDatabase",
 			get = "GetImportDatabase",
-			arg = "GatherMate_Data",
+			arg = "GatherMate2_Data",
 		},
 		stylebox = {
 			order = 4,
@@ -1016,7 +1016,7 @@ options.args.importing.args.GatherMateData = {
 					type = "toggle",
 					get = "GetExpacOnly",
 					set = "SetExpacOnly",
-					arg = "GatherMate_Data"
+					arg = "GatherMate2_Data"
 				},
 				loadExpansion = {
 					order = 4,
@@ -1026,7 +1026,7 @@ options.args.importing.args.GatherMateData = {
 					get  = "GetExpac",
 					set  = "SetExpac",
 					values = ImportHelper.expac_data,
-					arg  = "GatherMate_Data",
+					arg  = "GatherMate2_Data",
 				},
 				loadAuto = {
 					order = 5,
@@ -1035,7 +1035,7 @@ options.args.importing.args.GatherMateData = {
 					type = "toggle",
 					get = "GetAutoImport",
 					set = "SetAutoImport",
-					arg = "GatherMate_Data",
+					arg = "GatherMate2_Data",
 				},
 			}
 		},
@@ -1055,7 +1055,7 @@ options.args.importing.args.GatherMateData = {
 					end
 					GatherMateData:PerformMerge(db.importers["GatherMate2_Data"].Databases,db.importers["GatherMate2_Data"].Style,filter)
 					GatherMateData:CleanupImportData()
-					Config:Print(L["GatherMateData has been imported."])
+					Config:Print(L["GatherMate2Data has been imported."])
 					Config:SendMessage("GatherMateConfigChanged")
 					db["importers"]["GatherMate_Data"]["lastImport"] = dataVersion
 					imported["GatherMate_Data"] = true
