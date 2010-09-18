@@ -213,7 +213,6 @@ local node_ids = {
 		[NL["Netherwing Egg"]] 					= 531,
 		[NL["Everfrost Chip"]]					= 532,
 		[NL["Brightly Colored Egg"]]			= 533,
--- cata treasure
 	},
 	["Archaeology"] = {
 		-- cata archeolgy objects
@@ -274,7 +273,6 @@ local rare_spawns = {
 	[148] = {[101]=true}, -- floating wreckage
 	[233] = {[234]=true}, -- obsidian
 	[236] = {[237]=true}, -- elementium
-
 }
 Collector.rareNodes = rare_spawns
 -- Format zone = { "Database", "new node id"}
