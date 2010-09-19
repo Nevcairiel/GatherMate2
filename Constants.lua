@@ -287,18 +287,12 @@ Collector.specials = nodeRemap
 local Display = GatherMate:GetModule("Display")
 local icon_path = "Interface\\AddOns\\GatherMate2\\Artwork\\"
 Display.trackingCircle = icon_path.."track_circle.tga"
---[[
-local count = GetNumTrackingTypes();
-local info;
-for id=1, count do
-	name, texture, active, category  = GetTrackingInfo(id);
-end
---]]
-Display:SetSkillTracking("Mining", "Interface\\Icons\\Spell_Nature_Earthquake")
-Display:SetSkillTracking("Herb Gathering", "Interface\\Icons\\INV_Misc_Flower_02")
-Display:SetSkillTracking("Fishing", "Interface\\Icons\\INV_Misc_Fish_02")
-Display:SetSkillTracking("Treasure", "Interface\\Icons\\Racial_Dwarf_FindTreasure")
-
+-- Find xxx spells
+Display:SetTrackingSpell("Mining", 2580)
+Display:SetTrackingSpell("Herb Gathering", 2383)
+Display:SetTrackingSpell("Fishing", 43308)
+Display:SetTrackingSpell("Treasure", 2481) -- Left this in, however it appears that the spell no longer exists. Maybe added as a potion TreasureFindingPotion
+-- Profession markers
 Display:SetSkillProfession("Herb Gathering", L["Herbalism"])
 Display:SetSkillProfession("Mining", L["Mining"])
 Display:SetSkillProfession("Fishing", L["Fishing"])

@@ -49,7 +49,7 @@ local profession_to_skill = {}
 local have_prof_skill = {}
 
 local active_tracking = {}
-local texture_to_skill = {}
+local tracking_spells = {}
 
 --[[
 	recycle a pin
@@ -312,11 +312,11 @@ function Display:MINIMAP_UPDATE_TRACKING()
 	local info;
 	for id=1, count do
 		name, texture, active, category  = GetTrackingInfo(id);
-		if texture_to_skill[texture] and active then
-			active_tracking[texture_to_skill[texture]] = true
+		if tracking_spells[name] and active then
+			active_tracking[tracking_spells[name]] = true
 		else
-			if texture_to_skill[texture] then
-				active_tracking[texture_to_skill[texture]] = false
+			if tracking_spells[name] and not active then
+				active_tracking[tracking_spells[name]] = false
 			end
 		end
 	end
@@ -351,8 +351,8 @@ function Display:UpdateVisibility()
 	end
 end
 
-function Display:SetSkillTracking(skill, tracking)
-	texture_to_skill[tracking] = skill
+function Display:SetTrackingSpell(skill,spell)
+	tracking_spells[(GetSpellInfo(spell))] = skill
 	if fullInit then self:MINIMAP_UPDATE_TRACKING() end
 end
 
