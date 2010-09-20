@@ -42,6 +42,7 @@ Locales\GatherMate2-zhCN.lua
 Locales\GatherMate2-zhTW.lua
 Locales\GatherMate2-ruRU.lua
 
+## Order is important
 GatherMate2.lua
 Collector.lua
 Display.lua
