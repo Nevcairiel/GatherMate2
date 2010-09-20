@@ -43,7 +43,7 @@ Locales\GatherMate2-zhTW.lua
 Locales\GatherMate2-ruRU.lua
 
 GatherMate2.lua
-Display.lua
-Collector.lua
 Constants.lua
+Display.lua
 Config.lua
+Collector.lua
