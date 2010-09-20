@@ -213,7 +213,7 @@ do
 		while state do
 			if filterTable[value] or ignoreFilter then
 				-- inline the :getXY() here in critical minimap update loop
-				local x2, y2, level2 = GatherMate.mapData:DecodeLoc(state)
+				local x2, y2, level2 = floor(state/1000000)/10000, floor(state % 1000000 / 100)/10000, state % 100
 				local x = (x2 - xLocal) * yw
 				local y = (y2 - yLocal) * yh
 				if x*x + y*y <= radiusSquared and level2 == mLevel then
