@@ -100,7 +100,7 @@ local node_ids = {
 		[NL["Saronite Deposit"]]				= 231,
 		[NL["Rich Saronite Deposit"]]			= 232,
 -- Cata nodes
-		[NL["Obsidian Chunk"]]					= 233,
+		[NL["Obsidium Deposit"]]				= 233,
 		[NL["Huge Obsidian Slab"]]				= 234,
 		[NL["Pure Saronite Deposit"]] 			= 235,
 		[NL["Elementium Vein"]]					= 236,
