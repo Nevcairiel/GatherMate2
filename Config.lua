@@ -624,7 +624,7 @@ options.args.display.args.filters.args.archaeology = {
 			name = L["Treasure"],
 			desc = L["Select the archaeology nodes you wish to display."],
 			type = "multiselect",
-			values = sortedFilter["Treasure"],
+			values = sortedFilter["Archaeology"],
 			set = "SetState",
 			get = "GetState",
 			arg = "Archaeology",
@@ -1095,6 +1095,183 @@ options.args.faq_group = {
 		},
 	},
 }
+local ConversionHelper = {}
+ConversionHelper.dbList = {}
+ConversionHelper.zoneList = {}
+ConversionHelper.importZones = {}
+ConversionHelper.importDBs = {}
+ConversionHelper.dbList["Fishing"] = L["Fishing"]
+ConversionHelper.dbList["Treasure"] = L["Treasure"]
+ConversionHelper.dbList["Herb Gathering"] = L["Herb Bushes"]
+ConversionHelper.dbList["Mining"] = L["Mineral Veins"]
+ConversionHelper.dbList["Extract Gas"] = L["Gas Clouds"]
+
+function ConversionHelper:DBSelectAll()
+	for k,v in pairs(self.dbList) do
+		self.importDBs[k]=true
+	end
+	Config:UpdateConfig()
+end
+
+function ConversionHelper:DBSelectNone()
+	for k,v in pairs(self.dbList) do
+		self.importDBs[k]=false
+	end
+	Config:UpdateConfig()
+end
+
+function ConversionHelper:ZoneSelectAll()
+	for k,v in pairs(self.zoneList) do
+		self.importZones[k]=true
+	end
+	Config:UpdateConfig()
+end
+
+function ConversionHelper:ZoneSelectNone()
+	for k,v in pairs(self.zoneList) do
+		self.importZones[k]=false
+	end
+	Config:UpdateConfig()
+end
+
+
+function ConversionHelper:PopulateZoneList()
+	local continentList = {GetMapContinents()}
+	for cID = 1, #continentList do
+		for zID, zname in ipairs({GetMapZones(cID)}) do
+			SetMapZoom(cID, zID)
+			local mapfile = GetMapInfo()
+			local lname = GatherMate.mapData:MapLocalize(mapfile)
+			ConversionHelper.zoneList[mapfile] = lname
+		end
+	end
+end
+
+function ConversionHelper:GetSelectedDB(info,k)
+	return self.importDBs[k]
+end
+function ConversionHelper:SetSelectedDB(info, k , state)
+	self.importDBs[k] = state
+end
+function ConversionHelper:GetSelectedZone(info,k)
+	return self.importZones[k]
+end
+function ConversionHelper:SetSelectedZone(info, k , state)
+	self.importZones[k] = state
+end
+
+function ConversionHelper:ConvertDatabase()
+	local GM1 = LibStub("AceAddon-3.0"):GetAddon("GatherMate")
+	for nodeType,nodeName in pairs(self.dbList) do
+		for zone,zoneLocal in pairs(self.zoneList) do
+			for coord, nodeID in GM1:GetNodesForZone(zone, nodeType) do
+				-- We should decode the location here and add it to the new DB with default level of 0
+			end
+		end
+	end
+end
+
+ConversionHelper:PopulateZoneList()
+-- Legacy GatherMate Data
+
+options.args.importing.args.LegacyData = {
+	type = "group",
+	name = "GatherMate Conversion", -- addon name to import from, don't localize
+	handler = ConversionHelper,
+	disabled = function()
+		local name, title, notes, enabled, loadable, reason, security = GetAddOnInfo("GatherMate")
+		-- disable if the addon is not enabled, or
+		-- disable if there is a reason why it can't be loaded ("MISSING" or "DISABLED")
+		return not enabled or (reason ~= nil)
+	end,
+	args = {
+		desc = {
+			order = 0,
+			type = "description",
+			name = "Conversion_Desc",
+		},
+		dbSelection = {
+			order = 1,
+			type = "group",
+			name = "",
+			guiInline = true,
+			args = {
+				selectDBs = {
+					order = 1,
+					name = "Select Databases",
+					desc = "Select Databases",
+					type = "multiselect",
+					values = ConversionHelper.dbList,
+					get = "GetSelectedDB",
+					set = "SetSelectedDB",
+				},
+				select_all = {
+					order = 2,
+					name = L["Select All"],
+					desc = "Select all databases",
+					type = "execute",
+					func = "DBSelectAll",
+				},
+				select_none = {
+					order = 2,
+					name = L["Select None"],
+					desc = "Clear database selections",
+					type = "execute",
+					func = "DBSelectNone",
+				},
+			},
+		},
+		zoneSelection = {
+			order = 2,
+			type = "group",
+			name = "Select Zones",
+			guiInline = true,
+			args = {
+				zones = {
+					order = 1,
+					name = "",
+					desc = "Select Zones",
+					type = "multiselect",
+					values = ConversionHelper.zoneList,
+					get = "GetSelectedZone",
+					set = "SetSelectedZone",
+				},
+				select_all = {
+					order = 2,
+					name = L["Select All"],
+					desc = "Select all zones",
+					type = "execute",
+					func = "ZoneSelectAll",
+				},
+				select_none = {
+					order = 2,
+					name = L["Select None"],
+					desc = "Clear zone selections",
+					type = "execute",
+					func = "ZoneSelectNone",
+				},
+			},
+		},
+		conversionAction = {
+			order = 99,
+			type = "execute",
+			name = "Convert Databses",
+			desc = "Conversion Desc",
+			func = "ConvertDatabase",
+			disabled = function()
+				local dbCount = 0
+				local zoneCount = 0
+				for k,v in pairs(ConversionHelper.importDBs) do
+					if v then dbCount = dbCount + 1 end
+				end
+				for k,v in pairs(ConversionHelper.importZones) do
+					if v then zoneCount = zoneCount + 1 end
+				end
+				return dbCount == 0 or zoneCount == 0
+			end
+		}
+	},
+}
 
 
 --[[
@@ -1114,7 +1291,7 @@ function Config:OnInitialize()
 		local launcher = DataBroker:NewDataObject("GatherMate2", {
 		    type = "launcher",
 		    icon = "Interface\\AddOns\\GatherMate\\Artwork\\Icon.tga",
-		    OnClick = function(clickedframe, button) LibStub("AceConfigDialog-3.0"):Open("GatherMate") end,
+		    OnClick = function(clickedframe, button) LibStub("AceConfigDialog-3.0"):Open("GatherMate2") end,
 		})
 	end
 end
