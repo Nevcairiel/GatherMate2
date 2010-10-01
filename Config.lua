@@ -1166,9 +1166,14 @@ function ConversionHelper:ConvertDatabase()
 		for zone,zoneLocal in pairs(self.zoneList) do
 			for coord, nodeID in GM1:GetNodesForZone(zone, nodeType) do
 				-- We should decode the location here and add it to the new DB with default level of 0
+				local x,y = GM1:getXY(coord)
+				-- Now encoded it to the new format
+				local newcoord = GatherMate.mapData:EncodeLoc(x,y,0)
+				GatherMate:InjectNode(zone, newcoord ,nodeType, nodeID)
 			end
 		end
 	end
+	Config:Print("GatherMate data has been imported.")
 end
 
 ConversionHelper:PopulateZoneList()
