@@ -1,4 +1,4 @@
-﻿-- GatherMate Locale
+-- GatherMate Locale
 -- Please use the Localization App on WoWAce to Update this
 -- http://www.wowace.com/projects/gathermate2/localization/
 
