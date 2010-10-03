@@ -1173,7 +1173,7 @@ function ConversionHelper:ConvertDatabase()
 			end
 		end
 	end
-	Config:Print("GatherMate data has been imported.")
+	Config:Print(L["GatherMate data has been imported."])
 end
 
 ConversionHelper:PopulateZoneList()
@@ -1181,7 +1181,7 @@ ConversionHelper:PopulateZoneList()
 
 options.args.importing.args.LegacyData = {
 	type = "group",
-	name = "GatherMate Conversion", -- addon name to import from, don't localize
+	name = L["GatherMate Conversion"], -- addon name to import from, don't localize
 	handler = ConversionHelper,
 	disabled = function()
 		local name, title, notes, enabled, loadable, reason, security = GetAddOnInfo("GatherMate")
@@ -1193,7 +1193,7 @@ options.args.importing.args.LegacyData = {
 		desc = {
 			order = 0,
 			type = "description",
-			name = "Conversion_Desc",
+			name = L["Conversion_Desc"],
 		},
 		dbSelection = {
 			order = 1,
@@ -1203,8 +1203,8 @@ options.args.importing.args.LegacyData = {
 			args = {
 				selectDBs = {
 					order = 1,
-					name = "Select Databases",
-					desc = "Select Databases",
+					name = L["Select Databases"],
+					desc = L["Select Databases"],
 					type = "multiselect",
 					values = ConversionHelper.dbList,
 					get = "GetSelectedDB",
@@ -1213,14 +1213,14 @@ options.args.importing.args.LegacyData = {
 				select_all = {
 					order = 2,
 					name = L["Select All"],
-					desc = "Select all databases",
+					desc = L["Select all databases"],
 					type = "execute",
 					func = "DBSelectAll",
 				},
 				select_none = {
 					order = 2,
 					name = L["Select None"],
-					desc = "Clear database selections",
+					desc = L["Clear database selections"],
 					type = "execute",
 					func = "DBSelectNone",
 				},
@@ -1235,7 +1235,7 @@ options.args.importing.args.LegacyData = {
 				zones = {
 					order = 1,
 					name = "",
-					desc = "Select Zones",
+					desc = L["Select Zones"],
 					type = "multiselect",
 					values = ConversionHelper.zoneList,
 					get = "GetSelectedZone",
@@ -1244,14 +1244,14 @@ options.args.importing.args.LegacyData = {
 				select_all = {
 					order = 2,
 					name = L["Select All"],
-					desc = "Select all zones",
+					desc = L["Select all zones"],
 					type = "execute",
 					func = "ZoneSelectAll",
 				},
 				select_none = {
 					order = 2,
 					name = L["Select None"],
-					desc = "Clear zone selections",
+					desc = L["Clear zone selections"],
 					type = "execute",
 					func = "ZoneSelectNone",
 				},
@@ -1260,8 +1260,8 @@ options.args.importing.args.LegacyData = {
 		conversionAction = {
 			order = 99,
 			type = "execute",
-			name = "Convert Databses",
-			desc = "Conversion Desc",
+			name = L["Convert Databses"],
+			desc = L["Conversion_Desc"],
 			func = "ConvertDatabase",
 			disabled = function()
 				local dbCount = 0
@@ -1290,7 +1290,7 @@ function Config:OnInitialize()
 	self.importHelper = ImportHelper
 	LibStub("AceConfigRegistry-3.0"):RegisterOptionsTable("GatherMate2", options)
 	LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GatherMate2", "GatherMate2")
-	self:RegisterChatCommand("gathermate", function() LibStub("AceConfigDialog-3.0"):Open("GatherMate2") end )
+	self:RegisterChatCommand("gathermate2", function() LibStub("AceConfigDialog-3.0"):Open("GatherMate2") end )
 	self:RegisterMessage("GatherMateConfigChanged")
 	if DataBroker then
 		local launcher = DataBroker:NewDataObject("GatherMate2", {
