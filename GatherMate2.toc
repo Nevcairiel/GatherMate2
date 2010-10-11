@@ -14,7 +14,7 @@
 ## SavedVariables: GatherMate2DB, GatherMate2HerbDB, GatherMate2MineDB, GatherMate2FishDB, GatherMate2GasDB, GatherMate2TreasureDB, GatherMate2ArchaeologyDB
 ## X-Category: Map
 ## Version: @project-version@
-## X-License: GPL v2
+## X-License: ARR
 ## OptionalDeps: Ace3, LibDataBroker-1.1, LibMapData-1.0
 ## LoadManagers: AddonLoader
 ## X-LoadOn-Always: delayed
