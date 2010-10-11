@@ -967,7 +967,7 @@ ImportHelper.expac_data = {
 	["WRATH"] = L["Wrath of the Lich King"],
 	["CATACLYSM"] = L["Cataclysm"],
 }
-imported["GatherMate_Data"] = false
+imported["GatherMate2_Data"] = false
 options.args.importing.args.GatherMateData = {
 	type = "group",
 	name = "GatherMate2Data", -- addon name to import from, don't localize
@@ -1041,8 +1041,8 @@ options.args.importing.args.GatherMateData = {
 		},
 		loadData = {
 			order = 8,
-			name = L["Import GatherMateData"],
-			desc = L["Load GatherMateData and import the data to your database."],
+			name = L["Import GatherMate2Data"],
+			desc = L["Load GatherMate2Data and import the data to your database."],
 			type = "execute",
 			func = function()
 				local loaded, reason = LoadAddOn("GatherMate2_Data")
@@ -1050,15 +1050,15 @@ options.args.importing.args.GatherMateData = {
 				if loaded then
 					local dataVersion = tonumber(GetAddOnMetadata("GatherMate2_Data", "X-Generated-Version"):match("%d+"))
 					local filter = nil
-					if db.importers["GatherMate_Data"].expacOnly then
-						filter = db.importers["GatherMate_Data"].expac
+					if db.importers["GatherMate2_Data"].expacOnly then
+						filter = db.importers["GatherMat2e_Data"].expac
 					end
 					GatherMateData:PerformMerge(db.importers["GatherMate2_Data"].Databases,db.importers["GatherMate2_Data"].Style,filter)
 					GatherMateData:CleanupImportData()
 					Config:Print(L["GatherMate2Data has been imported."])
-					Config:SendMessage("GatherMateConfigChanged")
-					db["importers"]["GatherMate_Data"]["lastImport"] = dataVersion
-					imported["GatherMate_Data"] = true
+					Config:SendMessage("GatherMate2ConfigChanged")
+					db["importers"]["GatherMate2_Data"]["lastImport"] = dataVersion
+					imported["GatherMate2_Data"] = true
 				else
 					Config:Print(L["Failed to load GatherMateData due to "]..reason)
 				end
@@ -1291,7 +1291,7 @@ function Config:OnInitialize()
 	LibStub("AceConfigRegistry-3.0"):RegisterOptionsTable("GatherMate2", options)
 	LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GatherMate2", "GatherMate2")
 	self:RegisterChatCommand("gathermate2", function() LibStub("AceConfigDialog-3.0"):Open("GatherMate2") end )
-	self:RegisterMessage("GatherMateConfigChanged")
+	self:RegisterMessage("GatherMate2ConfigChanged")
 	if DataBroker then
 		local launcher = DataBroker:NewDataObject("GatherMate2", {
 		    type = "launcher",
