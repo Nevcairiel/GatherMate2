@@ -1309,7 +1309,7 @@ function Config:UpdateConfig()
 	self:SendMessage("GatherMate2ConfigChanged")
 end
 
-function Config:GatherMateConfigChanged()
+function Config:GatherMate2ConfigChanged()
 	db = GatherMate.db.profile
 end
 
