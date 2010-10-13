@@ -297,7 +297,7 @@ function Display:SKILL_LINES_CHANGED()
 		have_prof_skill[k] = nil
 	end
 
-	for index, key in ipairs({GetProfessions()}) do
+	for index, key in pairs({GetProfessions()}) do
 		name, icon, rank, maxrank, numspells, spelloffset, skillline = GetProfessionInfo(key)
 		if profession_to_skill[name] then
 			have_prof_skill[profession_to_skill[name]] = true
