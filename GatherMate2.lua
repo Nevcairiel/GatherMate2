@@ -184,8 +184,8 @@ function GatherMate:InjectNode(zone, coords, nodeType, nodeID)
 	if GatherMate.db.profile.dbLocks[nodeType] then
 		return
 	end
-	db[zoneID] = db[zone] or {}
-	db[zoneID][coords] = nodeID
+	db[zone] = db[zone] or {}
+	db[zone][coords] = nodeID
 end
 function GatherMate:DeleteNode(zone, coords, nodeType)
 	-- db lock check
