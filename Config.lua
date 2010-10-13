@@ -1162,14 +1162,14 @@ end
 
 function ConversionHelper:ConvertDatabase()
 	local GM1 = LibStub("AceAddon-3.0"):GetAddon("GatherMate")
-	for nodeType,nodeName in pairs(self.dbList) do
-		for zone,zoneLocal in pairs(self.zoneList) do
-			for coord, nodeID in GM1:GetNodesForZone(zone, nodeType) do
+	for nodeType,nodeName in pairs(self.importDBs) do
+		for zone,zoneLocal in pairs(self.importZones) do
+			for coord, nodeID in GM1:GetNodesForZone(self.zoneList[zone], nodeType) do
 				-- We should decode the location here and add it to the new DB with default level of 0
 				local x,y = GM1:getXY(coord)
 				-- Now encoded it to the new format
 				local newcoord = GatherMate.mapData:EncodeLoc(x,y,0)
-				GatherMate:InjectNode(zone, newcoord ,nodeType, nodeID)
+				GatherMate:InjectNode(GatherMate.mapData:MapAreaId(zone), newcoord ,nodeType, nodeID)
 			end
 		end
 	end
