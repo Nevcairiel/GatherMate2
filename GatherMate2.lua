@@ -335,7 +335,7 @@ function GatherMate:CleanupDB()
 	local Collector = GatherMate:GetModule("Collector")
 	local rares = Collector.rareNodes
 	-- Need to iterate list of zones here
-	for zone,v in pairs(GatherMate.mapData:GetAllMapIDs()) do
+	for v,zone in pairs(GatherMate.mapData:GetAllMapIDs()) do
 		--self:Print(L["Processing "]..zone)
 		for profession in pairs(gmdbs) do
 			local range = db.cleanupRange[profession]
