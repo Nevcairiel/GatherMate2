@@ -1295,7 +1295,7 @@ function Config:OnInitialize()
 	if DataBroker then
 		local launcher = DataBroker:NewDataObject("GatherMate2", {
 		    type = "launcher",
-		    icon = "Interface\\AddOns\\GatherMate\\Artwork\\Icon.tga",
+		    icon = "Interface\\AddOns\\GatherMate2\\Artwork\\Icon.tga",
 		    OnClick = function(clickedframe, button) LibStub("AceConfigDialog-3.0"):Open("GatherMate2") end,
 		})
 	end
