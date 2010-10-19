@@ -992,7 +992,7 @@ options.args.importing.args.GatherMateData = {
 			values = ImportHelper.db_options,
 			set = "SetImportStyle",
 			get = "GetImportStyle",
-			arg = "GatherMate_Data",
+			arg = "GatherMate2_Data",
 		},
 		loadDatabase = {
 			order = 2,

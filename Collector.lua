@@ -105,7 +105,7 @@ end
 function Collector:GasBuffDetector(b,timestamp, eventType, srcGUID, srcName, srcFlags, dstGUID, dstName, dstFlags, spellId,spellName,spellSchool,auraType)
 	if foundTarget or (prevSpell and prevSpell ~= gasSpell) then return end
 	if eventType == "SPELL_CAST_SUCCESS" and  spellName == gasSpell then
-	ga = gasSpell
+		ga = gasSpell
 	elseif eventType == "UNIT_DISSIPATES" and  ga == gasSpell then
 		foundTarget = true
 		self:addItem(ga,dstName)
