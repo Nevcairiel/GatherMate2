@@ -213,7 +213,7 @@ options.args.display.args.general = {
 					name = L["Icon Scale"],
 					desc = L["Icon scaling, this lets you enlarge or shrink your icons on both the World Map and Minimap."],
 					type = "range",
-					min = 0.5, max = 2, step = 0.01,
+					min = 0.5, max = 5, step = 0.01,
 					arg = "scale",
 				},
 				iconAlpha = {
@@ -1051,7 +1051,7 @@ options.args.importing.args.GatherMateData = {
 					local dataVersion = tonumber(GetAddOnMetadata("GatherMate2_Data", "X-Generated-Version"):match("%d+"))
 					local filter = nil
 					if db.importers["GatherMate2_Data"].expacOnly then
-						filter = db.importers["GatherMat2e_Data"].expac
+						filter = db.importers["GatherMate2_Data"].expac
 					end
 					GatherMateData:PerformMerge(db.importers["GatherMate2_Data"].Databases,db.importers["GatherMate2_Data"].Style,filter)
 					GatherMateData:CleanupImportData()
@@ -1291,6 +1291,7 @@ function Config:OnInitialize()
 	LibStub("AceConfigRegistry-3.0"):RegisterOptionsTable("GatherMate2", options)
 	LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GatherMate2", "GatherMate2")
 	self:RegisterChatCommand("gathermate2", function() LibStub("AceConfigDialog-3.0"):Open("GatherMate2") end )
+	self:RegisterChatCommand("gm2", function() LibStub("AceConfigDialog-3.0"):Open("GatherMate2") end )
 	self:RegisterMessage("GatherMate2ConfigChanged")
 	if DataBroker then
 		local launcher = DataBroker:NewDataObject("GatherMate2", {

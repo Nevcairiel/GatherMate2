@@ -786,6 +786,8 @@ function Display:UpdateWorldMap(force)
 	end
 	if lastScale ~= db.scale or lastAlphaPref ~= db.alpha then
 		local scale, alpha = db.scale, db.alpha
+		-- Make Worldmap scaling 0.25 bigger than the minimap.
+		scale = scale + 0.25
 		for index, pin in pairs(worldmapPins) do
 			pin:SetHeight(12 * scale)
 			pin:SetWidth(12 * scale)
