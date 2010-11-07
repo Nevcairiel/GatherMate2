@@ -78,6 +78,7 @@ function Collector:RegisterGatherEvents()
 	self:RegisterEvent("UI_ERROR_MESSAGE","UIError")
 	self:RegisterEvent("LOOT_CLOSED","GatherCompleted")
 	self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", "GasBuffDetector")
+	self:RegisterEvent("CHAT_MSG_LOOT","SecondaryGasCheck") -- for Storm Clouds
 	gatherEvents = true
 end
 
@@ -95,6 +96,20 @@ function Collector:UnregisterGatherEvents()
 	self:UnregisterEvent("LOOT_CLOSED")
 	self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 	gatherEvents = false
+end
+
+local CrystalizedWater = (GetItemInfo(37705)) or ""
+
+function Collector:SecondaryGasCheck(event,msg)
+	if ga ~= gasSpell then return end
+	if not msg then return end
+	if foundTarget then return end
+	if ga == gasSpell and strfind(msg,CrystalizedWater) then
+		-- check for Steam Clouds by assuming your always getting water from Steam Clouds
+		foundTarget = true
+		self:addItem(ga,NL["Steam Cloud"])
+		ga = "No"
+	end
 end
 
 --[[
@@ -173,7 +188,7 @@ end
 function Collector:SpellStarted(event,unit,spellcast,rank,target)
 	if unit ~= "player" then return end
 	foundTarget = false
-	ga ="NO"
+	ga ="No"
 	if spells[spellcast] then
 		curSpell = spellcast
 		prevSpell = spellcast
