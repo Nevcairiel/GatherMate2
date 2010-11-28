@@ -1290,7 +1290,7 @@ function Config:OnInitialize()
 	self.importHelper = ImportHelper
 	LibStub("AceConfigRegistry-3.0"):RegisterOptionsTable("GatherMate2", options)
 	LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GatherMate2", "GatherMate2")
-	self:RegisterChatCommand("gathermate2", function() LibStub("AceConfigDialog-3.0"):Open("GatherMate2") end )
+	self:RegisterChatCommand("gathermate", function() LibStub("AceConfigDialog-3.0"):Open("GatherMate2") end )
 	self:RegisterMessage("GatherMate2ConfigChanged")
 	if DataBroker then
 		local launcher = DataBroker:NewDataObject("GatherMate2", {
