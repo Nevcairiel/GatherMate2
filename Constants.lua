@@ -180,7 +180,7 @@ local node_ids = {
 		[NL["Stormvine"]]						= 458,
 		[NL["Heartblossom"]]					= 459,
 		[NL["Twilight Jasmine"]]				= 460,
-		[NL["Whiptail"]]								= 461,
+		[NL["Whiptail"]]						= 461,
 	},
 	["Treasure"] = {
 		[NL["Giant Clam"]] 						= 501,
