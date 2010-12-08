@@ -180,6 +180,7 @@ local node_ids = {
 		[NL["Stormvine"]]						= 458,
 		[NL["Heartblossom"]]					= 459,
 		[NL["Twilight Jasmine"]]				= 460,
+		[NL["Whiptail"]]								= 461,
 	},
 	["Treasure"] = {
 		[NL["Giant Clam"]] 						= 501,
@@ -461,12 +462,13 @@ local node_textures = {
 		[452] = icon_path.."Herb\\misc_flower.tga",
 		[453] = icon_path.."Herb\\frostlotus.tga",
 		[454] = icon_path.."Herb\\dragonsteeth.tga",
-		[455] = icon_path.."Herb\\whiptail.tga",
+		[455] = icon_path.."Herb\\plaguebloom.tga",
 		[456] = icon_path.."Herb\\azsharasveil.tga",
 		[457] = icon_path.."Herb\\cinderbloom.tga",
 		[458] = icon_path.."Herb\\stormvine.tga",
 		[459] = icon_path.."Herb\\heartblossom.tga",
 		[460] = icon_path.."Herb\\twilightjasmine.tga",
+		[461] = icon_path.."Herb\\whiptail.tga",
 	},
 	["Treasure"] = {
 		[501] = icon_path.."Treasure\\clam.tga",
@@ -634,6 +636,7 @@ local node_minharvest = {
 		[458] = 425,
 		[459] = 475,
 		[460] = 525,
+		[461] = 500,
 	},
 	["Treasure"] = {
 	},
