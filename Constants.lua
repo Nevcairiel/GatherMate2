@@ -65,6 +65,15 @@ local node_ids = {
 		[NL["Sparse Schooner Wreckage"]]		= 146,
 		[NL["Abundant Bloodsail Wreckage"]]		= 147,
 		[NL["Teeming Floating Wreckage"]]		= 148,
+		-- Placeholder till i can verify names
+		--[NL["Albino Cavefish School"]]		= 149,
+		--[NL["Algaefin Rockfish School"]]		= 150,
+		--[NL["Blackbelly Mudfish School"]]		= 151,
+		--[NL["Fathom Eel Swarm"]]				= 152,
+		--[NL["Highland Guppy School"]]			= 153,
+		--[NL["Mountain Trout School"]]			= 154,
+		--[NL["Pool of Fire"]]					= 155,
+		--[NL["Shipwreck Debris"]]				= 156,
 	},
 	["Mining"] = {
 		[NL["Copper Vein"]] 					= 201,
@@ -355,6 +364,15 @@ local node_textures = {
 		[146] = icon_path.."Fish\\treasure.tga",
 		[147] = icon_path.."Fish\\treasure.tga",
 		[148] = icon_path.."Fish\\treasure.tga",
+		-- Placeholder graphics
+		--[149] = icon.path.."Fish\\net.tga",
+		--[150] = icon.path.."Fish\\net.tga",
+		--[151] = icon.path.."Fish\\net.tga",
+		--[152] = icon.path.."Fish\\net.tga",
+		--[153] = icon.path.."Fish\\net.tga",
+		--[154] = icon.path.."Fish\\net.tga",
+		--[155] = icon.path.."Fish\\net.tga",
+		--[156] = icon.path.."Fish\\net.tga",
 	},
 	["Mining"] = {
 		[201] = icon_path.."Mine\\copper.tga",
