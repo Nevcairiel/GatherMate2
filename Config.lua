@@ -1284,7 +1284,10 @@ function Config:OnInitialize()
 	acr:RegisterOptionsTable("GM2/FAQ", faqOptions)
 	acd:AddToBlizOptions("GM2/FAQ", "FAQ", "GatherMate 2")
 
-	self:RegisterChatCommand("gathermate", function() LibStub("AceConfigDialog-3.0"):Open("GatherMate 2") end)
+	self:RegisterChatCommand("gathermate", function()
+		local p = findPanel("GatherMate 2")
+		if p then InterfaceOptionsFrame_OpenToCategory(p.element.name) end
+	end)
 	self:RegisterMessage("GatherMate2ConfigChanged")
 	if DataBroker then
 		local launcher = DataBroker:NewDataObject("GatherMate2", {
