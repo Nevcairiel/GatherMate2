@@ -13,7 +13,7 @@ local pinCache = {}
 -- last x,y of the player.
 -- total number of pins we have created
 local lastX, lastY, lastXY, lastYY, pinCount = 0, 0, 0, 0, 0
-local lastLevel = 0
+local lastLevel, lastZone = 0, -1
 -- reference to the pin generating the UIDropDown
 local pinClickedOn
 -- our current zone
@@ -597,7 +597,7 @@ function Display:UpdateIconPositions()
 	local x, y = GetPlayerMapPosition("player")
 	local level = GetCurrentMapDungeonLevel()
 	-- if position is 0, the player changed the worldmap to another zone, just keep the old values
-	if (x == 0 or y == 0 or GatherMate.mapData:MapLocalize(zone) ~= GetRealZoneText()) then
+	if (x == 0 or y == 0 or GetCurrentMapZone() == 0) then
 		x, y = lastX, lastY
 		level = lastLevel
 	end
@@ -667,9 +667,10 @@ function Display:UpdateMiniMap(force)
 	local x, y = GetPlayerMapPosition("player")
 	-- if position is 0, the player changed the worldmap to another zone, just keep the old values
 	-- GetCurrentMapZone now changes when you changes maps
-	if (x == 0 or y == 0 or GatherMate.mapData:MapLocalize(zone) ~= GetRealZoneText()) then
+	if (x == 0 or y == 0 or GetCurrentMapZone() == 0) then
 		x, y = lastX, lastY
 		level = lastLevel
+		zone = lastZone
 	end
 
 	-- get data from the API for calculations
@@ -712,6 +713,7 @@ function Display:UpdateMiniMap(force)
 		lastFacing = facing
 		lastXY, lastYY = _x, _y
 		lastLevel = level
+		lastZone = zone
 
 		if rotateMinimap then
 			sin = math_sin(facing)
