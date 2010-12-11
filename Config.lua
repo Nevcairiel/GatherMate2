@@ -32,54 +32,43 @@ end
 
 
 local prof_options = {
-	["always"]          = L["Always show"],
-	["with_profession"] = L["Only with profession"],
-	["active"]          = L["Only while tracking"],
-	["never"]           = L["Never show"],
+	always          = L["Always show"],
+	with_profession = L["Only with profession"],
+	active          = L["Only while tracking"],
+	never           = L["Never show"],
 }
 local prof_options2 = { -- For Gas, which doesn't have tracking as a skill
-	["always"]           = L["Always show"],
-	["with_profession"]  = L["Only with profession"],
-	["never"]            = L["Never show"],
+	always           = L["Always show"],
+	with_profession  = L["Only with profession"],
+	never            = L["Never show"],
 }
 local prof_options3 = {
-	["always"]          = L["Always show"],
-	["active"]          = L["Only while tracking"],
-	["never"]           = L["Never show"],
+	always          = L["Always show"],
+	active          = L["Only while tracking"],
+	never           = L["Never show"],
 }
 local prof_options4 = { -- For Archaeology, which doesn't have tracking as a skill
-	["always"]           = L["Always show"],
-	["with_profession"]  = L["Only with profession"],
-	["never"]            = L["Never show"],
+	always           = L["Always show"],
+	with_profession  = L["Only with profession"],
+	never            = L["Never show"],
 }
 
-local options = {}
 local db
 local imported = {}
 -- setup the options, we need to reference GatherMate for this
-options.type = "group"
-options.name = "GatherMate2"
-options.get = function( k ) return db[k.arg] end
-options.set = function( k, v ) db[k.arg] = v; Config:UpdateConfig(); end
-options.args = {}
-options.plugins = {}
 
--- Display Settings config tree
-options.args.display = {
+local function get(k) return db[k.arg] end
+local function set(k, v) db[k.arg] = v; Config:UpdateConfig(); end
+
+local generalOptions = {
 	type = "group",
-	name = L["Display Settings"],
-	order = 1,
-	args = {},
-}
-options.args.display.args.general = {
-	type = "group",
-	name = L["General"],
-	order = 1,
+	get = get,
+	set = set,
 	args = {
 		showGroup = {
 			type = "group",
 			name = L["Show Databases"],
-			guiInline = true,
+			inline = true,
 			order = 1,
 			get = function(k) return db.show[k.arg] end,
 			set = function(k, v) db.show[k.arg] = v; Config:UpdateConfig(); end,
@@ -142,7 +131,7 @@ options.args.display.args.general = {
 		iconGroup = {
 			type = "group",
 			name = L["Icons"],
-			guiInline = true,
+			inline = true,
 			order = 2,
 			args = {
 				desc = {
@@ -237,7 +226,7 @@ options.args.display.args.general = {
 					name = L["Tracking Circle Color"],
 					desc = L["Color of the tracking circle."],
 					type = "group",
-					guiInline = true,
+					inline = true,
 					get = function(info)
 						local t = db.trackColors[info.arg]
 						return t.Red, t.Green, t.Blue, t.Alpha
@@ -311,8 +300,8 @@ options.args.display.args.general = {
 							desc = L["The distance in yards to a node before it turns into a tracking circle"],
 							type = "range",
 							min = 50, max = 240, step = 5,
-							get = options.get,
-							set = options.set,
+							get = get,
+							set = set,
 							arg = "trackDistance",
 						},
 						trackShow = {
@@ -320,8 +309,8 @@ options.args.display.args.general = {
 							name = L["Show Tracking Circle"],
 							desc = L["Toggle showing the tracking circle."],
 							type = "select",
-							get = options.get,
-							set = options.set,
+							get = get,
+							set = set,
 							values = prof_options,
 							arg = "trackShow",
 						},
@@ -420,25 +409,28 @@ function ImportHelper:SetExpac(info,state)
 	db["importers"][info.arg].expac = state
 end
 
-local commonFiltersDescTable = {
-	order = 0,
-	type = "description",
-	name = L["Filter_Desc"],
-}
-options.args.display.args.filters = {
+local filterOptions = {
 	type = "group",
 	name = L["Filters"],
 	order = 2,
-	--childGroups = "tab", -- this makes the filter tree become inline tabs
+	get = get,
+	set = set,
+	childGroups = "tab",
 	handler = ConfigFilterHelper,
-	args = {},
+	args = {
+		heading = {
+			order = 0,
+			type = "description",
+			name = L["Filter_Desc"],
+			width = "full",
+		},
+	},
 }
-options.args.display.args.filters.args.herbs = {
+filterOptions.args.herbs = {
 	type = "group",
-	name = L["Herb filter"],
+	name = L["Herbalism"],
 	desc = L["Select the herb nodes you wish to display."],
 	args = {
-		desc = commonFiltersDescTable,
 		select_all = {
 			order = 1,
 			name = L["Select All"],
@@ -466,12 +458,11 @@ options.args.display.args.filters.args.herbs = {
 		},
 	},
 }
-options.args.display.args.filters.args.mines = {
+filterOptions.args.mines = {
 	type = "group",
-	name = L["Mine filter"],
+	name = L["Mining"],
 	desc = L["Select the mining nodes you wish to display."],
 	args = {
-		desc = commonFiltersDescTable,
 		select_all = {
 			order = 1,
 			name = L["Select All"],
@@ -499,11 +490,10 @@ options.args.display.args.filters.args.mines = {
 		},
 	},
 }
-options.args.display.args.filters.args.fish = {
+filterOptions.args.fish = {
 	type = "group",
-	name = L["Fish filter"],
+	name = L["Fishing"],
 	args = {
-		desc = commonFiltersDescTable,
 		select_all = {
 			order = 1,
 			name = L["Select All"],
@@ -532,11 +522,10 @@ options.args.display.args.filters.args.fish = {
 		},
 	},
 }
-options.args.display.args.filters.args.gas = {
+filterOptions.args.gas = {
 	type = "group",
-	name = L["Gas filter"],
+	name = L["Gas Clouds"],
 	args = {
-		desc = commonFiltersDescTable,
 		select_all = {
 			order = 1,
 			name = L["Select All"],
@@ -565,11 +554,10 @@ options.args.display.args.filters.args.gas = {
 		},
 	},
 }
-options.args.display.args.filters.args.treasure = {
+filterOptions.args.treasure = {
 	type = "group",
-	name = L["Treasure filter"],
+	name = L["Treasure"],
 	args = {
-		desc = commonFiltersDescTable,
 		select_all = {
 			order = 1,
 			name = L["Select All"],
@@ -598,11 +586,10 @@ options.args.display.args.filters.args.treasure = {
 		},
 	},
 }
-options.args.display.args.filters.args.archaeology = {
+filterOptions.args.archaeology = {
 	type = "group",
-	name = L["Archaeology filter"],
+	name = L["Archaeology"],
 	args = {
-		desc = commonFiltersDescTable,
 		select_all = {
 			order = 1,
 			name = L["Select All"],
@@ -635,187 +622,30 @@ options.args.display.args.filters.args.archaeology = {
 local selectedDatabase, selectedNode, selectedZone = "Extract Gas", 0, nil
 
 -- Cleanup config tree
-options.args.cleanup = {
+local maintenanceOptions = {
 	type = "group",
 	name = L["Database Maintenance"],
-	order = 5,
+	get = get,
+	set = set,
 	args = {
-		cleanup = {
-			order = 20,
-			name = L["Cleanup Database"],
-			type = "group",
-			args = {
-				cleanup = {
-					order = 10,
-					name = L["Cleanup Database"],
-					type = "group",
-					guiInline = true,
-					args = {
-						desc = {
-							order = 0,
-							type = "description",
-							name = L["Cleanup_Desc"],
-						},
-						cleanup = {
-							name = L["Cleanup Database"],
-							desc = L["Cleanup your database by removing duplicates. This takes a few moments, be patient."],
-							type = "execute",
-							handler = GatherMate,
-							func = "CleanupDB",
-							order = 20,
-						},
-					},
-				},
-				deleteSelective = {
-					order = 20,
-					name = L["Delete Specific Nodes"],
-					type = "group",
-					guiInline = true,
-					args = {
-						desc = {
-							order = 0,
-							type = "description",
-							name = L["DELETE_SPECIFIC_DESC"],
-						},
-						selectDB = {
-							order = 30,
-							name = L["Select Database"],
-							desc = L["Select Database"],
-							type = "select",
-							values = {
-								["Fishing"] = L["Fishes"],
-								["Treasure"] = L["Treasure"],
-								["Herb Gathering"] = L["Herb Bushes"],
-								["Mining"] = L["Mineral Veins"],
-								["Extract Gas"] = L["Gas Clouds"],
-								["Archaeology"] = L["Archaeology"],
-							},
-							get = function() return selectedDatabase end,
-							set = function(k, v)
-								selectedDatabase = v
-								selectedNode = 0
-							end,
-						},
-						selectNode = {
-							order = 40,
-							name = L["Select Node"],
-							desc = L["Select Node"],
-							type = "select",
-							values = function()
-								return sortedFilter[selectedDatabase]
-							end,
-							get = function() return selectedNode end,
-							set = function(k, v) selectedNode = v end,
-						},
-						selectZone = {
-							order = 50,
-							name = L["Select Zone"],
-							desc = L["Select Zone"],
-							type = "select",
-							values = sortedFilter["zones"],
-							get = function() return selectedZone end,
-							set = function(k, v) selectedZone = v end,
-						},
-						delete = {
-							order = 60,
-							name = L["Delete"],
-							desc = L["Delete selected node from selected zone"],
-							type = "execute",
-							confirm = true,
-							confirmText = L["Are you sure you want to delete all of the selected node from the selected zone?"],
-							func = function()
-								if selectedZone and selectedNode ~= 0 then
-									GatherMate:DeleteNodeFromZone(selectedDatabase, GatherMate.nodeIDs[selectedDatabase][selectedNode], selectedZone)
-								end
-							end,
-							disabled = function()
-								return selectedNode == 0 or selectedZone == nil
-							end,
-						},
-					},
-				},
-				delete = {
-					order = 30,
-					name = L["Delete Entire Database"],
-					type = "group",
-					guiInline = true,
-					func = function(info)
-						GatherMate:ClearDB(info.arg)
-					end,
-					args = {
-						desc = {
-							order = 0,
-							type = "description",
-							name = L["DELETE_ENTIRE_DESC"],
-						},
-						Mine = {
-							order = 5,
-							name = L["Mineral Veins"],
-							desc = L["Delete Entire Database"],
-							type = "execute",
-							arg = "Mining",
-							confirm = true,
-							confirmText = L["Are you sure you want to delete all nodes from this database?"],
-						},
-						Herb = {
-							order = 5,
-							name = L["Herb Bushes"],
-							desc = L["Delete Entire Database"],
-							type = "execute",
-							arg = "Herb Gathering",
-							confirm = true,
-							confirmText = L["Are you sure you want to delete all nodes from this database?"],
-						},
-						Fish = {
-							order = 5,
-							name = L["Fishes"],
-							desc = L["Delete Entire Database"],
-							type = "execute",
-							arg = "Fishing",
-							confirm = true,
-							confirmText = L["Are you sure you want to delete all nodes from this database?"],
-						},
-						Gas = {
-							order = 5,
-							name = L["Gas Clouds"],
-							desc = L["Delete Entire Database"],
-							type = "execute",
-							arg = "Extract Gas",
-							confirm = true,
-							confirmText = L["Are you sure you want to delete all nodes from this database?"],
-						},
-						Treasure = {
-							order = 5,
-							name = L["Treasure"],
-							desc = L["Delete Entire Database"],
-							type = "execute",
-							arg = "Treasure",
-							confirm = true,
-							confirmText = L["Are you sure you want to delete all nodes from this database?"],
-						},
-						Archaeology = {
-							order = 5,
-							name = L["Archaeology"],
-							desc = L["Delete Entire Database"],
-							type = "execute",
-							arg = "Archaeology",
-							confirm = true,
-							confirmText = L["Are you sure you want to delete all nodes from this database?"],
-						},
-					},
-				},
-			},
-		},
 		desc = {
-			order = 0,
+			order = 1,
 			type = "description",
 			name = L["Cleanup_Desc"],
+		},
+		cleanup = {
+			name = L["Cleanup Database"],
+			desc = L["Cleanup your database by removing duplicates. This takes a few moments, be patient."],
+			type = "execute",
+			handler = GatherMate,
+			func = "CleanupDB",
+			order = 5,
+			width = "full",
 		},
 		cleanup_range = {
 			order = 10,
 			name = L["Cleanup radius"],
 			type = "group",
-			guiInline = true,
 			get = function(info)
 				return db.cleanupRange[info.arg]
 			end,
@@ -878,11 +708,146 @@ options.args.cleanup = {
 				}
 			},
 		},
+		deleteSelective = {
+			order = 20,
+			name = L["Delete Specific Nodes"],
+			type = "group",
+			args = {
+				desc = {
+					order = 0,
+					type = "description",
+					name = L["DELETE_SPECIFIC_DESC"],
+				},
+				selectDB = {
+					order = 30,
+					name = L["Select Database"],
+					desc = L["Select Database"],
+					type = "select",
+					values = {
+						["Fishing"] = L["Fishes"],
+						["Treasure"] = L["Treasure"],
+						["Herb Gathering"] = L["Herb Bushes"],
+						["Mining"] = L["Mineral Veins"],
+						["Extract Gas"] = L["Gas Clouds"],
+						["Archaeology"] = L["Archaeology"],
+					},
+					get = function() return selectedDatabase end,
+					set = function(k, v)
+						selectedDatabase = v
+						selectedNode = 0
+					end,
+				},
+				selectNode = {
+					order = 40,
+					name = L["Select Node"],
+					desc = L["Select Node"],
+					type = "select",
+					values = function()
+						return sortedFilter[selectedDatabase]
+					end,
+					get = function() return selectedNode end,
+					set = function(k, v) selectedNode = v end,
+				},
+				selectZone = {
+					order = 50,
+					name = L["Select Zone"],
+					desc = L["Select Zone"],
+					type = "select",
+					values = sortedFilter["zones"],
+					get = function() return selectedZone end,
+					set = function(k, v) selectedZone = v end,
+				},
+				delete = {
+					order = 60,
+					name = L["Delete"],
+					desc = L["Delete selected node from selected zone"],
+					type = "execute",
+					confirm = true,
+					confirmText = L["Are you sure you want to delete all of the selected node from the selected zone?"],
+					func = function()
+						if selectedZone and selectedNode ~= 0 then
+							GatherMate:DeleteNodeFromZone(selectedDatabase, GatherMate.nodeIDs[selectedDatabase][selectedNode], selectedZone)
+						end
+					end,
+					disabled = function()
+						return selectedNode == 0 or selectedZone == nil
+					end,
+				},
+			},
+		},
+		delete = {
+			order = 30,
+			name = L["Delete Entire Database"],
+			type = "group",
+			func = function(info)
+				GatherMate:ClearDB(info.arg)
+			end,
+			args = {
+				desc = {
+					order = 0,
+					type = "description",
+					name = L["DELETE_ENTIRE_DESC"],
+				},
+				Mine = {
+					order = 5,
+					name = L["Mineral Veins"],
+					desc = L["Delete Entire Database"],
+					type = "execute",
+					arg = "Mining",
+					confirm = true,
+					confirmText = L["Are you sure you want to delete all nodes from this database?"],
+				},
+				Herb = {
+					order = 5,
+					name = L["Herb Bushes"],
+					desc = L["Delete Entire Database"],
+					type = "execute",
+					arg = "Herb Gathering",
+					confirm = true,
+					confirmText = L["Are you sure you want to delete all nodes from this database?"],
+				},
+				Fish = {
+					order = 5,
+					name = L["Fishes"],
+					desc = L["Delete Entire Database"],
+					type = "execute",
+					arg = "Fishing",
+					confirm = true,
+					confirmText = L["Are you sure you want to delete all nodes from this database?"],
+				},
+				Gas = {
+					order = 5,
+					name = L["Gas Clouds"],
+					desc = L["Delete Entire Database"],
+					type = "execute",
+					arg = "Extract Gas",
+					confirm = true,
+					confirmText = L["Are you sure you want to delete all nodes from this database?"],
+				},
+				Treasure = {
+					order = 5,
+					name = L["Treasure"],
+					desc = L["Delete Entire Database"],
+					type = "execute",
+					arg = "Treasure",
+					confirm = true,
+					confirmText = L["Are you sure you want to delete all nodes from this database?"],
+				},
+				Archaeology = {
+					order = 5,
+					name = L["Archaeology"],
+					desc = L["Delete Entire Database"],
+					type = "execute",
+					arg = "Archaeology",
+					confirm = true,
+					confirmText = L["Are you sure you want to delete all nodes from this database?"],
+				},
+			},
+		},
 		dblocking = {
 			order = 11,
 			name = L["Database Locking"],
 			type = "group",
-			guiInline = true,
 			get = function(info)
 				return db.dbLocks[info.arg]
 			end,
@@ -944,11 +909,14 @@ options.args.cleanup = {
 
 
 -- GatherMateData Import config tree
-options.args.importing = {
+local importOptions = {
 	type = "group",
 	name = L["Import Data"],
 	order = 10,
 	args = {},
+	get = get,
+	set = set,
+	childGroups = "tab",
 }
 ImportHelper.db_options = {
 	["Merge"] = L["Merge"],
@@ -968,7 +936,7 @@ ImportHelper.expac_data = {
 	["CATACLYSM"] = L["Cataclysm"],
 }
 imported["GatherMate2_Data"] = false
-options.args.importing.args.GatherMateData = {
+importOptions.args.GatherMateData = {
 	type = "group",
 	name = "GatherMate2Data", -- addon name to import from, don't localize
 	handler = ImportHelper,
@@ -1077,21 +1045,15 @@ options.args.importing.args.GatherMateData = {
 	},
 }
 
-options.args.faq_group = {
+local faqOptions = {
 	type = "group",
-	name = L["FAQ"],
-	desc = L["Frequently Asked Questions"],
-	order = -1,
+	name = L["Frequently Asked Questions"],
 	args = {
-		header = {
-			type = "header",
-			name = L["Frequently Asked Questions"],
-			order = 0,
-		},
 		desc = {
 			type = "description",
 			name = L["FAQ_TEXT"],
-			order = 1,
+			width = "full",
+			fontSize = "medium",
 		},
 	},
 }
@@ -1179,7 +1141,7 @@ end
 ConversionHelper:PopulateZoneList()
 -- Legacy GatherMate Data
 
-options.args.importing.args.LegacyData = {
+importOptions.args.LegacyData = {
 	type = "group",
 	name = L["GatherMate Conversion"], -- addon name to import from, don't localize
 	handler = ConversionHelper,
@@ -1283,20 +1245,52 @@ options.args.importing.args.LegacyData = {
 	Initialize the Config System
 ]]
 
+local acr = LibStub("AceConfigRegistry-3.0")
+local acd = LibStub("AceConfigDialog-3.0")
+
+local function findPanel(name, parent)
+	for i, button in next, InterfaceOptionsFrameAddOns.buttons do
+		if button.element then
+			if name and button.element.name == name then return button
+			elseif parent and button.element.parent == parent then return button
+			end
+		end
+	end
+end
 function Config:OnInitialize()
 	db = GatherMate.db.profile
-	options.plugins["profiles"] = { profiles = LibStub("AceDBOptions-3.0"):GetOptionsTable(GatherMate2.db) }
-	self.options = options
+
 	self.importHelper = ImportHelper
-	LibStub("AceConfigRegistry-3.0"):RegisterOptionsTable("GatherMate2", options)
-	LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GatherMate2", "GatherMate2")
-	self:RegisterChatCommand("gathermate", function() LibStub("AceConfigDialog-3.0"):Open("GatherMate2") end )
+
+	acr:RegisterOptionsTable("GatherMate 2", generalOptions)
+	local options = acd:AddToBlizOptions("GatherMate 2", "GatherMate 2")
+	options:HookScript("OnShow", function()
+		local p = findPanel("GatherMate 2")
+		if p and p.element.collapsed then OptionsListButtonToggle_OnClick(p.toggle) end
+	end)
+
+	acr:RegisterOptionsTable("GM2/Filter", filterOptions)
+	acd:AddToBlizOptions("GM2/Filter", "Filters", "GatherMate 2")
+
+	acr:RegisterOptionsTable("GM2/Maintenance", maintenanceOptions)
+	acd:AddToBlizOptions("GM2/Maintenance", "Maintenance", "GatherMate 2")
+
+	acr:RegisterOptionsTable("GM2/Import", importOptions)
+	acd:AddToBlizOptions("GM2/Import", "Import", "GatherMate 2")
+
+	acr:RegisterOptionsTable("GM2/Profiles", LibStub("AceDBOptions-3.0"):GetOptionsTable(GatherMate2.db))
+	acd:AddToBlizOptions("GM2/Profiles", "Profiles", "GatherMate 2")
+
+	acr:RegisterOptionsTable("GM2/FAQ", faqOptions)
+	acd:AddToBlizOptions("GM2/FAQ", "FAQ", "GatherMate 2")
+
+	self:RegisterChatCommand("gathermate", function() LibStub("AceConfigDialog-3.0"):Open("GatherMate 2") end)
 	self:RegisterMessage("GatherMate2ConfigChanged")
 	if DataBroker then
 		local launcher = DataBroker:NewDataObject("GatherMate2", {
-		    type = "launcher",
-		    icon = "Interface\\AddOns\\GatherMate2\\Artwork\\Icon.tga",
-		    OnClick = function(clickedframe, button) LibStub("AceConfigDialog-3.0"):Open("GatherMate2") end,
+			type = "launcher",
+			icon = "Interface\\AddOns\\GatherMate2\\Artwork\\Icon.tga",
+			OnClick = function(clickedframe, button) LibStub("AceConfigDialog-3.0"):Open("GatherMate 2") end,
 		})
 	end
 end
@@ -1341,10 +1335,11 @@ end
 -- Allows an external import module to insert their aceopttable into the Importing tree
 -- returns a reference to the saved variables state for the addon
 function Config:RegisterImportModule(moduleName, optionsTable)
-	options.args.importing.args[moduleName] = optionsTable
+	importOptions.args[moduleName] = optionsTable
 	return db.importers[moduleName]
 end
 -- Allows an external module to insert their aceopttable
 function Config:RegisterModule(moduleName, optionsTable)
 	options.args[moduleName] = optionsTable
 end
+
