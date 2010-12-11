@@ -1,5 +1,5 @@
 local GatherMate = LibStub("AceAddon-3.0"):GetAddon("GatherMate2")
-local Config = GatherMate:NewModule("Config","AceConsole-3.0","AceEvent-3.0")
+local Config = GatherMate:NewModule("Config","AceEvent-3.0")
 local Display = GatherMate:GetModule("Display")
 local L = LibStub("AceLocale-3.0"):GetLocale("GatherMate2", false)
 
@@ -62,259 +62,243 @@ local function set(k, v) db[k.arg] = v; Config:UpdateConfig(); end
 
 local generalOptions = {
 	type = "group",
+	get = function(k) return db.show[k.arg] end,
+	set = function(k, v) db.show[k.arg] = v; Config:UpdateConfig(); end,
+	args = {
+		desc = {
+			order = 0,
+			type = "description",
+			name = L["Selected databases are shown on both the World Map and Minimap."],
+		},
+		showMinerals = {
+			order = 1,
+			name = L["Show Mining Nodes"],
+			desc = L["Toggle showing mining nodes."],
+			type = "select",
+			values = prof_options,
+			arg = "Mining"
+		},
+		showHerbs = {
+			order = 2,
+			name = L["Show Herbalism Nodes"],
+			desc = L["Toggle showing herbalism nodes."],
+			type = "select",
+			values = prof_options,
+			arg = "Herb Gathering"
+		},
+		showFishes = {
+			order = 3,
+			name = L["Show Fishing Nodes"],
+			desc = L["Toggle showing fishing nodes."],
+			type = "select",
+			values = prof_options,
+			arg = "Fishing"
+		},
+		showGases = {
+			order = 4,
+			name = L["Show Gas Clouds"],
+			desc = L["Toggle showing gas clouds."],
+			type = "select",
+			values = prof_options2,
+			arg = "Extract Gas"
+		},
+		showTreasure = {
+			order = 5,
+			name = L["Show Treasure Nodes"],
+			desc = L["Toggle showing treasure nodes."],
+			type = "select",
+			values = prof_options3,
+			arg = "Treasure"
+		},
+		showArchaeology = {
+			order = 6,
+			name = L["Show Archaeology Nodes"],
+			desc = L["Toggle showing archaeology nodes."],
+			type = "select",
+			values = prof_options4,
+			arg = "Archaeology"
+		},
+	},
+}
+
+local minimapOptions = {
+	type = "group",
 	get = get,
 	set = set,
 	args = {
-		showGroup = {
-			type = "group",
-			name = L["Show Databases"],
-			inline = true,
-			order = 1,
-			get = function(k) return db.show[k.arg] end,
-			set = function(k, v) db.show[k.arg] = v; Config:UpdateConfig(); end,
-			args = {
-				desc = {
-					order = 0,
-					type = "description",
-					name = L["Selected databases are shown on both the World Map and Minimap."],
-				},
-				showMinerals = {
-					order = 1,
-					name = L["Show Mining Nodes"],
-					desc = L["Toggle showing mining nodes."],
-					type = "select",
-					values = prof_options,
-					arg = "Mining"
-				},
-				showHerbs = {
-					order = 2,
-					name = L["Show Herbalism Nodes"],
-					desc = L["Toggle showing herbalism nodes."],
-					type = "select",
-					values = prof_options,
-					arg = "Herb Gathering"
-				},
-				showFishes = {
-					order = 3,
-					name = L["Show Fishing Nodes"],
-					desc = L["Toggle showing fishing nodes."],
-					type = "select",
-					values = prof_options,
-					arg = "Fishing"
-				},
-				showGases = {
-					order = 4,
-					name = L["Show Gas Clouds"],
-					desc = L["Toggle showing gas clouds."],
-					type = "select",
-					values = prof_options2,
-					arg = "Extract Gas"
-				},
-				showTreasure = {
-					order = 5,
-					name = L["Show Treasure Nodes"],
-					desc = L["Toggle showing treasure nodes."],
-					type = "select",
-					values = prof_options3,
-					arg = "Treasure"
-				},
-				showArchaeology = {
-					order = 6,
-					name = L["Show Archaeology Nodes"],
-					desc = L["Toggle showing archaeology nodes."],
-					type = "select",
-					values = prof_options4,
-					arg = "Archaeology"
-				}
-			},
+		desc = {
+			order = 0,
+			type = "description",
+			name = L["Control various aspects of node icons on both the World Map and Minimap."],
 		},
-		iconGroup = {
-			type = "group",
-			name = L["Icons"],
-			inline = true,
+		showMinimapIcons = {
+			order = 1,
+			name = L["Show Minimap Icons"],
+			desc = L["Toggle showing Minimap icons."],
+			type = "toggle",
+			arg = "showMinimap",
+		},
+		showWorldMapIcons = {
 			order = 2,
-			args = {
-				desc = {
-					order = 0,
-					type = "description",
-					name = L["Control various aspects of node icons on both the World Map and Minimap."],
-				},
-				showMinimapIcons = {
-					order = 1,
-					name = L["Show Minimap Icons"],
-					desc = L["Toggle showing Minimap icons."],
-					type = "toggle",
-					arg = "showMinimap",
-				},
-				showWorldMapIcons = {
-					order = 2,
-					name = L["Show World Map Icons"],
-					desc = L["Toggle showing World Map icons."],
-					type = "toggle",
-					arg = "showWorldMap",
-				},
-				minimapTooltips = {
-					order = 3,
-					name = L["Minimap Icon Tooltips"],
-					desc = L["Toggle showing Minimap icon tooltips."],
-					type = "toggle",
-					arg = "minimapTooltips",
-					disabled = function() return not db.showMinimap end,
-				},
-				togglekey = {
-					order = 4,
-					name = L["Keybind to toggle Minimap Icons"],
-					desc = L["Keybind to toggle Minimap Icons"],
-					type = "keybinding",
-					width = "double",
-					get = function(info)
-						return table.concat(KeybindHelper:MakeKeyBindingTable(GetBindingKey("TOGGLE_GATHERMATE2_MINIMAPICONS")), ", ")
-					end,
-					set = function(info, key)
-						if key == "" then
-							local t = KeybindHelper:MakeKeyBindingTable(GetBindingKey("TOGGLE_GATHERMATE2_MINIMAPICONS"))
-							for i = 1, #t do
-								SetBinding(t[i])
-							end
+			name = L["Show World Map Icons"],
+			desc = L["Toggle showing World Map icons."],
+			type = "toggle",
+			arg = "showWorldMap",
+		},
+		minimapTooltips = {
+			order = 3,
+			name = L["Minimap Icon Tooltips"],
+			desc = L["Toggle showing Minimap icon tooltips."],
+			type = "toggle",
+			arg = "minimapTooltips",
+			disabled = function() return not db.showMinimap end,
+		},
+		minimapNodeRange = {
+			order = 4,
+			type = "toggle",
+			name = L["Show Nodes on Minimap Border"],
+			desc = L["Shows more Nodes that are currently out of range on the minimap's border."],
+			arg = "nodeRange",
+		},
+		togglekey = {
+			order = 5,
+			name = L["Keybind to toggle Minimap Icons"],
+			desc = L["Keybind to toggle Minimap Icons"],
+			type = "keybinding",
+			width = "full",
+			get = function(info)
+				return table.concat(KeybindHelper:MakeKeyBindingTable(GetBindingKey("TOGGLE_GATHERMATE2_MINIMAPICONS")), ", ")
+			end,
+			set = function(info, key)
+				if key == "" then
+					local t = KeybindHelper:MakeKeyBindingTable(GetBindingKey("TOGGLE_GATHERMATE2_MINIMAPICONS"))
+					for i = 1, #t do
+						SetBinding(t[i])
+					end
+				else
+					local oldAction = GetBindingAction(key)
+					local frame = LibStub("AceConfigDialog-3.0").OpenFrames["GatherMate"]
+					if frame then
+						if ( oldAction ~= "" and oldAction ~= "TOGGLE_GATHERMATE2_MINIMAPICONS" ) then
+							frame:SetStatusText(KEY_UNBOUND_ERROR:format(GetBindingText(oldAction, "BINDING_NAME_")))
 						else
-							local oldAction = GetBindingAction(key)
-							local frame = LibStub("AceConfigDialog-3.0").OpenFrames["GatherMate"]
-							if frame then
-								if ( oldAction ~= "" and oldAction ~= "TOGGLE_GATHERMATE2_MINIMAPICONS" ) then
-									frame:SetStatusText(KEY_UNBOUND_ERROR:format(GetBindingText(oldAction, "BINDING_NAME_")))
-								else
-									frame:SetStatusText(KEY_BOUND)
-								end
-							end
-							SetBinding(key, "TOGGLE_GATHERMATE2_MINIMAPICONS")
+							frame:SetStatusText(KEY_BOUND)
 						end
-						SaveBindings(GetCurrentBindingSet())
-					end,
+					end
+					SetBinding(key, "TOGGLE_GATHERMATE2_MINIMAPICONS")
+				end
+				SaveBindings(GetCurrentBindingSet())
+			end,
+		},
+		iconScale = {
+			order = 10,
+			name = L["Icon Scale"],
+			desc = L["Icon scaling, this lets you enlarge or shrink your icons on both the World Map and Minimap."],
+			type = "range",
+			min = 0.5, max = 5, step = 0.01,
+			arg = "scale",
+		},
+		iconAlpha = {
+			order = 11,
+			name = L["Icon Alpha"],
+			desc = L["Icon alpha value, this lets you change the transparency of the icons. Only applies on World Map."],
+			type = "range",
+			min = 0.1, max = 1, step = 0.05,
+			arg = "alpha",
+		},
+		tracking = {
+			order = 20,
+			name = L["Tracking Circle Color"],
+			desc = L["Color of the tracking circle."],
+			type = "group",
+			inline = true,
+			get = function(info)
+				local t = db.trackColors[info.arg]
+				return t.Red, t.Green, t.Blue, t.Alpha
+			end,
+			set = function(info, r, g, b, a)
+				local t = db.trackColors[info.arg]
+				t.Red = r
+				t.Green = g
+				t.Blue = b
+				t.Alpha = a
+				Config:UpdateConfig()
+			end,
+			args = {
+				trackingColorMine = {
+					order = 1,
+					name = L["Mineral Veins"],
+					desc = L["Color of the tracking circle."],
+					type = "color",
+					hasAlpha = true,
+					arg = "Mining",
+				},
+				trackingColorHerb = {
+					order = 2,
+					name = L["Herb Bushes"],
+					desc = L["Color of the tracking circle."],
+					type = "color",
+					hasAlpha = true,
+					arg = "Herb Gathering",
+				},
+				trackingColorFish = {
+					order = 3,
+					name = L["Fishing"],
+					desc = L["Color of the tracking circle."],
+					type = "color",
+					hasAlpha = true,
+					arg = "Fishing",
+				},
+				trackingColorGas = {
+					order = 4,
+					name = L["Gas Clouds"],
+					desc = L["Color of the tracking circle."],
+					type = "color",
+					hasAlpha = true,
+					arg = "Extract Gas",
+				},
+				trackingColorTreasure = {
+					order = 6,
+					name = L["Treasure"],
+					desc = L["Color of the tracking circle."],
+					type = "color",
+					hasAlpha = true,
+					arg = "Treasure",
+				},
+				trackingColorArchaelogy = {
+					order = 7,
+					name = L["Archaeology"],
+					desc = L["Color of the tracking circle."],
+					type = "color",
+					hasAlpha = true,
+					arg = "Archaeology",
 				},
 				space = {
-					order = 5,
+					order = 10,
 					name = "",
 					desc = "",
 					type = "description",
+					width = "full",
 				},
-				iconScale = {
-					order = 6,
-					name = L["Icon Scale"],
-					desc = L["Icon scaling, this lets you enlarge or shrink your icons on both the World Map and Minimap."],
+				trackDistance = {
+					order = 15,
+					name = L["Tracking Distance"],
+					desc = L["The distance in yards to a node before it turns into a tracking circle"],
 					type = "range",
-					min = 0.5, max = 5, step = 0.01,
-					arg = "scale",
+					min = 50, max = 240, step = 5,
+					get = get,
+					set = set,
+					arg = "trackDistance",
 				},
-				iconAlpha = {
-					order = 7,
-					name = L["Icon Alpha"],
-					desc = L["Icon alpha value, this lets you change the transparency of the icons. Only applies on World Map."],
-					type = "range",
-					min = 0.1, max = 1, step = 0.05,
-					arg = "alpha",
-				},
-				minimapNodeRange = {
-					order = 8,
-					type = "toggle",
-					name = L["Show Nodes on Minimap Border"],
-					width = "double",
-					desc = L["Shows more Nodes that are currently out of range on the minimap's border."],
-					arg = "nodeRange",
-				},
-				tracking = {
-					order = 9,
-					name = L["Tracking Circle Color"],
-					desc = L["Color of the tracking circle."],
-					type = "group",
-					inline = true,
-					get = function(info)
-						local t = db.trackColors[info.arg]
-						return t.Red, t.Green, t.Blue, t.Alpha
-					end,
-					set = function(info, r, g, b, a)
-						local t = db.trackColors[info.arg]
-						t.Red = r
-						t.Green = g
-						t.Blue = b
-						t.Alpha = a
-						Config:UpdateConfig()
-					end,
-					args = {
-						trackingColorMine = {
-							order = 1,
-							name = L["Mineral Veins"],
-							desc = L["Color of the tracking circle."],
-							type = "color",
-							hasAlpha = true,
-							arg = "Mining",
-						},
-						trackingColorHerb = {
-							order = 2,
-							name = L["Herb Bushes"],
-							desc = L["Color of the tracking circle."],
-							type = "color",
-							hasAlpha = true,
-							arg = "Herb Gathering",
-						},
-						trackingColorFish = {
-							order = 3,
-							name = L["Fishing"],
-							desc = L["Color of the tracking circle."],
-							type = "color",
-							hasAlpha = true,
-							arg = "Fishing",
-						},
-						trackingColorGas = {
-							order = 4,
-							name = L["Gas Clouds"],
-							desc = L["Color of the tracking circle."],
-							type = "color",
-							hasAlpha = true,
-							arg = "Extract Gas",
-						},
-						trackingColorTreasure = {
-							order = 6,
-							name = L["Treasure"],
-							desc = L["Color of the tracking circle."],
-							type = "color",
-							hasAlpha = true,
-							arg = "Treasure",
-						},
-						trackingColorArchaelogy = {
-							order = 7,
-							name = L["Archaeology"],
-							desc = L["Color of the tracking circle."],
-							type = "color",
-							hasAlpha = true,
-							arg = "Archaeology",
-						},
-						space = {
-							order = 7,
-							name = "",
-							desc = "",
-							type = "description",
-						},
-						trackDistance = {
-							order = 15,
-							name = L["Tracking Distance"],
-							desc = L["The distance in yards to a node before it turns into a tracking circle"],
-							type = "range",
-							min = 50, max = 240, step = 5,
-							get = get,
-							set = set,
-							arg = "trackDistance",
-						},
-						trackShow = {
-							order = 20,
-							name = L["Show Tracking Circle"],
-							desc = L["Toggle showing the tracking circle."],
-							type = "select",
-							get = get,
-							set = set,
-							values = prof_options,
-							arg = "trackShow",
-						},
-					},
+				trackShow = {
+					order = 20,
+					name = L["Show Tracking Circle"],
+					desc = L["Toggle showing the tracking circle."],
+					type = "select",
+					get = get,
+					set = set,
+					values = prof_options,
+					arg = "trackShow",
 				},
 			},
 		},
@@ -1269,6 +1253,9 @@ function Config:OnInitialize()
 		if p and p.element.collapsed then OptionsListButtonToggle_OnClick(p.toggle) end
 	end)
 
+	acr:RegisterOptionsTable("GM2/Minimap", minimapOptions)
+	acd:AddToBlizOptions("GM2/Minimap", "Minimap", "GatherMate 2")
+
 	acr:RegisterOptionsTable("GM2/Filter", filterOptions)
 	acd:AddToBlizOptions("GM2/Filter", "Filters", "GatherMate 2")
 
@@ -1284,10 +1271,12 @@ function Config:OnInitialize()
 	acr:RegisterOptionsTable("GM2/FAQ", faqOptions)
 	acd:AddToBlizOptions("GM2/FAQ", "FAQ", "GatherMate 2")
 
-	self:RegisterChatCommand("gathermate", function()
+	SLASH_GatherMate21 = "/gathermate"
+	SlashCmdList.GatherMate2 = function()
 		local p = findPanel("GatherMate 2")
 		if p then InterfaceOptionsFrame_OpenToCategory(p.element.name) end
-	end)
+	end
+
 	self:RegisterMessage("GatherMate2ConfigChanged")
 	if DataBroker then
 		local launcher = DataBroker:NewDataObject("GatherMate2", {
@@ -1343,6 +1332,7 @@ function Config:RegisterImportModule(moduleName, optionsTable)
 end
 -- Allows an external module to insert their aceopttable
 function Config:RegisterModule(moduleName, optionsTable)
-	options.args[moduleName] = optionsTable
+	acr:RegisterOptionsTable("GM2/" .. moduleName, optionsTable)
+	acd:AddToBlizOptions("GM2/" .. moduleName, moduleName, "GatherMate 2")
 end
 
