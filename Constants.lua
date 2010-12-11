@@ -225,6 +225,10 @@ local node_ids = {
 		[NL["Netherwing Egg"]] 					= 531,
 		[NL["Everfrost Chip"]]					= 532,
 		[NL["Brightly Colored Egg"]]			= 533,
+		[NL["Silken Treasure Chest"]]			= 534,
+		[NL["Sturdy Treasure Chest"]]			= 535,
+		[NL["Runestone Treasure Chest"]]		= 536,
+		[NL["Silverbound Treasure Chest"]]		= 537,
 	},
 	["Archaeology"] = {
 		-- cata archeolgy objects
@@ -522,6 +526,10 @@ local node_textures = {
 		[531] = icon_path.."Treasure\\egg.tga",
 		[532] = icon_path.."Treasure\\everfrost.tga",
 		[533] = icon_path.."Treasure\\egg.tga",
+		[534] = icon_path.."Treasure\\treasure.tga",
+		[535] = icon_path.."Treasure\\treasure.tga",
+		[536] = icon_path.."Treasure\\treasure.tga",
+		[537] = icon_path.."Treasure\\treasure.tga",
 	},
 	["Archaeology"] = {
 		[601] = icon_path.."Archaeology\\shovel.tga",
