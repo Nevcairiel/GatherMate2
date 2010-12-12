@@ -688,7 +688,7 @@ local maintenanceOptions = {
 					desc = L["Cleanup radius"],
 					type = "range",
 					min = 0, max = 30, step = 1,
-					arg = "Treasure",
+					arg = "Archaeology",
 				}
 			},
 		},
@@ -1271,18 +1271,20 @@ function Config:OnInitialize()
 	acr:RegisterOptionsTable("GM2/FAQ", faqOptions)
 	acd:AddToBlizOptions("GM2/FAQ", "FAQ", "GatherMate 2")
 
-	SLASH_GatherMate21 = "/gathermate"
-	SlashCmdList.GatherMate2 = function()
+	local function openOptions()
 		local p = findPanel("GatherMate 2")
 		if p then InterfaceOptionsFrame_OpenToCategory(p.element.name) end
 	end
+
+	SLASH_GatherMate21 = "/gathermate"
+	SlashCmdList.GatherMate2 = openOptions
 
 	self:RegisterMessage("GatherMate2ConfigChanged")
 	if DataBroker then
 		local launcher = DataBroker:NewDataObject("GatherMate2", {
 			type = "launcher",
 			icon = "Interface\\AddOns\\GatherMate2\\Artwork\\Icon.tga",
-			OnClick = function(clickedframe, button) LibStub("AceConfigDialog-3.0"):Open("GatherMate 2") end,
+			OnClick = openOptions,
 		})
 	end
 end
