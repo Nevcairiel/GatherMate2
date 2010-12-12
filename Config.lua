@@ -1007,12 +1007,12 @@ importOptions.args.GatherMateData = {
 					end
 					GatherMateData:PerformMerge(db.importers["GatherMate2_Data"].Databases,db.importers["GatherMate2_Data"].Style,filter)
 					GatherMateData:CleanupImportData()
-					Config:Print(L["GatherMate2Data has been imported."])
+					print(L["GatherMate2Data has been imported."])
 					Config:SendMessage("GatherMate2ConfigChanged")
 					db["importers"]["GatherMate2_Data"]["lastImport"] = dataVersion
 					imported["GatherMate2_Data"] = true
 				else
-					Config:Print(L["Failed to load GatherMateData due to "]..reason)
+					print(L["Failed to load GatherMateData due to "]..reason)
 				end
 			end,
 			disabled = function()
@@ -1119,7 +1119,7 @@ function ConversionHelper:ConvertDatabase()
 			end
 		end
 	end
-	Config:Print(L["GatherMate data has been imported."])
+	print(L["GatherMate data has been imported."])
 end
 
 ConversionHelper:PopulateZoneList()
@@ -1319,7 +1319,7 @@ function Config:CheckAutoImport()
 					imported[k] = true
 					Config:SendMessage("GatherMate2ConfigChanged")
 					v["lastImport"] = dataVersion
-					Config:Print(L["Auto import complete for addon "]..k)
+					print(L["Auto import complete for addon "]..k)
 				end
 			end
 		end
