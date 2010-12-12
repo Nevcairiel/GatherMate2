@@ -108,14 +108,14 @@ local function showPin(self)
 
 		local t = db.trackColors
 		local text = format(tooltip_template, t[self.nodeType].Alpha*255, t[self.nodeType].Red*255, t[self.nodeType].Green*255, t[self.nodeType].Blue*255, self.title)
-		local lvl = GatherMate.nodeMinHarvest[self.nodeType][self.nodeID]
+		local lvl = GatherMate.nodeMinHarvest[self.nodeType] and GatherMate.nodeMinHarvest[self.nodeType][self.nodeID]
 		if lvl then
 			text = text..format(" (%d)", lvl)
 		end
 		for id, pin in pairs(pinset) do
 			if pin:IsMouseOver() and pin.title and pin ~= self then
 				text = text .. "\n" .. format(tooltip_template, t[pin.nodeType].Alpha*255, t[pin.nodeType].Red*255, t[pin.nodeType].Green*255, t[pin.nodeType].Blue*255, pin.title)
-				local lvl = GatherMate.nodeMinHarvest[pin.nodeType][pin.nodeID]
+				local lvl = GatherMate.nodeMinHarvest[pin.nodeType] and GatherMate.nodeMinHarvest[pin.nodeType][pin.nodeID]
 				if lvl then
 					text = text..format(" (%d)", lvl)
 				end

@@ -306,6 +306,7 @@ local minimapOptions = {
 }
 
 -- Setup some storage arrays by db to sort node names and zones alphabetically
+local withLvlFormat = "(%d) %s"
 local sortedFilter = setmetatable({}, {__index = function(t, k)
 	local new = {}
 	if k == "zones" then
@@ -314,14 +315,23 @@ local sortedFilter = setmetatable({}, {__index = function(t, k)
 			new[name] = name
 		end
 	else
-		local minHarvestTable = GatherMate.nodeMinHarvest[k]
-		for name, id in pairs(GatherMate.nodeIDs[k]) do
-			local lvl = minHarvestTable[id]
-			if lvl then
-				new[name] = "("..lvl..") "..name
-			else
-				new[name] = name
+		local map = GatherMate.nodeIDs[k]
+		for name in pairs(map) do
+			new[#new+1] = name
+		end
+		local minSkill = GatherMate.nodeMinHarvest[k]
+		if minSkill then
+			-- We only end up creating one function per tracked type anyway
+			table.sort(new, function(a, b)
+				local mA, mB = minSkill[map[a]], minSkill[map[b]]
+				if mA == mB then return map[a] > map[b]
+				else return mA > mB end
+			end)
+			for i, v in next, new do
+				new[i] = withLvlFormat:format(minSkill[map[v]], v)
 			end
+		else
+			table.sort(new)
 		end
 	end
 	rawset(t, k, new)
@@ -346,12 +356,16 @@ function ConfigFilterHelper:SelectNone(info)
 	end
 	Config:UpdateConfig()
 end
-function ConfigFilterHelper:SetState(info, k, state)
-	db.filter[info.arg][GatherMate.nodeIDs[info.arg][k]] = state
+function ConfigFilterHelper:SetState(info, nodeIndex, state)
+	local nodeName = sortedFilter[info.arg][nodeIndex]
+	if nodeName:find("^%(%d+%)") then nodeName = nodeName:match("^%(%d+%) (.*)$") end
+	db.filter[info.arg][GatherMate.nodeIDs[info.arg][nodeName]] = state
 	Config:UpdateConfig()
 end
-function ConfigFilterHelper:GetState(info, k)
-	return db.filter[info.arg][GatherMate.nodeIDs[info.arg][k]]
+function ConfigFilterHelper:GetState(info, nodeIndex)
+	local nodeName = sortedFilter[info.arg][nodeIndex]
+	if nodeName:find("^%(%d+%)") then nodeName = nodeName:match("^%(%d+%) (.*)$") end
+	return db.filter[info.arg][GatherMate.nodeIDs[info.arg][nodeName]]
 end
 
 local ImportHelper = {}
@@ -558,7 +572,7 @@ filterOptions.args.treasure = {
 			func = "SelectNone",
 			arg = "Treasure",
 		},
-		gaslist = {
+		treasurelist = {
 			order = 3,
 			name = L["Treasure"],
 			desc = L["Select the treasure you wish to display."],
@@ -590,9 +604,9 @@ filterOptions.args.archaeology = {
 			func = "SelectNone",
 			arg = "Archaeology",
 		},
-		gaslist = {
+		diglist = {
 			order = 3,
-			name = L["Treasure"],
+			name = L["Archaeology"],
 			desc = L["Select the archaeology nodes you wish to display."],
 			type = "multiselect",
 			values = sortedFilter["Archaeology"],
@@ -1272,8 +1286,7 @@ function Config:OnInitialize()
 	acd:AddToBlizOptions("GM2/FAQ", "FAQ", "GatherMate 2")
 
 	local function openOptions()
-		local p = findPanel("GatherMate 2")
-		if p then InterfaceOptionsFrame_OpenToCategory(p.element.name) end
+		InterfaceOptionsFrame_OpenToCategory("GatherMate 2")
 	end
 
 	SLASH_GatherMate21 = "/gathermate"

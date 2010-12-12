@@ -549,8 +549,6 @@ GatherMate.nodeTextures = node_textures
 	Min level to harvest
 ]]
 local node_minharvest = {
-	["Fishing"] = {
-	},
 	["Mining"] = {
 		[201] = 1,
 		[202] = 65,
@@ -590,6 +588,8 @@ local node_minharvest = {
 		[236] = 450,
 		[237] = 500,
 		[238] = 525,
+		[239] = 450,
+		[240] = 525,
 	},
 	["Extract Gas"] = {
 		[301] = 305,
@@ -663,10 +663,6 @@ local node_minharvest = {
 		[459] = 475,
 		[460] = 525,
 		[461] = 500,
-	},
-	["Treasure"] = {
-	},
-	["Archaeology"] = {
 	},
 }
 GatherMate.nodeMinHarvest = node_minharvest
