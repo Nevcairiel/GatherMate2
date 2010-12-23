@@ -418,6 +418,8 @@ local node_textures = {
 		[236] = icon_path.."Mine\\elementium.tga",
 		[237] = icon_path.."Mine\\elementium.tga",
 		[238] = icon_path.."Mine\\pyrite.tga",
+		[239] = icon_path.."Mine\\elementium.tga",
+		[220] = icon_path.."Mine\\pyrite.tga",
 	},
 	["Extract Gas"] = {
 		[301] = icon_path.."Gas\\windy_cloud.tga",
