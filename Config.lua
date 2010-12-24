@@ -308,6 +308,7 @@ local minimapOptions = {
 -- Setup some storage arrays by db to sort node names and zones alphabetically
 local withLvlFormat = "(%d) %s"
 local delocalizedZones = {}
+local denormalizedNames = {}
 local sortedFilter = setmetatable({}, {__index = function(t, k)
 	local new = {}
 	table.wipe(delocalizedZones)
@@ -322,6 +323,7 @@ local sortedFilter = setmetatable({}, {__index = function(t, k)
 		for name in pairs(map) do
 			local idx = #new+1
 			new[idx] = name
+			denormalizedNames[name] = name
 		end
 		local minSkill = GatherMate.nodeMinHarvest[k]
 		if minSkill then
@@ -333,6 +335,7 @@ local sortedFilter = setmetatable({}, {__index = function(t, k)
 			end)
 			for i, v in next, new do
 				new[i] = withLvlFormat:format(minSkill[map[v]], v)
+				denormalizedNames[new[i]] = v
 			end
 		else
 			table.sort(new)
@@ -769,6 +772,7 @@ local maintenanceOptions = {
 					func = function()
 						if selectedZone and selectedNode ~= 0 then
 							local nodeName = sortedFilter[selectedDatabase][selectedNode]
+							nodeName = denormalizedNames[nodeName]
 							GatherMate:DeleteNodeFromZone(selectedDatabase, GatherMate.nodeIDs[selectedDatabase][nodeName], delocalizedZones[selectedZone])
 						end
 					end,
