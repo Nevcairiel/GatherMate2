@@ -99,6 +99,7 @@ function Collector:UnregisterGatherEvents()
 end
 
 local CrystalizedWater = (GetItemInfo(37705)) or ""
+local MoteOfAir = (GetItemInfo(22572)) or ""
 
 function Collector:SecondaryGasCheck(event,msg)
 	if ga ~= gasSpell then return end
@@ -108,6 +109,12 @@ function Collector:SecondaryGasCheck(event,msg)
 		-- check for Steam Clouds by assuming your always getting water from Steam Clouds
 		foundTarget = true
 		self:addItem(ga,NL["Steam Cloud"])
+		ga = "No"
+	end
+	if ga == gasSpell and strfind(msg,MoteOfAir) then
+		-- check for Steam Clouds by assuming your always getting water from Steam Clouds
+		foundTarget = true
+		self:addItem(ga,NL["Windy Cloud"])
 		ga = "No"
 	end
 end
