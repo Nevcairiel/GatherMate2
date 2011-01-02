@@ -668,7 +668,8 @@ function Display:UpdateMiniMap(force)
 	local x, y = GetPlayerMapPosition("player")
 	-- if position is 0, the player changed the worldmap to another zone, just keep the old values
 	-- GetCurrentMapZone now changes when you changes maps
-	if (x == 0 or y == 0 or GetCurrentMapZone() == 0) then
+	-- only check x,z as in a dungeon when you teleport in GetCurrentMapZone always returns 0
+	if (x == 0 or y == 0 ) then
 		x, y = lastX, lastY
 		level = lastLevel
 		zone = lastZone
