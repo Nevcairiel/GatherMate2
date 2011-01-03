@@ -351,7 +351,7 @@ function Display:DigsitesChanged()
 		end
 	end
 	SetMapByID(activeMap)
-	self:UpdateVisibility()
+	self:UpdateMaps()
 end
 
 local function IsActiveDigSite()
