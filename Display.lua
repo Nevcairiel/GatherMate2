@@ -251,6 +251,7 @@ function Display:OnEnable()
 	self:RegisterEvent("PLAYER_ENTERING_WORLD","UpdateMaps")
 	self:SKILL_LINES_CHANGED()
 	self:MINIMAP_UPDATE_TRACKING()
+	self:DigsitesChanged()
 	self:UpdateVisibility()
 	self:UpdateMaps()
 	fullInit = true
@@ -264,6 +265,7 @@ function Display:RegisterMapEvents()
 	self:RegisterMessage("GatherMate2NodeAdded", "ScheduleUpdate")
 	self:RegisterMessage("GatherMate2DataImport", "DataUpdate")
 	self:RegisterMessage("GatherMate2Cleanup", "DataUpdate")
+	self:RegisterEvent("ARTIFACT_DIG_SITE_UPDATED","DigsitesChanged")
 	self.updateFrame:Show()
 	listening = true
 end
@@ -272,6 +274,7 @@ function Display:UnregisterMapEvents()
 	self:UnregisterEvent("MINIMAP_ZONE_CHANGED")
 	self:UnregisterEvent("MINIMAP_UPDATE_ZOOM")
 	self:UnregisterEvent("CVAR_UPDATE")
+	self:UnregisterEvent("ARTIFACT_DIG_SITE_UPDATED")
 	self:UnregisterMessage("GatherMate2ConfigChanged")
 	self:UnregisterMessage("GatherMate2NodeAdded")
 	self:UnregisterMessage("GatherMate2DataImport")
@@ -289,6 +292,7 @@ function Display:OnDisable()
 	self:UnregisterEvent("ZONE_CHANGED_NEW_AREA")
 	self:UnregisterEvent("SKILL_LINES_CHANGED")
 	self:UnregisterEvent("MINIMAP_UPDATE_TRACKING")
+	self:UnregisterEvent("ARTIFACT_DIG_SITE_UPDATED")
 end
 
 
@@ -325,6 +329,29 @@ function Display:MINIMAP_UPDATE_TRACKING()
 	self:UpdateMaps()
 end
 
+local digSites = {}
+
+function Display:DigsitesChanged()
+	local activeMap = GetCurrentMapAreaID()
+	table.wipe(digSites)
+	for continent, zone in pairs({GetMapContinents()}) do
+		SetMapZoom(continent)
+		local totalPOIs = GetNumMapLandmarks()
+		for index = 1,totalPOIs do
+			local name, description, textureIndex, px, py = GetMapLandmarkInfo(index)
+			if textureIndex == 177 then
+				local zoneName, mapFile, texPctX, texPctY, texX, texY, scrollX, scrollY = UpdateMapHighlight(px, py)
+				digSites[mapFile] = true
+			end
+		end
+	end
+	SetMapByID(activeMap)
+end
+
+local function IsActiveDigSite()
+	return digSites[(GetMapInfo())]
+end
+
 function Display:UpdateVisibility()
 	for k, v in pairs(GatherMate.db_types) do
 		local visible = false
@@ -335,6 +362,9 @@ function Display:UpdateVisibility()
 			visible = have_prof_skill[v]
 		elseif state == "active" then
 			visible = active_tracking[v] == true
+			if v == "Archaeology" then
+				visible = IsActiveDigSite()
+			end
 		end
 		GatherMate.Visible[v] = visible
 
@@ -347,6 +377,9 @@ function Display:UpdateVisibility()
 			visible = have_prof_skill[v]
 		elseif state == "active" then
 			visible = (active_tracking[v] == true)
+			if v == "Archaeology" then
+				visible = IsActiveDigSite()
+			end
 		end
 		trackShow[v] = visible
 	end
@@ -575,6 +608,8 @@ function Display:UpdateMaps()
 	if not WorldMapFrame:IsShown() then
 		SetMapToCurrentZone()
 	end
+	-- Ask to update the visiblity for archaeology updates to blobs
+	self:UpdateVisibility()
 	self:UpdateMiniMap(true)
 	self:UpdateWorldMap(true)
 end
@@ -756,7 +791,8 @@ function Display:UpdateWorldMap(force)
 	if force then rememberForce = true end
 	if not WorldMapFrame:IsVisible() then return end
 	if not db.showWorldMap then clearpins(worldmapPins) return end
-
+	-- Ask to update the visiblity for archaeology updates to blobs
+	self:UpdateVisibility()
 	local zoneid = GetCurrentMapAreaID()
 	local mapLevel = GetCurrentMapDungeonLevel()
 	if not zoneid or zoneid == -1 then clearpins(worldmapPins) return end -- player is not viewing a zone map of a continent

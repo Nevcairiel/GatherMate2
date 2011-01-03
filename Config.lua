@@ -49,6 +49,7 @@ local prof_options3 = {
 }
 local prof_options4 = { -- For Archaeology, which doesn't have tracking as a skill
 	always           = L["Always show"],
+	active			 = L["Only with digsite"],
 	with_profession  = L["Only with profession"],
 	never            = L["Never show"],
 }
