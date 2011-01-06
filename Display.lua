@@ -303,7 +303,7 @@ function Display:SKILL_LINES_CHANGED()
 	end
 
 	for index, key in pairs({GetProfessions()}) do
-		name, icon, rank, maxrank, numspells, spelloffset, skillline = GetProfessionInfo(key)
+		local name, icon, rank, maxrank, numspells, spelloffset, skillline = GetProfessionInfo(key)
 		if profession_to_skill[name] then
 			have_prof_skill[profession_to_skill[name]] = true
 		end
@@ -316,7 +316,7 @@ function Display:MINIMAP_UPDATE_TRACKING()
 	local count = GetNumTrackingTypes();
 	local info;
 	for id=1, count do
-		name, texture, active, category  = GetTrackingInfo(id);
+		local name, texture, active, category  = GetTrackingInfo(id);
 		if tracking_spells[name] and active then
 			active_tracking[tracking_spells[name]] = true
 		else
