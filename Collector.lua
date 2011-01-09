@@ -287,7 +287,7 @@ function Collector:GetFloatingNodeLocation(x,y,yardWidth,yardHeight)
 		return x,y
 	else
 		local rad = facing + pii
-		return x + sin(rad)*20/yardWidth, y + cos(rad)*20/yardHeight
+		return x + sin(rad)*15/yardWidth, y + cos(rad)*15/yardHeight
 	end
 end
 
