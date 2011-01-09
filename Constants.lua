@@ -287,9 +287,10 @@ local rare_spawns = {
 	[146] = {[133]=true}, --schooner
 	[147] = {[135]=true}, --bloodsail
 	[148] = {[101]=true}, -- floating wreckage
-	[233] = {[234]=true}, -- obsidian
-	[236] = {[237]=true,[238]=true,[239]=true}, -- elementium
-	[238] = {[239]=true}, -- pyrite
+	[239] = {[234]=true}, -- obsidian
+	[237] = {[236]=true}, -- rich elementium
+	[238] = {[236]=true}, -- pyrtite
+	[240] = {[236]=true}, -- rich pyrite
 }
 Collector.rareNodes = rare_spawns
 -- Format zone = { "Database", "new node id"}
