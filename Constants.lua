@@ -287,7 +287,7 @@ local rare_spawns = {
 	[146] = {[133]=true}, --schooner
 	[147] = {[135]=true}, --bloodsail
 	[148] = {[101]=true}, -- floating wreckage
-	[239] = {[234]=true}, -- obsidian
+	[239] = {[233]=true}, -- obsidian
 	[237] = {[236]=true}, -- rich elementium
 	[238] = {[236]=true}, -- pyrtite
 	[240] = {[236]=true}, -- rich pyrite
