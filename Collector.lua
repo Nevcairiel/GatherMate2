@@ -226,6 +226,12 @@ function Collector:addItem(skill,what)
 	if GetMapInfo() == "ScarletEnclave" then return end
 	--self:GatherCompleted()
 	local zone = GetCurrentMapAreaID()
+
+	-- Hyjal Phasing hack
+	if zone == 683 then
+		zone = 606
+	end
+
 	local level = GetCurrentMapDungeonLevel()
 	local node_type = spells[skill]
 	if not node_type or not what then return end

@@ -99,6 +99,33 @@ function GatherMate:OnInitialize()
 	self:RegisterDBType("Archaeology", GatherMate2ArchaeologyDB)
 	db = self.db.profile
 	filter = db.filter
+	-- Phasing version fix
+	if not self.db.profile.data_version then
+		self:UpgradeHyjalPhasing()
+		self.db.profile.data_version = 1
+	end
+end
+
+
+function GatherMate:UpgradeHyjalPhasing()
+	for database,storage in pairs(self.gmdbs) do
+		local moved_nodes = {}
+		-- copy the nodes
+		local count = 0
+		for zone,data in pairs(storage) do
+			if zone == 683 then -- Hyjal Phased terrain
+				for coord,value in pairs(data) do
+					moved_nodes[coord] = value
+					count = count + 1
+				end
+			end
+		end
+		print("Fixing hyjal nodes("..count..") for "..database)
+		for k,v in pairs(moved_nodes) do
+			storage[606][k] = v
+		end
+		storage[683] = nil
+	end
 end
 
 --[[
