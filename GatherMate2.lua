@@ -100,31 +100,36 @@ function GatherMate:OnInitialize()
 	db = self.db.profile
 	filter = db.filter
 	-- Phasing version fix
-	if not self.db.profile.data_version then
-		self:UpgradeHyjalPhasing()
-		self.db.profile.data_version = 1
+	if not self.db.global.data_version then
+		self:UpgradePhasing()
+		self.db.global.data_version = 1
 	end
 end
 
 
-function GatherMate:UpgradeHyjalPhasing()
+function GatherMate:UpgradePhasing()
 	for database,storage in pairs(self.gmdbs) do
 		local moved_nodes = {}
 		-- copy the nodes
 		local count = 0
 		for zone,data in pairs(storage) do
-			if zone == 683 then -- Hyjal Phased terrain
+			if self.phasing[zone] then -- Hyjal Phased terrain
+				moved_nodes[self.phasing[zone]] = {}
 				for coord,value in pairs(data) do
-					moved_nodes[coord] = value
+					moved_nodes[self.phasing[zone]][coord] = value
 					count = count + 1
 				end
 			end
 		end
-		print("Fixing hyjal nodes("..count..") for "..database)
+		print("Fixing nodes("..count..") phasing for "..database)
 		for k,v in pairs(moved_nodes) do
-			storage[606][k] = v
+			for c,v in pairs(v) do
+				storage[k][c] = v
+			end
 		end
-		storage[683] = nil
+		for k,v in pairs(self.phasing) do
+			storage[k] = nil
+		end
 	end
 end
 

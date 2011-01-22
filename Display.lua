@@ -333,7 +333,7 @@ local digSites = {}
 
 function Display:DigsitesChanged()
 	local activeMap = GetCurrentMapAreaID()
-	if activeMap == 683 then activeMap = 606 end
+	if GatherMate.phasing[activeMap] then actieMap = GatherMate.phasing[activeMap] end
 	table.wipe(digSites)
 	for continent, zone in pairs({GetMapContinents()}) do
 		SetMapZoom(continent)
@@ -700,7 +700,7 @@ function Display:UpdateMiniMap(force)
 
 	-- update our zone info
 	zone = GetCurrentMapAreaID()
-	if zone == 683 then zone = 606 end
+	if GatherMate.phasing[zone] then zone = GatherMate.phasing[zone] end
 	local level = GetCurrentMapDungeonLevel()
 	if not zone or zone == -1 then
 		zone = nil
@@ -802,7 +802,7 @@ function Display:UpdateWorldMap(force)
 	-- Ask to update the visiblity for archaeology updates to blobs
 	self:UpdateVisibility()
 	local zoneid = GetCurrentMapAreaID()
-	if zoneid == 683 then zoneid = 606 end
+	if GatherMate.phasing[zoneid] then zoneid = GatherMate.phasing[zoneid] end
 	local mapLevel = GetCurrentMapDungeonLevel()
 	if not zoneid or zoneid == -1 then clearpins(worldmapPins) return end -- player is not viewing a zone map of a continent
 	if not rememberForce and (lastDrawnWorldMap == zoneid and mapLevel == lastLevel) then return end -- already drawn last time, and not forced
