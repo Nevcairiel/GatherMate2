@@ -20,6 +20,7 @@ local openSpell = (GetSpellInfo(3365))
 local openNoTextSpell = (GetSpellInfo(22810))
 local pickSpell = (GetSpellInfo(1804))
 local archSpell = (GetSpellInfo(73979)) -- Searching for Artifacts spell
+local sandStormSpell = (GetSpellInfo(93473)) -- Sandstorm spell cast by the camel
 
 local spells = { -- spellname to "database name"
 	[miningSpell] = "Mining",
@@ -30,6 +31,7 @@ local spells = { -- spellname to "database name"
 	[openNoTextSpell] = "Treasure",
 	[pickSpell] = "Treasure",
 	[archSpell] = "Archaeology",
+	[sandStormSpell] = "Treasure",
 }
 local tooltipLeftText1 = _G["GameTooltipTextLeft1"]
 local strfind, stringmatch = string.find, string.match
@@ -149,6 +151,12 @@ function Collector:GasBuffDetector(b,timestamp, eventType, hideCaster, srcGUID, 
 		self:addItem(ga,dstName)
 		ga = "No"
 	end
+	-- Try to detect the camel figurine
+	if eventType == "SPELL_CAST_SUCCESS" and spellName == sandStormSpell and srcName == NL["Mysterious Camel Figurine"] then
+		foundTarget = true
+		self:addItem(sandStormSpell,NL["Mysterious Camel Figurine"])
+	end
+
 end
 
 --[[
