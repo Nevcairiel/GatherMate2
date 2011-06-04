@@ -230,6 +230,8 @@ local node_ids = {
 		[NL["Runestone Treasure Chest"]]		= 536,
 		[NL["Silverbound Treasure Chest"]]		= 537,
 		[NL["Mysterious Camel Figurine"]]       = 538,
+		[NL["Dark Iron Treasure Chest"]]        = 539,
+		[NL["Maplewood Treasure Chest"]]		= 540,
 	},
 	["Archaeology"] = {
 		-- cata archeolgy objects
@@ -536,6 +538,8 @@ local node_textures = {
 		[536] = icon_path.."Treasure\\treasure.tga",
 		[537] = icon_path.."Treasure\\treasure.tga",
 		[538] = icon_path.."Treasure\\camel.tga",
+		[539] = icon_path.."Treasure\\chest.tga",
+		[540] = icon_path.."Treasure\\chest.tga",
 	},
 	["Archaeology"] = {
 		[601] = icon_path.."Archaeology\\shovel.tga",
