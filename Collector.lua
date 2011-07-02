@@ -126,23 +126,8 @@ end
 	or get a better event instead of cha msg parsing
 	UNIT_DISSIPATES,0x0000000000000000,nil,0x80000000,0xF1307F0A00002E94,"Cinder Cloud",0xa28 now fires in cataclysm so hack not needed any more
 ]]
--- Start Pre-4.1 CLEU compat
-local TOC
-do
-	-- Because GetBuildInfo() still returns 40000 on the PTR
-	local major, minor, rev = strsplit(".", (GetBuildInfo()))
-	TOC = major*10000 + minor*100
-end
--- End Pre-4.1 CLEU compat
-function Collector:GasBuffDetector(b,timestamp, eventType, hideCaster, srcGUID, srcName, srcFlags, dstGUID, dstName, dstFlags, spellId,spellName,spellSchool,auraType)
+function Collector:GasBuffDetector(b,timestamp, eventType, hideCaster, srcGUID, srcName, srcFlags, srcRaidFlags, dstGUID, dstName, dstFlags, dstRaidFlags, spellId,spellName,spellSchool,auraType)
 	if foundTarget or (prevSpell and prevSpell ~= gasSpell) then return end
-
-	-- Start Pre-4.1 CLEU compat
-	if TOC < 40100 then
-		-- Shift arguments, to account new argument "hideCaster" in 4.1. Note "auraType" is lost but its not used
-		hideCaster, srcGUID, srcName, srcFlags, dstGUID, dstName, dstFlags, spellId,spellName,spellSchool,auraType = nil, hideCaster, srcGUID, srcName, srcFlags, dstGUID, dstName, dstFlags, spellId,spellName,spellSchool
-	end
-	-- End Pre-4.1 CLEU compat
 
 	if eventType == "SPELL_CAST_SUCCESS" and  spellName == gasSpell then
 		ga = gasSpell
