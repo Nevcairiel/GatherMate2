@@ -252,8 +252,7 @@ function Display:OnEnable()
 	self:SKILL_LINES_CHANGED()
 	self:MINIMAP_UPDATE_TRACKING()
 	self:DigsitesChanged()
-	self:UpdateVisibility()
-	self:UpdateMaps()
+	--self:UpdateMaps()  -- already in DigsitesChanged()
 	fullInit = true
 end
 
@@ -308,7 +307,6 @@ function Display:SKILL_LINES_CHANGED()
 			have_prof_skill[profession_to_skill[name]] = true
 		end
 	end
-	self:UpdateVisibility()
 	self:UpdateMaps()
 end
 
@@ -325,7 +323,6 @@ function Display:MINIMAP_UPDATE_TRACKING()
 			end
 		end
 	end
-	self:UpdateVisibility()
 	self:UpdateMaps()
 end
 
@@ -408,12 +405,11 @@ end
 
 function Display:DataUpdate()
 	forceNextUpdate = true
-	Display:UpdateWorldMap(true)
+	self:UpdateMaps()
 end
 
 function Display:ConfigChanged()
 	db = GatherMate.db.profile
-	self:UpdateVisibility()
 	self:UpdateMaps()
 	-- TODO filter prefs
 end
