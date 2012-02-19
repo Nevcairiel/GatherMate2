@@ -74,6 +74,7 @@ local node_ids = {
 		[NL["Mountain Trout School"]]			= 154,
 		[NL["Pool of Fire"]]					= 155,
 		[NL["Shipwreck Debris"]]				= 156,
+		[NL["Deepsea Sagefish School"]]			= 157,
 	},
 	["Mining"] = {
 		[NL["Copper Vein"]] 					= 201,
@@ -382,6 +383,7 @@ local node_textures = {
 		[154] = icon_path.."Fish\\sagefish.tga",
 		[155] = icon_path.."Gas\\cinder.tga",
 		[156] = icon_path.."Fish\\debris.tga",
+		[157] = icon_path.."Fish\\goby.tga",
 	},
 	["Mining"] = {
 		[201] = icon_path.."Mine\\copper.tga",
