@@ -75,6 +75,15 @@ local node_ids = {
 		[NL["Pool of Fire"]]					= 155,
 		[NL["Shipwreck Debris"]]				= 156,
 		[NL["Deepsea Sagefish School"]]			= 157,
+		-- Mists Pools
+		[NL["Emperor Salmon School"]]			= 158,
+		[NL["Giant Mantis Shrimp Swarm"]]		= 159,
+		[NL["Golden Carp School"]]				= 160,
+		[NL["Jade Lungfish School"]]			= 161,
+		[NL["Krasarang Paddlefish School"]]		= 162,
+		[NL["Redbelly Mandarin School"]]		= 163,
+		[NL["Reef Octopus Swarm"]]				= 164,
+		[NL["Floating Shipwreck Debris"]]		= 165,
 	},
 	["Mining"] = {
 		[NL["Copper Vein"]] 					= 201,
@@ -118,6 +127,9 @@ local node_ids = {
 		[NL["Pyrite Deposit"]]					= 238,
 		[NL["Rich Obsidium Deposit"]] 			= 239,
 		[NL["Rich Pyrite Deposit"]] 			= 240,
+		[NL["Ghost Iron Deposit"]] 				= 241,
+		[NL["Rich Ghost Iron Deposit"]] 		= 242,
+
 	},
 	["Extract Gas"] = {
 		[NL["Windy Cloud"]] 					= 301,
@@ -191,6 +203,13 @@ local node_ids = {
 		[NL["Heartblossom"]]					= 459,
 		[NL["Twilight Jasmine"]]				= 460,
 		[NL["Whiptail"]]						= 461,
+-- mist nodes
+		[NL["Golden Lotus"]]					= 462,
+		[NL["Fool's Cap"]]						= 463,
+		[NL["Snow Lily"]]						= 464,
+		[NL["Silkweed"]]						= 465,
+		[NL["Green Tea Leaf"]]					= 466,
+		[NL["Rain Poppy"]]						= 467,
 	},
 	["Treasure"] = {
 		[NL["Giant Clam"]] 						= 501,
@@ -378,12 +397,21 @@ local node_textures = {
 		[149] = icon_path.."Fish\\salmon.tga",
 		[150] = icon_path.."Fish\\goby.tga",
 		[151] = icon_path.."Fish\\mudfish.tga",
-		[152] = icon_path.."Fish\\suckerfish.tga",
-		[153] = icon_path.."Fish\\herring.tga",
-		[154] = icon_path.."Fish\\sagefish.tga",
+		[152] = icon_path.."Fish\\feel.tga",
+		[153] = icon_path.."Fish\\hguppy.tga",
+		[154] = icon_path.."Fish\\mtrout.tga",
 		[155] = icon_path.."Gas\\cinder.tga",
 		[156] = icon_path.."Fish\\debris.tga",
-		[157] = icon_path.."Fish\\goby.tga",
+		[157] = icon_path.."Fish\\dsagefish.tga",
+		-- Placeholders till mist graphics are exrtacted
+		[158] = icon_path.."Fish\\net.tga",
+		[159] = icon_path.."Fish\\net.tga",
+		[160] = icon_path.."Fish\\net.tga",
+		[161] = icon_path.."Fish\\net.tga",
+		[162] = icon_path.."Fish\\net.tga",
+		[163] = icon_path.."Fish\\net.tga",
+		[164] = icon_path.."Fish\\net.tga",
+		[165] = icon_path.."Fish\\treasure.tga",
 	},
 	["Mining"] = {
 		[201] = icon_path.."Mine\\copper.tga",
@@ -427,6 +455,8 @@ local node_textures = {
 		[238] = icon_path.."Mine\\pyrite.tga",
 		[239] = icon_path.."Mine\\elementium.tga",
 		[240] = icon_path.."Mine\\pyrite.tga",
+		[241] = icon_path.."Mine\\pyrite.tga",
+		[242] = icon_path.."Mine\\pyrite.tga",
 	},
 	["Extract Gas"] = {
 		[301] = icon_path.."Gas\\windy_cloud.tga",
@@ -500,6 +530,13 @@ local node_textures = {
 		[459] = icon_path.."Herb\\heartblossom.tga",
 		[460] = icon_path.."Herb\\twilightjasmine.tga",
 		[461] = icon_path.."Herb\\whiptail.tga",
+		-- Place Holders
+		[462] = icon_path.."Herb\\whiptail.tga",
+		[463] = icon_path.."Herb\\whiptail.tga",
+		[464] = icon_path.."Herb\\whiptail.tga",
+		[465] = icon_path.."Herb\\whiptail.tga",
+		[466] = icon_path.."Herb\\whiptail.tga",
+		[467] = icon_path.."Herb\\whiptail.tga",
 	},
 	["Treasure"] = {
 		[501] = icon_path.."Treasure\\clam.tga",
@@ -602,6 +639,8 @@ local node_minharvest = {
 		[238] = 525,
 		[239] = 450,
 		[240] = 525,
+		[241] = 515,
+		[242] = 550,
 	},
 	["Extract Gas"] = {
 		[301] = 305,
@@ -675,6 +714,12 @@ local node_minharvest = {
 		[459] = 475,
 		[460] = 525,
 		[461] = 500,
+		[462] = 500,
+		[463] = 500,
+		[464] = 500,
+		[465] = 500,
+		[466] = 500,
+		[467] = 500,
 	},
 }
 GatherMate.nodeMinHarvest = node_minharvest
