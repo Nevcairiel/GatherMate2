@@ -129,7 +129,9 @@ local node_ids = {
 		[NL["Rich Pyrite Deposit"]] 			= 240,
 		[NL["Ghost Iron Deposit"]] 				= 241,
 		[NL["Rich Ghost Iron Deposit"]] 		= 242,
-
+		[NL["Black Trillium Deposit"]]			= 243,
+		[NL["White Trillium Deposit"]]			= 244,
+		-- Kyparite Ore needs to find out what this spawns from
 	},
 	["Extract Gas"] = {
 		[NL["Windy Cloud"]] 					= 301,
@@ -265,6 +267,8 @@ local node_ids = {
 		[NL["Vrykul Archaeology Find"]]         = 608,
 		[NL["Tol'vir Archaeology Find"]]        = 609,
 		[NL["Other Archaeology Find"]]          = 610,
+		[NL["Pandaren Archaeology Find"]]		= 611,
+		[NL["Mogu Archaeology Find"]]			= 612,
 	}
 }
 GatherMate.nodeIDs = node_ids
@@ -314,6 +318,8 @@ local rare_spawns = {
 	[237] = {[236]=true}, -- rich elementium
 	[238] = {[236]=true}, -- pyrtite
 	[240] = {[236]=true}, -- rich pyrite
+	[243] = {[242]=true,[241]=true}, -- black trillium ore
+	[244] = {[242]=true,[241]=true}, -- white trillium ore
 }
 Collector.rareNodes = rare_spawns
 -- Format zone = { "Database", "new node id"}
@@ -404,13 +410,13 @@ local node_textures = {
 		[156] = icon_path.."Fish\\debris.tga",
 		[157] = icon_path.."Fish\\dsagefish.tga",
 		-- Placeholders till mist graphics are exrtacted
-		[158] = icon_path.."Fish\\net.tga",
-		[159] = icon_path.."Fish\\net.tga",
-		[160] = icon_path.."Fish\\net.tga",
-		[161] = icon_path.."Fish\\net.tga",
-		[162] = icon_path.."Fish\\net.tga",
-		[163] = icon_path.."Fish\\net.tga",
-		[164] = icon_path.."Fish\\net.tga",
+		[158] = icon_path.."Fish\\emp_salmon.tga",
+		[159] = icon_path.."Fish\\matis_shrimp.tga",
+		[160] = icon_path.."Fish\\darter.tga",
+		[161] = icon_path.."Fish\\lungfish.tga",
+		[162] = icon_path.."Fish\\paddle_fish.tga",
+		[163] = icon_path.."Fish\\redbelly.tga",
+		[164] = icon_path.."Fish\\reef_octopus.tga",
 		[165] = icon_path.."Fish\\treasure.tga",
 	},
 	["Mining"] = {
@@ -455,8 +461,10 @@ local node_textures = {
 		[238] = icon_path.."Mine\\pyrite.tga",
 		[239] = icon_path.."Mine\\elementium.tga",
 		[240] = icon_path.."Mine\\pyrite.tga",
-		[241] = icon_path.."Mine\\pyrite.tga",
-		[242] = icon_path.."Mine\\pyrite.tga",
+		[241] = icon_path.."Mine\\ghostiron.tga",
+		[242] = icon_path.."Mine\\ghostiron.tga",
+		[243] = icon_path.."Mine\\black_trilium.tga",
+		[244] = icon_path.."Mine\\white_trillium.tga",
 	},
 	["Extract Gas"] = {
 		[301] = icon_path.."Gas\\windy_cloud.tga",
@@ -531,12 +539,12 @@ local node_textures = {
 		[460] = icon_path.."Herb\\twilightjasmine.tga",
 		[461] = icon_path.."Herb\\whiptail.tga",
 		-- Place Holders
-		[462] = icon_path.."Herb\\whiptail.tga",
-		[463] = icon_path.."Herb\\whiptail.tga",
-		[464] = icon_path.."Herb\\whiptail.tga",
-		[465] = icon_path.."Herb\\whiptail.tga",
-		[466] = icon_path.."Herb\\whiptail.tga",
-		[467] = icon_path.."Herb\\whiptail.tga",
+		[462] = icon_path.."Herb\\golden_lotus.tga",
+		[463] = icon_path.."Herb\\fools_cap.tga",
+		[464] = icon_path.."Herb\\snow_lily.tga",
+		[465] = icon_path.."Herb\\silkweed.tga",
+		[466] = icon_path.."Herb\\green_tea_leaf.tga",
+		[467] = icon_path.."Herb\\raid_poppy.tga",
 	},
 	["Treasure"] = {
 		[501] = icon_path.."Treasure\\clam.tga",
@@ -591,6 +599,8 @@ local node_textures = {
 		[608] = icon_path.."Archaeology\\shovel.tga",
 		[609] = icon_path.."Archaeology\\shovel.tga",
 		[610] = icon_path.."Archaeology\\shovel.tga",
+		[611] = icon_path.."Archaeology\\shovel.tga",
+		[612] = icon_path.."Archaeology\\shovel.tga",
 	},
 }
 GatherMate.nodeTextures = node_textures
@@ -641,6 +651,8 @@ local node_minharvest = {
 		[240] = 525,
 		[241] = 515,
 		[242] = 550,
+		[243] = 550,
+		[244] = 550,
 	},
 	["Extract Gas"] = {
 		[301] = 305,
