@@ -127,6 +127,7 @@ local node_ids = {
 		[NL["Pyrite Deposit"]]					= 238,
 		[NL["Rich Obsidium Deposit"]] 			= 239,
 		[NL["Rich Pyrite Deposit"]] 			= 240,
+-- mist nodes
 		[NL["Ghost Iron Deposit"]] 				= 241,
 		[NL["Rich Ghost Iron Deposit"]] 		= 242,
 		[NL["Black Trillium Deposit"]]			= 243,
