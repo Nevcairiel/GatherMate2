@@ -1024,7 +1024,7 @@ importOptions.args.GatherMateData = {
 				local loaded, reason = LoadAddOn("GatherMate2_Data")
 				local GatherMateData = LibStub("AceAddon-3.0"):GetAddon("GatherMate2_Data")
 				if loaded then
-					local dataVersion = tonumber(GatherMateData.generatedVersion):match("%d+")
+					local dataVersion = tonumber(GatherMateData.generatedVersion:match("%d+"))
 					local filter = nil
 					if db.importers["GatherMate2_Data"].expacOnly then
 						filter = db.importers["GatherMate2_Data"].expac
