@@ -78,7 +78,7 @@ function Collector:RegisterGatherEvents()
 	self:RegisterEvent("UNIT_SPELLCAST_INTERRUPTED","SpellFailed")
 	self:RegisterEvent("CURSOR_UPDATE","CursorChange")
 	self:RegisterEvent("UI_ERROR_MESSAGE","UIError")
-	self:RegisterEvent("LOOT_CLOSED","GatherCompleted")
+	--self:RegisterEvent("LOOT_CLOSED","GatherCompleted")
 	self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", "GasBuffDetector")
 	self:RegisterEvent("CHAT_MSG_LOOT","SecondaryGasCheck") -- for Storm Clouds
 	gatherEvents = true
@@ -95,7 +95,7 @@ function Collector:UnregisterGatherEvents()
 	self:UnregisterEvent("UNIT_SPELLCAST_INTERRUPTED")
 	self:UnregisterEvent("CURSOR_UPDATE")
 	self:UnregisterEvent("UI_ERROR_MESSAGE")
-	self:UnregisterEvent("LOOT_CLOSED")
+	--self:UnregisterEvent("LOOT_CLOSED")
 	self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 	gatherEvents = false
 end
@@ -287,6 +287,7 @@ function Collector:addItem(skill,what)
 		lastNode = what
 		lastNodeCoords = foundCoord
 	end
+	self:GatherCompleted()
 end
 
 --[[
