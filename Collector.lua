@@ -227,6 +227,12 @@ local lastNode = ""
 local lastNodeCoords = 0
 
 function Collector:addItem(skill,what)
+	-- check for microdungeon
+	local mapName, textureWidth, textureHeight, isMicroDungeon, microDungeonName = GetMapInfo()
+	if isMicroDungeon then
+	  SetMapByID(GetCurrentMapAreaID())
+	end
+	-- end check
 	local x, y = GetPlayerMapPosition("player")
 	if x == 0 and y == 0 then return end
 	-- Temporary fix, the map "ScarletEnclave" and "EasternPlaguelands"
