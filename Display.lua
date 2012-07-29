@@ -489,8 +489,8 @@ function Display:getMiniPin(coord, nodeID, nodeType, zone, index)
 		pin:SetParent(Minimap)
 		pin:SetFrameStrata(minimapStrata)
 		pin:SetFrameLevel(minimapFrameLevel)
-		pin:SetHeight(12 * db.scale / minimapScale)
-		pin:SetWidth(12 * db.scale / minimapScale)
+		pin:SetHeight(12 * db.miniscale / minimapScale)
+		pin:SetWidth(12 * db.miniscale / minimapScale)
 		--pin:SetAlpha(db.alpha)
 		pin:EnableMouse(db.minimapTooltips)
 		pin.isCircle = false
@@ -519,8 +519,8 @@ function Display:addMiniPin(pin, refresh)
 		pin.texture:SetTexCoord(0, 1, 0, 1)
 	-- if distance > 100, set back to the node texture
 	elseif (pin.isCircle or refresh) and dist_2 > db.trackDistance^2 then
-		pin:SetHeight(12 * db.scale / minimapScale)
-		pin:SetWidth(12 * db.scale / minimapScale)
+		pin:SetHeight(12 * db.miniscale / minimapScale)
+		pin:SetWidth(12 * db.miniscale / minimapScale)
 		pin.texture:SetTexture(nodeTextures[pin.nodeType][pin.nodeID])
 		pin.texture:SetVertexColor(1, 1, 1, 1)
 		pin.texture:SetTexCoord(0, 1, 0, 1)
@@ -841,7 +841,7 @@ function Display:UpdateWorldMap(force)
 	if lastScale ~= db.scale or lastAlphaPref ~= db.alpha then
 		local scale, alpha = db.scale, db.alpha
 		-- Make Worldmap scaling 0.25 bigger than the minimap.
-		scale = scale + 0.25
+		scale = scale
 		for index, pin in pairs(worldmapPins) do
 			pin:SetHeight(12 * scale)
 			pin:SetWidth(12 * scale)

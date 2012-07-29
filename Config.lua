@@ -193,14 +193,22 @@ local minimapOptions = {
 		},
 		iconScale = {
 			order = 10,
-			name = L["Icon Scale"],
-			desc = L["Icon scaling, this lets you enlarge or shrink your icons on both the World Map and Minimap."],
+			name = L["World Map Icon Scale"],
+			desc = L["Icon scaling, this lets you enlarge or shrink your icons on the World Map."],
 			type = "range",
 			min = 0.5, max = 5, step = 0.01,
 			arg = "scale",
 		},
-		iconAlpha = {
+		miconScale = {
 			order = 11,
+			name = L["Minimap Icon Scale"],
+			desc = L["Icon scaling, this lets you enlarge or shrink your icons on the Minimap."],
+			type = "range",
+			min = 0.5, max = 5, step = 0.01,
+			arg = "miniscale",
+		},
+		iconAlpha = {
+			order = 12,
 			name = L["Icon Alpha"],
 			desc = L["Icon alpha value, this lets you change the transparency of the icons. Only applies on World Map."],
 			type = "range",

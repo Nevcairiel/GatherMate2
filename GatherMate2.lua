@@ -14,7 +14,8 @@ local reverseTables = {}
 -- defaults for storage
 local defaults = {
 	profile = {
-		scale       = 0.75,
+		scale       = 1.0,
+		miniscale	= 0.75,
 		alpha       = 1,
 		show = {
 			["Treasure"] = "always",
