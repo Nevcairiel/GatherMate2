@@ -131,6 +131,10 @@ local node_ids = {
 		[NL["Rich Ghost Iron Deposit"]] 		= 242,
 		[NL["Black Trillium Deposit"]]			= 243,
 		[NL["White Trillium Deposit"]]			= 244,
+		[NL["Kyparite Deposit"]]				= 245,
+		[NL["Rich Kyparite Deposit"]]			= 246,
+		[NL["Trillium Vein"]]					= 247,
+		[NL["Rich Trillium Vein"]]				= 248,
 		-- Kyparite Ore needs to find out what this spawns from
 	},
 	["Extract Gas"] = {
@@ -470,6 +474,10 @@ local node_textures = {
 		[242] = icon_path.."Mine\\ghostiron.tga",
 		[243] = icon_path.."Mine\\black_trilium.tga",
 		[244] = icon_path.."Mine\\white_trillium.tga",
+		[245] = icon_path.."Mine\\kyparite.tga",
+		[246] = icon_path.."Mine\\kyparite.tga",
+		[247] = icon_path.."Mine\\white_trillium.tga",
+		[248] = icon_path.."Mine\\black_trillium.tga",
 	},
 	["Extract Gas"] = {
 		[301] = icon_path.."Gas\\windy_cloud.tga",
@@ -664,6 +672,10 @@ local node_minharvest = {
 		[242] = 550,
 		[243] = 550,
 		[244] = 550,
+		[245] = 550,
+		[246] = 575,
+		[247] = 600,
+		[248] = 600,
 	},
 	["Extract Gas"] = {
 		[301] = 305,
