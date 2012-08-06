@@ -49,8 +49,8 @@ local node_ids = {
 		[NL["Nettlefish School"]]				= 131,
 		[NL["Strange Pool"]]					= 132,
 		[NL["Schooner Wreckage Pool"]]			= 133,
-		[NL["Waterlogged Wreckage Pool"]]			= 134,
-		[NL["Bloodsail Wreckage Pool"]]				= 135,
+		[NL["Waterlogged Wreckage Pool"]]		= 134,
+		[NL["Bloodsail Wreckage Pool"]]			= 135,
 		-- Begin tediuous prefix mapping
 		--[NL["Lesser Sagefish School"]]			= 136, -- sagefish.tga
 		--[NL["Lesser Oily Blackmouth School"]] 	= 137, -- oilyblackmouth.tga

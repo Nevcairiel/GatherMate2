@@ -116,7 +116,7 @@ function GatherMate:RemoveDepracatedNodes()
 	for database,storage in pairs(self.gmdbs) do
 		for zone,data in pairs(storage) do
 			for coord,value in pairs(data) do
-				local name = self:GetNameForNode(value)
+				local name = self:GetNameForNode(database,value)
 				if not name then
 					data[coord] = nil
 				end
