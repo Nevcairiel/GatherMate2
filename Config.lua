@@ -1043,6 +1043,7 @@ importOptions.args.GatherMateData = {
 					Config:SendMessage("GatherMate2ConfigChanged")
 					db["importers"]["GatherMate2_Data"]["lastImport"] = dataVersion
 					imported["GatherMate2_Data"] = true
+					GatherMate:RemoveDepracatedNodes()
 				else
 					print(L["Failed to load GatherMateData due to "]..reason)
 				end
