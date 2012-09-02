@@ -230,7 +230,9 @@ function Collector:addItem(skill,what)
 	-- check for microdungeon
 	local mapName, textureWidth, textureHeight, isMicroDungeon, microDungeonName = GetMapInfo()
 	if isMicroDungeon then
-	  SetMapByID(GetCurrentMapAreaID())
+		-- we wont do any collection events inside of a micro dungeon
+		--SetMapByID(GetCurrentMapAreaID())
+		return
 	end
 	-- end check
 	local x, y = GetPlayerMapPosition("player")
