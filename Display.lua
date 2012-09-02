@@ -709,7 +709,7 @@ function Display:UpdateMiniMap(force)
 	end
 	-- microduneon check
 	local mapName, textureWidth, textureHeight, isMicroDungeon, microDungeonName = GetMapInfo()
-	if isMicroDungeon then
+	if isMicroDungeon and not WorldMapFrame:IsShown() then
 	  SetMapByID(GetCurrentMapAreaID())
 	end	--end check
 	-- get current player position
