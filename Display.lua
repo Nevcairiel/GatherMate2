@@ -634,9 +634,14 @@ function Display:UpdateIconPositions()
 	-- microdungeon check
 	local mapName, textureWidth, textureHeight, isMicroDungeon, microDungeonName = GetMapInfo()
 	if isMicroDungeon then
-	  SetMapByID(GetCurrentMapAreaID())
-	end
-	--end check
+		if not WorldMapFrame:IsShown() then
+			-- return to the main map of this zone
+			ZoomOut()
+		else
+			-- can't do anything while in a micro dungeon and the main map is visible
+			return
+		end
+	end --end check
 	-- get current player position
 	local x, y = GetPlayerMapPosition("player")
 	local level = GetCurrentMapDungeonLevel()
@@ -709,12 +714,14 @@ function Display:UpdateMiniMap(force)
 	end
 	-- microduneon check
 	local mapName, textureWidth, textureHeight, isMicroDungeon, microDungeonName = GetMapInfo()
-	if isMicroDungeon  then
+	if isMicroDungeon then
 		if not WorldMapFrame:IsShown() then
 			-- return to the main map of this zone
 			ZoomOut()
 		else
 			-- can't do anything while in a micro dungeon and the main map is visible
+			clearpins(minimapPins)
+			zone = nil
 			return
 		end
 	end	--end check
