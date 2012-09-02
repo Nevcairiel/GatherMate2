@@ -330,7 +330,7 @@ local digSites = {}
 
 function Display:DigsitesChanged()
 	local activeMap = GetCurrentMapAreaID()
-	if GatherMate.phasing[activeMap] then actieMap = GatherMate.phasing[activeMap] end
+	if GatherMate.phasing[activeMap] then activeMap = GatherMate.phasing[activeMap] end
 	table.wipe(digSites)
 	for continent, zone in pairs({GetMapContinents()}) do
 		SetMapZoom(continent)
