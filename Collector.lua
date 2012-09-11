@@ -13,7 +13,7 @@ Convert for 2.4 spell IDs
 local miningSpell = (GetSpellInfo(2575))
 local herbSpell = (GetSpellInfo(2366))
 local herbSkill = (string.gsub((GetSpellInfo(9134)),"%A",""))
-local fishSpell = (GetSpellInfo(131474))
+local fishSpell = (GetSpellInfo(7620)) or (GetSpellInfo(131476))
 local gasSpell = (GetSpellInfo(30427))
 --local gasSpell = (GetSpellInfo(48929))  --other gasspell
 local openSpell = (GetSpellInfo(3365))
