@@ -267,6 +267,7 @@ local node_ids = {
 		[NL["Razormaw Matriarch's Nest"]]		= 543,
 		[NL["Ravasaur Matriarch's Nest"]]		= 544,
 		[NL["Dark Soil"]]						= 545,
+		[NL["Onyx Egg"]]						= 546,
 	},
 	["Archaeology"] = {
 		-- cata archeolgy objects
@@ -613,6 +614,7 @@ local node_textures = {
 		[543] = icon_path.."Treasure\\red_raptor.tga",
 		[544] = icon_path.."Treasure\\green_raptor.tga",
 		[545] = icon_path.."Treasure\\soil.tga",
+		[546] = icon_path.."Treasure\\egg.tga",
 	},
 	["Archaeology"] = {
 		[601] = icon_path.."Archaeology\\shovel.tga",
