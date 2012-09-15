@@ -611,6 +611,8 @@ function Display:UpdateMaps()
 	if not WorldMapFrame:IsShown() then
 		SetMapToCurrentZone()
 	end
+	-- recheck zoom on map update, as it seems on load you dont get the map zoom changed event
+	indoors = GetCVar("minimapZoom")+0 == Minimap:GetZoom() and "outdoor" or "indoor"
 	-- Ask to update the visiblity for archaeology updates to blobs
 	self:UpdateVisibility()
 	self:UpdateMiniMap(true)
@@ -675,7 +677,6 @@ function Display:UpdateIconPositions()
 	if x ~= lastX or y ~= lastY or facing ~= lastFacing or level ~= lastLevel or refresh then
 		-- update radius of the map
 		mapRadius = self.minimapSize[indoors][zoom] / 2
-
 		-- we calculate the distance to the node in yards
 		local _x, _y =  GatherMate:PointToYards(x, y, zone, level)
 		-- update upvalues for icon placement
