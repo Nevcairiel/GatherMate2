@@ -950,6 +950,7 @@ ImportHelper.expac_data = {
 	["TBC"] = L["The Burning Crusades"],
 	["WRATH"] = L["Wrath of the Lich King"],
 	["CATACLYSM"] = L["Cataclysm"],
+	["MISTS"] = L["Mists of Pandaria"]
 }
 imported["GatherMate2_Data"] = false
 importOptions.args.GatherMateData = {
