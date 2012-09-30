@@ -334,6 +334,7 @@ local rare_spawns = {
 	[240] = {[236]=true}, -- rich pyrite
 	[243] = {[242]=true,[241]=true}, -- black trillium ore
 	[244] = {[242]=true,[241]=true}, -- white trillium ore
+	[462] = {[462]=true,[463]=true,[464]=true,[465]=true,[466]=true,[467]=true,[468]=true}, -- golden lotus
 }
 Collector.rareNodes = rare_spawns
 -- Format zone = { "Database", "new node id"}
