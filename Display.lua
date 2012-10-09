@@ -353,7 +353,8 @@ function Display:DigsitesChanged()
 end
 
 local function IsActiveDigSite()
-	return digSites[(GetMapInfo())]
+	local showDig = _G.GetCVarBool("digSites")
+	return digSites[(GetMapInfo())] and showDig
 end
 
 function Display:UpdateVisibility()
