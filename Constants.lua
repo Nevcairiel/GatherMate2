@@ -132,8 +132,8 @@ local node_ids = {
 		[NL["Rich Pyrite Deposit"]] 			= 240,
 		[NL["Ghost Iron Deposit"]] 				= 241,
 		[NL["Rich Ghost Iron Deposit"]] 		= 242,
-		[NL["Black Trillium Deposit"]]			= 243,
-		[NL["White Trillium Deposit"]]			= 244,
+		--[NL["Black Trillium Deposit"]]			= 243,
+		--[NL["White Trillium Deposit"]]			= 244,
 		[NL["Kyparite Deposit"]]				= 245,
 		[NL["Rich Kyparite Deposit"]]			= 246,
 		[NL["Trillium Vein"]]					= 247,
@@ -332,8 +332,8 @@ local rare_spawns = {
 	[237] = {[236]=true}, -- rich elementium
 	[238] = {[236]=true}, -- pyrtite
 	[240] = {[236]=true}, -- rich pyrite
-	[243] = {[242]=true,[241]=true}, -- black trillium ore
-	[244] = {[242]=true,[241]=true}, -- white trillium ore
+	--[243] = {[242]=true,[241]=true}, -- black trillium ore
+	--[244] = {[242]=true,[241]=true}, -- white trillium ore
 	[462] = {[462]=true,[463]=true,[464]=true,[465]=true,[466]=true,[467]=true,[468]=true}, -- golden lotus
 }
 Collector.rareNodes = rare_spawns
@@ -481,8 +481,8 @@ local node_textures = {
 		[240] = icon_path.."Mine\\pyrite.tga",
 		[241] = icon_path.."Mine\\ghostiron.tga",
 		[242] = icon_path.."Mine\\ghostiron.tga",
-		[243] = icon_path.."Mine\\black_trillium.tga",
-		[244] = icon_path.."Mine\\white_trillium.tga",
+		--[243] = icon_path.."Mine\\black_trillium.tga",
+		--[244] = icon_path.."Mine\\white_trillium.tga",
 		[245] = icon_path.."Mine\\kyparite.tga",
 		[246] = icon_path.."Mine\\kyparite.tga",
 		[247] = icon_path.."Mine\\white_trillium.tga",
@@ -680,8 +680,8 @@ local node_minharvest = {
 		[240] = 525,
 		[241] = 515,
 		[242] = 550,
-		[243] = 550,
-		[244] = 550,
+		--[243] = 550,
+		--[244] = 550,
 		[245] = 550,
 		[246] = 575,
 		[247] = 600,
