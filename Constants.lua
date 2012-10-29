@@ -48,7 +48,7 @@ local node_ids = {
 		[NL["Musselback Sculpin School"]]		= 130,
 		[NL["Nettlefish School"]]				= 131,
 		[NL["Strange Pool"]]					= 132,
-		[NL["Schooner Wreckage Pool"]]			= 133,
+		[NL["Schooner Wreckage"]]			    = 133,
 		[NL["Waterlogged Wreckage Pool"]]		= 134,
 		[NL["Bloodsail Wreckage Pool"]]			= 135,
 		-- Begin tediuous prefix mapping
