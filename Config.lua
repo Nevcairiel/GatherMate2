@@ -11,8 +11,9 @@ local DataBroker = LibStub:GetLibrary("LibDataBroker-1.1",true)
 ]]
 
 -- Setup keybinds (these need to be global strings to show up properly in ESC -> Key Bindings)
-BINDING_HEADER_GatherMate = "GatherMate2"
+BINDING_HEADER_GatherMate2 = "GatherMate2"
 BINDING_NAME_TOGGLE_GATHERMATE2_MINIMAPICONS = L["Keybind to toggle Minimap Icons"]
+BINDING_NAME_TOGGLE_GATHERMATE2_MAINMAPICONS = L["Keybind to toggle Worldmap Icons"]
 
 -- A helper function for keybindings
 local KeybindHelper = {}
@@ -187,6 +188,36 @@ local minimapOptions = {
 						end
 					end
 					SetBinding(key, "TOGGLE_GATHERMATE2_MINIMAPICONS")
+				end
+				SaveBindings(GetCurrentBindingSet())
+			end,
+		},
+		toggleWkey = {
+			order = 6,
+			name = L["Keybind to toggle Worldmap Icons"],
+			desc = L["Keybind to toggle Worldmap Icons"],
+			type = "keybinding",
+			width = "full",
+			get = function(info)
+				return table.concat(KeybindHelper:MakeKeyBindingTable(GetBindingKey("TOGGLE_GATHERMATE2_MAINMAPICONS")), ", ")
+			end,
+			set = function(info, key)
+				if key == "" then
+					local t = KeybindHelper:MakeKeyBindingTable(GetBindingKey("TOGGLE_GATHERMATE2_MAINMAPICONS"))
+					for i = 1, #t do
+						SetBinding(t[i])
+					end
+				else
+					local oldAction = GetBindingAction(key)
+					local frame = LibStub("AceConfigDialog-3.0").OpenFrames["GatherMate"]
+					if frame then
+						if ( oldAction ~= "" and oldAction ~= "TOGGLE_GATHERMATE2_MAINMAPICONS" ) then
+							frame:SetStatusText(KEY_UNBOUND_ERROR:format(GetBindingText(oldAction, "BINDING_NAME_")))
+						else
+							frame:SetStatusText(KEY_BOUND)
+						end
+					end
+					SetBinding(key, "TOGGLE_GATHERMATE2_MAINMAPICONS")
 				end
 				SaveBindings(GetCurrentBindingSet())
 			end,
