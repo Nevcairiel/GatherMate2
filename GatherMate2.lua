@@ -385,6 +385,7 @@ function GatherMate:CleanupDB()
 	local Collector = GatherMate:GetModule("Collector")
 	local rares = Collector.rareNodes
 	-- Need to iterate list of zones here
+	-- Should change this to a co-routine to prevent freeze
 	for v,zone in pairs(GatherMate.mapData:GetAllMapIDs()) do
 		--self:Print(L["Processing "]..zone)
 		for profession in pairs(gmdbs) do
