@@ -1372,8 +1372,8 @@ function Config:CheckAutoImport()
 			local dataVersion = tonumber(verline:match("%d+"))
 			if dataVersion and dataVersion > v["lastImport"] then
 				local loaded, reason = LoadAddOn(k)
-				local addon = LibStub("AceAddon-3.0"):GetAddon(k)
 				if loaded then
+					local addon = LibStub("AceAddon-3.0"):GetAddon(k)
 					local filter = nil
 					if v.expacOnly then
 						filter = v.expac
