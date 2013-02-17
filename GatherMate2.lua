@@ -380,14 +380,39 @@ end
 
 --[[
 	Function to cleanup the databases by removing nearby nodes of similar types
-]]
-function GatherMate:CleanupDB()
+	As of 02/17/2013 will be converted to become a coroutine
+--]]
+
+local CleanerUpdateFrame = CreateFrame("Frame")
+CleanerUpdateFrame.running = false
+
+function CleanerUpdateFrame:OnUpdate(elapsed)
+	local finished = coroutine.resume(self.cleanup)
+	if finished then
+		if coroutine.status(self.cleanup) == "dead" then
+			self:SetScript("OnUpdate",nil)
+			self.running = false
+			self.cleanup = nil
+			GatherMate:Print(L["Cleanup Complete."])
+		end
+	else
+		self:SetScript("OnUpdate",nil)
+		self.runing = false
+		self.cleanup = nil
+		GatherMate:Print(L["Cleanup Failed."])
+	end
+end
+
+function GatherMate:IsCleanupRunning()
+	return CleanerUpdateFrame.running
+end
+
+function GatherMate:SweepDatabase()
 	local Collector = GatherMate:GetModule("Collector")
 	local rares = Collector.rareNodes
-	-- Need to iterate list of zones here
-	-- Should change this to a co-routine to prevent freeze
 	for v,zone in pairs(GatherMate.mapData:GetAllMapIDs()) do
 		--self:Print(L["Processing "]..zone)
+		coroutine.yield()
 		for profession in pairs(gmdbs) do
 			local range = db.cleanupRange[profession]
 			for coord, nodeID in self:GetNodesForZone(zone, profession, true) do
@@ -402,7 +427,25 @@ function GatherMate:CleanupDB()
 	end
 	self:RemoveDepracatedNodes()
 	self:SendMessage("GatherMate2Cleanup")
-	self:Print(L["Cleanup Complete."])
+end
+
+function GatherMate:CleanupDB()
+	if not CleanerUpdateFrame.running then
+		CleanerUpdateFrame.cleanup = coroutine.create(GatherMate.SweepDatabase)
+		CleanerUpdateFrame:SetScript("OnUpdate",CleanerUpdateFrame.OnUpdate)
+		CleanerUpdateFrame.running = true
+		local status = coroutine.resume(CleanerUpdateFrame.cleanup,GatherMate)
+		if not status then
+			CleanerUpdateFrame.running = false
+			CleanerUpdateFrame:SetScript("OnUpdate",nil)
+			CleanerUpdateFrame.cleanup = nil
+			self:Print(L["Cleanup Failed."])
+		else
+			self:Print(L["Cleanup Started."])
+		end
+	else
+		self:Print(L["Cleanup in progress."])
+	end
 end
 
 --[[

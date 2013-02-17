@@ -686,6 +686,7 @@ local maintenanceOptions = {
 			func = "CleanupDB",
 			order = 5,
 			width = "full",
+			disabled = function() return GatherMate:IsCleanupRunning() end
 		},
 		cleanup_range = {
 			order = 10,
