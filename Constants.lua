@@ -283,6 +283,7 @@ local node_ids = {
 		[NL["Other Archaeology Find"]]          = 610,
 		[NL["Pandaren Archaeology Find"]]		= 611,
 		[NL["Mogu Archaeology Find"]]			= 612,
+		[NL["Mantid Archaeology Find"]]			= 613,
 	}
 }
 GatherMate.nodeIDs = node_ids
@@ -619,6 +620,7 @@ local node_textures = {
 		[610] = icon_path.."Archaeology\\shovel.tga",
 		[611] = icon_path.."Archaeology\\shovel.tga",
 		[612] = icon_path.."Archaeology\\shovel.tga",
+		[613] = icon_path.."Archaeology\\shovel.tga",
 	},
 }
 GatherMate.nodeTextures = node_textures
