@@ -1349,7 +1349,27 @@ function Config:OnInitialize()
 		local launcher = DataBroker:NewDataObject("GatherMate2", {
 			type = "launcher",
 			icon = "Interface\\AddOns\\GatherMate2\\Artwork\\Icon.tga",
-			OnClick = openOptions,
+			OnClick = function(obj, btn)
+				if btn == "RightButton" then
+					return openOptions()
+				elseif IsShiftKeyDown() then
+					GatherMate2.db.profile.showWorldMap = not GatherMate2.db.profile.showWorldMap
+				else
+					GatherMate2.db.profile.showMinimap = not GatherMate2.db.profile.showMinimap
+				end
+				Config:UpdateConfig()
+			end,
+			OnTooltipShow = function(tip)
+				tip:AddLine("GatherMate2", NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
+				tip:AddLine(" ")
+				tip:AddDoubleLine(L["Minimap Icons"], GatherMate2.db.profile.showMinimap and (GREEN_FONT_COLOR_CODE .. L["Enabled"] .. "|r") or (GRAY_FONT_COLOR_CODE .. L["Disabled"] .. "|r"))
+				tip:AddDoubleLine(L["World Map Icons"], GatherMate2.db.profile.showWorldMap and (GREEN_FONT_COLOR_CODE .. L["Enabled"] .. "|r") or (GRAY_FONT_COLOR_CODE .. L["Disabled"] .. "|r"))
+				tip:AddLine(" ")
+				tip:AddLine(L["Click to toggle minimap icons."])
+				tip:AddLine(L["Shift-click to toggle world map icons."])
+				tip:AddLine(L["Right-click for options."])
+				tip:Show()
+			end,
 		})
 	end
 end
