@@ -264,7 +264,7 @@ function Collector:addItem(skill,what)
 	local rares = self.rareNodes
 	-- run through the nearby's
 	local skip = false
-	local foundCoord = GatherMate.mapData:EncodeLoc(x, y, level)
+	local foundCoord = GatherMate:EncodeLoc(x, y, level)
 	local specialNode = false
 	local specialWhat = what
 	if foundCoord == lastNodeCoords and what == lastNode then return end

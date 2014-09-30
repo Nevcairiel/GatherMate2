@@ -159,7 +159,7 @@ end
 local function addTomTomWaypoint(button,pin)
 	if TomTom then
 		local c, z = GetCurrentMapContinent(), GetCurrentMapZone()
-		local x, y, level = GatherMate.mapData:DecodeLoc(pin.coords)
+		local x, y, level = GatherMate:DecodeLoc(pin.coords)
 		TomTom:AddZWaypoint(c, z, x*100, y*100, pin.title, nil, true, true)
 	end
 end
@@ -451,7 +451,7 @@ function Display:addWorldPin(coord, nodeID, nodeType, zone, index)
 	local pin = worldmapPins[index]
 	if not pin then
 		pin = self:getMapPin()
-		local x, y, level = GatherMate.mapData:DecodeLoc(coord)
+		local x, y, level = GatherMate:DecodeLoc(coord)
 		pin.coords = coord
 		pin.title = GatherMate:GetNameForNode(nodeType, nodeID)
 		pin.zone = zone
@@ -499,7 +499,7 @@ function Display:getMiniPin(coord, nodeID, nodeType, zone, index)
 		pin.texture:SetTexture(nodeTextures[nodeType][nodeID])
 		pin.texture:SetTexCoord(0, 1, 0, 1)
 		pin.texture:SetVertexColor(1, 1, 1, 1)
-		pin.x, pin.y, pin.level = GatherMate.mapData:DecodeLoc(coord)
+		pin.x, pin.y, pin.level = GatherMate:DecodeLoc(coord)
 		pin.x1, pin.y1 = GatherMate:PointToYards(pin.x,pin.y,zone,pin.level)
 		minimapPins[index] = pin
 	end
@@ -842,7 +842,7 @@ function Display:UpdateWorldMap(force)
 	for i,db_type in pairs(GatherMate.db_types) do
 		if GatherMate.Visible[db_type] then
 			for coord, nodeID in GatherMate:GetNodesForZone(zoneid, db_type) do
-				local nx,ny,nlevel = GatherMate.mapData:DecodeLoc(coord)
+				local nx,ny,nlevel = GatherMate:DecodeLoc(coord)
 				if nlevel == mapLevel then
 					self:addWorldPin(coord, nodeID, db_type, zoneid, (i * 1e14) + coord).keep = true
 				end

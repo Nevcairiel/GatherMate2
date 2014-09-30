@@ -15,7 +15,7 @@
 ## X-Category: Map
 ## Version: @project-version@
 ## X-License: ARR
-## OptionalDeps: Ace3, LibDataBroker-1.1, LibMapData-1.0
+## OptionalDeps: Ace3, LibDataBroker-1.1
 ## LoadManagers: AddonLoader
 ## X-LoadOn-Always: delayed
 
@@ -31,7 +31,6 @@ Libs\AceGUI-3.0\AceGUI-3.0.xml
 Libs\AceConsole-3.0\AceConsole-3.0.xml
 Libs\AceConfig-3.0\AceConfig-3.0.xml
 Libs\AceDBOptions-3.0\AceDBOptions-3.0.xml
-Libs\LibMapData-1.0\library.lua
 #@end-no-lib-strip@
 
 Locales\GatherMate2-enUS.lua

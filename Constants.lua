@@ -8,8 +8,6 @@ local GatherMate = LibStub("AceAddon-3.0"):GetAddon("GatherMate2")
 local NL = LibStub("AceLocale-3.0"):GetLocale("GatherMate2Nodes",true)
 local L = LibStub("AceLocale-3.0"):GetLocale("GatherMate2")
 
-GatherMate.mapData = LibStub("LibMapData-1.0")
-
 --[[
 	Node Identifiers
 ]]

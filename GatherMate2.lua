@@ -110,6 +110,8 @@ function GatherMate:OnInitialize()
 		self:RemoveDepracatedNodes()
 		self.db.global.data_version = 2
 	end
+
+	self:GetMapInfo()
 end
 
 function GatherMate:RemoveDepracatedNodes()
@@ -203,18 +205,11 @@ function GatherMate:ClearDB(dbx)
 end
 
 --[[
-	how big is the zone
-]]
-function GatherMate:GetZoneSize(zone,level)
-	return self.mapData:MapArea(zone,level)
-end
-
---[[
 	Add an item to the DB
 ]]
 function GatherMate:AddNode(zone, x, y, level, nodeType, name)
 	local db = gmdbs[nodeType]
-	local id = self.mapData:EncodeLoc(x,y,level)
+	local id = self:EncodeLoc(x,y,level)
 	-- db lock check
 	if GatherMate.db.profile.dbLocks[nodeType] then
 		return
@@ -284,7 +279,7 @@ do
 		local tbl = next(tablestack) or {}
 		tablestack[tbl] = nil
 		tbl.data = gmdbs[nodeType][zone] or emptyTbl
-		tbl.yw, tbl.yh =  self.mapData:MapArea(zone,level)
+		tbl.yw, tbl.yh =  self:GetZoneSize(zone,level)
 		tbl.radiusSquared = radius * radius
 		tbl.xLocal, tbl.yLocal = x, y
 		tbl.mLevel = level
@@ -325,20 +320,6 @@ do
 	end
 end
 --[[
-	Get the distance between 2 points in a zone
-]]
-function GatherMate:Distance(zone,floor,x1,y1,x2,y2)
-	local distance,xdelta,ydelta = self.mapData:Distance(zone,floor, x1,y1,x2,y2)
-	return distance
-end
---[[
-	convert a point on the map to yard values
-]]
-function GatherMate:PointToYards(x,y,zone,level)
-	return self.mapData:PointToYards(zone,level,x,y)
-end
-
---[[
 	Node id function forward and reverse
 ]]
 function GatherMate:GetIDForNode(type, name)
@@ -355,7 +336,7 @@ end
 ]]
 function GatherMate:RemoveNode(zone, x, y, level, nodeType)
 	local db = gmdbs[nodeType][zone]
-	local coord = self.mapData:EncodeLoc(x,y,level)
+	local coord = self:EncodeLoc(x,y,level)
 	if db[coord] then
 		local t = self.reverseNodeIDs[nodeType][db[coord]]
 		db[coord] = nil
@@ -410,13 +391,13 @@ end
 function GatherMate:SweepDatabase()
 	local Collector = GatherMate:GetModule("Collector")
 	local rares = Collector.rareNodes
-	for v,zone in pairs(GatherMate.mapData:GetAllMapIDs()) do
+	for v,zone in pairs(GatherMate:GetAllMapIDs()) do
 		--self:Print(L["Processing "]..zone)
 		coroutine.yield()
 		for profession in pairs(gmdbs) do
 			local range = db.cleanupRange[profession]
 			for coord, nodeID in self:GetNodesForZone(zone, profession, true) do
-				local x,y,level = self.mapData:DecodeLoc(coord)
+				local x,y,level = self:DecodeLoc(coord)
 				for _coord, _nodeID in self:FindNearbyNode(zone, x, y, level, profession, range, true) do
 					if coord ~= _coord and (nodeID == _nodeID or (rares[_nodeID] and rares[_nodeID][nodeID])) then
 						self:RemoveNodeByID(zone, profession, _coord)
@@ -463,3 +444,155 @@ function GatherMate:DeleteNodeFromZone(nodeType, nodeID, zone)
 	end
 end
 
+--[[
+	Encode location
+]]
+function GatherMate:EncodeLoc(x, y, level)
+	local level = level or 0
+	if x > 0.9999 then
+		x = 0.9999
+	end
+	if y > 0.9999 then
+		y = 0.9999
+	end
+	return floor( x * 10000 + 0.5 ) * 1000000 + floor( y * 10000  + 0.5 ) * 100 + level
+end
+
+--[[
+	Decode location
+]]
+function GatherMate:DecodeLoc(id)
+	return floor(id/1000000)/10000, floor(id % 1000000 / 100)/10000, id % 100
+end
+
+--[[
+	Map Info block
+]]
+do
+	local mapToId, idToMap = {}, {}
+	local mapLocalized = {}
+	local mapInfo = {} --table { width, height, left, top, right, bottom }
+
+	local function processZone(id, name)
+		if not id or idToMap[id] then return end
+		SetMapByID(id)
+		local mapFile = GetMapInfo()
+		local numFloors = GetNumDungeonMapLevels()
+		idToMap[id] = mapFile
+		if mapToId[mapFile] then return end
+
+		mapToId[mapFile] = id
+		mapLocalized[mapFile] = name or GetMapNameByID(id)
+
+		local _, left, top, right, bottom = GetCurrentMapZone()
+		if (left and top and right and bottom and (left ~= 0 or top ~= 0 or right ~= 0 or bottom ~= 0)) then
+			mapInfo[mapFile] = { left - right, top - bottom, left, top, right, bottom }
+		elseif not mapInfo[mapFile] then
+			mapInfo[mapFile] = {0, 0}
+		end
+
+		if numFloors == 0 and GetCurrentMapDungeonLevel() == 1 then
+			numFloors = 1
+		end
+
+		if DungeonUsesTerrainMap() then
+			numFloors = numFloors - 1
+		end
+
+		mapInfo[mapFile].floors = {}
+		if numFloors > 0 then
+			for f = 1, numFloors do
+				SetDungeonMapLevel(f)
+				local _, right, bottom, left, top  = GetCurrentMapDungeonLevel()
+				if left and top and right and bottom then
+					mapInfo[mapFile].floors[f] = { left - right, top - bottom, left, top, right, bottom }
+				end
+			end
+		end
+	end
+
+	--[[
+		load map data into the map info tables
+	]]
+	function GatherMate:GetMapInfo()
+		local continents = {GetMapContinents()}
+		for i = 1, #continents, 2 do
+			processZone(continents[i], continents[i+1])
+			local zones = {GetMapZones((i + 1) / 2)}
+			for z =  1, #zones, 2 do
+				processZone(zones[z], zones[z+1])
+			end
+		end
+
+		local areas = GetAreaMaps()
+		for idx, zoneId in pairs(areas) do
+			processZone(zoneId)
+		end
+	end
+
+	--[[
+		Get the localized name of the map
+	]]
+	function GatherMate:MapLocalize(mapFile)
+		if mapFile == WORLDMAP_COSMIC_ID then return WORLD_MAP end
+		if type(mapFile) == "number" then
+			mapFile = idToMap[mapFile]
+		end
+		assert(mapLocalized[mapFile])
+		return mapLocalized[mapFile]
+	end
+
+	--[[
+		get the area id of the map
+	]]
+	function GatherMate:MapAreaId(mapFile)
+		assert(mapToId[mapFile])
+		return mapToId[mapFile]
+	end
+
+	--[[
+		get a list of all map ids
+	]]
+	function GatherMate:GetAllMapIDs()
+		local t = {}
+		for id in pairs(idToMap) do
+			tinsert(t, id)
+		end
+		return t
+	end
+
+	--[[
+		get the size of the zone, in yards
+	]]
+	function GatherMate:GetZoneSize(mapFile, level)
+		if mapFile == WORLDMAP_COSMIC_ID then return 0, 0 end
+		if type(mapFile) == "number" then
+			mapFile = idToMap[mapFile]
+		end
+		local data = mapInfo[mapFile]
+		if not data then return 0, 0 end
+		if level and level > 0 and data.floors[level] then
+			return data.floors[level][1], data.floors[level][2]
+		else
+			return data[1],data[2]
+		end
+	end
+
+	--[[
+		Get the distance between 2 points in a zone
+	]]
+	function GatherMate:Distance(zone, level, x1, y1, x2, y2)
+		local width, height = self:GetZoneSize(zone, level)
+		local x = (x2 - x1) * width
+		local y = (y2 - y1) * height
+		return (x*x + y*y)^0.5
+	end
+
+	--[[
+		convert a point on the map to yard values
+	]]
+	function GatherMate:PointToYards(x, y, zone, level)
+		local width, height = self:GetZoneSize(zone, level)
+		return x * width, y * height
+	end
+end

@@ -353,8 +353,8 @@ local sortedFilter = setmetatable({}, {__index = function(t, k)
 	local new = {}
 	table.wipe(delocalizedZones)
 	if k == "zones" then
-		for index, zoneID in pairs(GatherMate.mapData:GetAllMapIDs()) do
-			local name = GatherMate.mapData:MapLocalize(zoneID)
+		for index, zoneID in pairs(GatherMate:GetAllMapIDs()) do
+			local name = GatherMate:MapLocalize(zoneID)
 			new[name] = name
 			delocalizedZones[name] = zoneID
 		end
@@ -1181,8 +1181,8 @@ function ConversionHelper:ConvertDatabase()
 				-- We should decode the location here and add it to the new DB with default level of 0
 				local x,y = GM1:getXY(coord)
 				-- Now encoded it to the new format
-				local newcoord = GatherMate.mapData:EncodeLoc(x,y,0)
-				GatherMate:InjectNode(GatherMate.mapData:MapAreaId(zone), newcoord ,nodeType, nodeID)
+				local newcoord = GatherMate:EncodeLoc(x,y,0)
+				GatherMate:InjectNode(GatherMate:MapAreaId(zone), newcoord ,nodeType, nodeID)
 			end
 		end
 	end
