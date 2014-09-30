@@ -1149,12 +1149,13 @@ end
 
 function ConversionHelper:PopulateZoneList()
 	local continentList = {GetMapContinents()}
-	for cID = 1, #continentList do
-		for zID, zname in ipairs({GetMapZones(cID)}) do
+	for cID = 1, #continentList / 2 do
+		local zones = {GetMapZones(cID)}
+		for i = 1, #zones, 2 do
+			local zID = (i + 1) / 2
 			SetMapZoom(cID, zID)
 			local mapfile = GetMapInfo()
-			local lname = GatherMate.mapData:MapLocalize(mapfile)
-			ConversionHelper.zoneList[mapfile] = lname
+			ConversionHelper.zoneList[mapfile] = zones[i+1]
 		end
 	end
 end
