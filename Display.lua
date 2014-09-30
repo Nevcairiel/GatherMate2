@@ -589,13 +589,16 @@ end
 --[[
 	Minimap zoom changed
 ]]
-function Display:MinimapZoom()
+function Display:UpdateMiniMapZoom()
 	local zoom = Minimap:GetZoom()
 	if GetCVar("minimapZoom") == GetCVar("minimapInsideZoom") then
 		Minimap:SetZoom(zoom < 2 and zoom + 1 or zoom - 1)
 	end
 	indoors = GetCVar("minimapZoom")+0 == Minimap:GetZoom() and "outdoor" or "indoor"
 	Minimap:SetZoom(zoom)
+end
+function Display:MinimapZoom()
+	self:UpdateMiniMapZoom()
 	self:UpdateMiniMap()
 end
 --[[
@@ -614,7 +617,7 @@ function Display:UpdateMaps()
 		SetMapToCurrentZone()
 	end
 	-- recheck zoom on map update, as it seems on load you dont get the map zoom changed event
-	indoors = GetCVar("minimapZoom")+0 == Minimap:GetZoom() and "outdoor" or "indoor"
+	self:UpdateMiniMapZoom()
 	-- Ask to update the visiblity for archaeology updates to blobs
 	self:UpdateVisibility()
 	self:UpdateMiniMap(true)
