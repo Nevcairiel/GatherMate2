@@ -471,6 +471,7 @@ end
 do
 	local mapToId, idToMap = {}, {}
 	local mapLocalized = {}
+	local mapInstances = {}
 	local mapInfo = {} --table { width, height, left, top, right, bottom }
 
 	local function processZone(id, name)
@@ -490,6 +491,8 @@ do
 		elseif not mapInfo[mapFile] then
 			mapInfo[mapFile] = {0, 0}
 		end
+
+		mapInstances[id] = GetAreaMapInfo(id)
 
 		if numFloors == 0 and GetCurrentMapDungeonLevel() == 1 then
 			numFloors = 1
@@ -594,5 +597,39 @@ do
 	function GatherMate:PointToYards(x, y, zone, level)
 		local width, height = self:GetZoneSize(zone, level)
 		return x * width, y * height
+	end
+
+	--[[
+		convert yard values to a point on the map
+	]]
+	function GatherMate:YardToPoints(x, y, zone, level)
+		local width, height = self:GetZoneSize(zone, level)
+		return x / width, y / height
+	end
+
+	--[[
+		get the player position in yards
+	]]
+	function GatherMate:PlayerPositionYards(mapFile, level)
+		if mapFile == WORLDMAP_COSMIC_ID then return 0, 0 end
+		local zoneId
+		if type(mapFile) == "number" then
+			zoneId = mapFile
+			mapFile = idToMap[mapFile]
+		else
+			zoneId = mapToId[mapFile]
+		end
+		local data = mapInfo[mapFile]
+		if not data then return 0, 0 end
+		if level and level > 0 and data.floors[level] then
+			data = data.floors[level]
+		end
+
+		local y, x, z, instanceId = UnitPosition("player")
+		if zoneId and mapInstances[zoneId] ~= instanceId then return 0, 0 end
+		local left, top, right, bottom = data[3], data[4], data[5], data[6]
+		x = (left - x)
+		y = (top - y)
+		return x, y
 	end
 end

@@ -12,7 +12,7 @@ local info = {}
 local pinCache = {}
 -- last x,y of the player.
 -- total number of pins we have created
-local lastX, lastY, lastXY, lastYY, pinCount = 0, 0, 0, 0, 0
+local lastXY, lastYY, pinCount = 0, 0, 0
 local lastLevel, lastZone = 0, -1
 -- reference to the pin generating the UIDropDown
 local pinClickedOn
@@ -245,12 +245,13 @@ function Display:OnEnable()
 	SetMapToCurrentZone()
 	self:RegisterMapEvents()
 	self:RegisterEvent("WORLD_MAP_UPDATE", "UpdateWorldMap")
-	self:RegisterEvent("ZONE_CHANGED_NEW_AREA", "UpdateMaps")
+	self:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 	self:RegisterEvent("SKILL_LINES_CHANGED")
 	self:RegisterEvent("MINIMAP_UPDATE_TRACKING")
 	self:RegisterEvent("PLAYER_ENTERING_WORLD","UpdateMaps")
 	self:SKILL_LINES_CHANGED()
 	self:MINIMAP_UPDATE_TRACKING()
+	self:ZONE_CHANGED_NEW_AREA()
 	self:DigsitesChanged()
 	--self:UpdateMaps()  -- already in DigsitesChanged()
 	fullInit = true
@@ -294,6 +295,20 @@ function Display:OnDisable()
 	self:UnregisterEvent("ARTIFACT_DIG_SITE_UPDATED")
 end
 
+function Display:ZONE_CHANGED_NEW_AREA()
+	local areaID, dungeonLevel = GetCurrentMapAreaID(), GetCurrentMapDungeonLevel()
+	SetMapToCurrentZone()
+	zone = GetCurrentMapAreaID()
+	if GatherMate.phasing[zone] then zone = GatherMate.phasing[zone] end
+	if zone ~= areaID then
+		SetMapByID(areaID)
+	end
+	if dungeonLevel and dungeonLevel > 0 then
+		SetDungeonMapLevel(dungeonLevel)
+	end
+
+	self:UpdateMaps()
+end
 
 function Display:SKILL_LINES_CHANGED()
 	local skillname, isHeader
@@ -650,13 +665,11 @@ function Display:UpdateIconPositions()
 		end
 	end --end check
 	-- get current player position
-	local x, y = GetPlayerMapPosition("player")
-	local level = GetCurrentMapDungeonLevel()
-	-- if position is 0, the player changed the worldmap to another zone, just keep the old values
-	if (x == 0 or y == 0 or GetCurrentMapZone() == 0) then
-		x, y = lastX, lastY
-		level = lastLevel
+	local level = lastLevel
+	if GetCurrentMapAreaID() == zone then
+		level = GetCurrentMapDungeonLevel()
 	end
+	local x, y = GatherMate:PlayerPositionYards(zone, level)
 
 	-- for rotating minimap support
 	local facing
@@ -679,14 +692,11 @@ function Display:UpdateIconPositions()
 	end
 
 	-- if the player moved, or changed the facing (rotating map) - update nodes
-	if x ~= lastX or y ~= lastY or facing ~= lastFacing or level ~= lastLevel or refresh then
+	if x ~= lastXY or y ~= lastYY or facing ~= lastFacing or level ~= lastLevel or refresh then
 		-- update radius of the map
 		mapRadius = self.minimapSize[indoors][zoom] / 2
-		-- we calculate the distance to the node in yards
-		local _x, _y =  GatherMate:PointToYards(x, y, zone, level)
 		-- update upvalues for icon placement
-		lastX, lastY = x, y
-		lastXY, lastYY = _x, _y
+		lastXY, lastYY = x, y
 		lastLevel = level
 		lastFacing = facing
 
@@ -710,9 +720,6 @@ end
 function Display:UpdateMiniMap(force)
 	if not db.showMinimap or not Minimap:IsVisible() then return end
 
-	-- update our zone info
-	zone = GetCurrentMapAreaID()
-	if GatherMate.phasing[zone] then zone = GatherMate.phasing[zone] end
 	local level = GetCurrentMapDungeonLevel()
 	if not zone or zone == -1 then
 		zone = nil
@@ -732,14 +739,11 @@ function Display:UpdateMiniMap(force)
 		end
 	end	--end check
 	-- get current player position
-	local x, y = GetPlayerMapPosition("player")
-	-- if position is 0, the player changed the worldmap to another zone, just keep the old values
-	-- GetCurrentMapZone now changes when you changes maps
-	-- only check x,z as in a dungeon when you teleport in GetCurrentMapZone always returns 0
+	local x, y = GatherMate:PlayerPositionYards(zone, level)
 	if (x == 0 or y == 0 ) then
-		x, y = lastX, lastY
 		level = lastLevel
 		zone = lastZone
+		x, y = GatherMate:PlayerPositionYards(zone, level)
 	end
 
 	-- get data from the API for calculations
@@ -765,7 +769,7 @@ function Display:UpdateMiniMap(force)
 	end
 
 	-- if the player moved, the zoom changed, or changed the facing (rotating map) - update nodes
-	if x ~= lastX or y ~= lastY or diffZoom or facing ~= lastFacing or level ~= lastLevel or force then
+	if x ~= lastXY or y ~= lastYY or diffZoom or facing ~= lastFacing or level ~= lastLevel or force then
 		-- set upvalues to new settings
 		minimapShape = GetMinimapShape and self.minimapShapes[GetMinimapShape() or "ROUND"]
 		mapRadius = self.minimapSize[indoors][zoom] / 2
@@ -774,13 +778,10 @@ function Display:UpdateMiniMap(force)
 		minimapStrata = Minimap:GetFrameStrata()
 		minimapFrameLevel = Minimap:GetFrameLevel() + 5
 
-		-- calculate distance in yards
-		local _x, _y =  GatherMate:PointToYards(x, y, zone, level)
 		-- update upvalues for icon placement
-		lastX, lastY = x, y
 		lastZoom = zoom
 		lastFacing = facing
-		lastXY, lastYY = _x, _y
+		lastXY, lastYY = x, y
 		lastLevel = level
 		lastZone = zone
 
@@ -789,9 +790,10 @@ function Display:UpdateMiniMap(force)
 			cos = math_cos(facing)
 		end
 		-- iterate the node databases and add the nodes
+		local x1, y1 = GatherMate:YardToPoints(x,y,zone,level)
 		for i,db_type in pairs(GatherMate.db_types) do
 			if GatherMate.Visible[db_type] then
-				for coord, nodeID in GatherMate:FindNearbyNode(zone, x, y, level, db_type, mapRadius*nodeRange) do
+				for coord, nodeID in GatherMate:FindNearbyNode(zone, x1, y1, level, db_type, mapRadius*nodeRange) do
 					local pin = self:getMiniPin(coord, nodeID, db_type, zone, (i * 1e14) + coord)
 					pin.keep = true
 					self:addMiniPin(pin, force)
