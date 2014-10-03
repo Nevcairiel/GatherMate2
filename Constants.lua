@@ -138,6 +138,11 @@ local node_ids = {
 		[NL["Rich Kyparite Deposit"]]			= 246,
 		[NL["Trillium Vein"]]					= 247,
 		[NL["Rich Trillium Vein"]]				= 248,
+-- wod nodes
+		[NL["True Iron Deposit"]]				= 249,
+		[NL["Rich True Iron Deposit"]]			= 250,
+		[NL["Blackrock Deposit"]]				= 251,
+		[NL["Rich Blackrock Deposit"]]			= 252,
 	},
 	["Extract Gas"] = {
 		[NL["Windy Cloud"]] 					= 301,
@@ -219,6 +224,13 @@ local node_ids = {
 		[NL["Green Tea Leaf"]]					= 466,
 		[NL["Rain Poppy"]]						= 467,
 		[NL["Sha-Touched Herb"]]				= 468,
+-- wod nodes
+		[NL["Talador Orchid"]]					= 469,
+		[NL["Nagrand Arrowbloom"]]				= 470,
+		[NL["Starflower"]]						= 471,
+		[NL["Gorgrond Flytrap"]]				= 472,
+		[NL["Fireweed"]]						= 473,
+		[NL["Frostweed"]]						= 474,
 	},
 	["Treasure"] = {
 		[NL["Giant Clam"]] 						= 501,
@@ -474,6 +486,10 @@ local node_textures = {
 		[246] = icon_path.."Mine\\kyparite.tga",
 		[247] = icon_path.."Mine\\white_trillium.tga",
 		[248] = icon_path.."Mine\\black_trillium.tga",
+		[249] = icon_path.."Mine\\trueiron.tga",
+		[250] = icon_path.."Mine\\trueiron.tga",
+		[251] = icon_path.."Mine\\blackrock.tga",
+		[252] = icon_path.."Mine\\blackrock.tga",
 	},
 	["Extract Gas"] = {
 		[301] = icon_path.."Gas\\windy_cloud.tga",
@@ -553,6 +569,12 @@ local node_textures = {
 		[466] = icon_path.."Herb\\green_tea_leaf.tga",
 		[467] = icon_path.."Herb\\rain_poppy.tga",
 		[468] = icon_path.."Herb\\shaherb.tga",
+		[469] = icon_path.."Herb\\taladororchid.tga",
+		[470] = icon_path.."Herb\\arrowbloom.tga",
+		[471] = icon_path.."Herb\\starflower.tga",
+		[472] = icon_path.."Herb\\flytrap.tga",
+		[473] = icon_path.."Herb\\fireweed.tga",
+		[474] = icon_path.."Herb\\frostweed.tga",
 	},
 	["Treasure"] = {
 		[501] = icon_path.."Treasure\\clam.tga",
