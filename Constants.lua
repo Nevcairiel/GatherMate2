@@ -65,7 +65,6 @@ local node_ids = {
 		--[NL["Sparse Schooner Wreckage"]]		= 146,
 		--[NL["Abundant Bloodsail Wreckage"]]	= 147,
 		--[NL["Teeming Floating Wreckage"]]		= 148,
-		-- Placeholder till i can verify names
 		[NL["Albino Cavefish School"]]			= 149,
 		--[NL["Algaefin Rockfish School"]]		= 150,
 		[NL["Blackbelly Mudfish School"]]		= 151,
@@ -121,7 +120,7 @@ local node_ids = {
 		[NL["Titanium Vein"]]					= 230,
 		[NL["Saronite Deposit"]]				= 231,
 		[NL["Rich Saronite Deposit"]]			= 232,
--- Cata nodes
+--- Cata nodes
 		[NL["Obsidium Deposit"]]				= 233,
 		--[NL["Huge Obsidian Slab"]]			= 234,
 		[NL["Pure Saronite Deposit"]] 			= 235,
@@ -130,6 +129,7 @@ local node_ids = {
 		[NL["Pyrite Deposit"]]					= 238,
 		[NL["Rich Obsidium Deposit"]] 			= 239,
 		[NL["Rich Pyrite Deposit"]] 			= 240,
+-- mists nodes
 		[NL["Ghost Iron Deposit"]] 				= 241,
 		[NL["Rich Ghost Iron Deposit"]] 		= 242,
 		--[NL["Black Trillium Deposit"]]			= 243,
@@ -138,7 +138,6 @@ local node_ids = {
 		[NL["Rich Kyparite Deposit"]]			= 246,
 		[NL["Trillium Vein"]]					= 247,
 		[NL["Rich Trillium Vein"]]				= 248,
-		-- Kyparite Ore needs to find out what this spawns from
 	},
 	["Extract Gas"] = {
 		[NL["Windy Cloud"]] 					= 301,
@@ -405,7 +404,6 @@ local node_textures = {
 		--[146] = icon_path.."Fish\\treasure.tga",
 		--[147] = icon_path.."Fish\\treasure.tga",
 		--[148] = icon_path.."Fish\\treasure.tga",
-		-- Placeholder graphics
 		[149] = icon_path.."Fish\\salmon.tga",
 		--[150] = icon_path.."Fish\\goby.tga",
 		[151] = icon_path.."Fish\\mudfish.tga",
@@ -415,7 +413,6 @@ local node_textures = {
 		[155] = icon_path.."Gas\\cinder.tga",
 		[156] = icon_path.."Fish\\debris.tga",
 		[157] = icon_path.."Fish\\dsagefish.tga",
-		-- Placeholders till mist graphics are exrtacted
 		[158] = icon_path.."Fish\\emp_salmon.tga",
 		[159] = icon_path.."Fish\\matis_shrimp.tga",
 		[160] = icon_path.."Fish\\darter.tga",
@@ -456,7 +453,6 @@ local node_textures = {
 		[225] = icon_path.."Mine\\ethernium.tga",
 		[226] = icon_path.."Mine\\ethernium.tga",
 		[227] = icon_path.."Mine\\ethernium.tga",
-		-- place holder graphic
 		[228] = icon_path.."Mine\\cobalt.tga",
 		[229] = icon_path.."Mine\\cobalt.tga",
 		[230] = icon_path.."Mine\\titanium.tga",
@@ -531,7 +527,6 @@ local node_textures = {
 		[440] = icon_path.."Herb\\ragveil.tga",
 		[441] = icon_path.."Herb\\flame_cap.tga",
 		[442] = icon_path.."Herb\\netherdust.tga",
-		-- place holder graphic
 		[443] = icon_path.."Herb\\evergreen.tga",
 		[444] = icon_path.."Herb\\constrictor.tga",
 		[445] = icon_path.."Herb\\constrictor.tga",
@@ -551,7 +546,6 @@ local node_textures = {
 		[459] = icon_path.."Herb\\heartblossom.tga",
 		[460] = icon_path.."Herb\\twilightjasmine.tga",
 		[461] = icon_path.."Herb\\whiptail.tga",
-		-- Place Holders
 		[462] = icon_path.."Herb\\golden_lotus.tga",
 		[463] = icon_path.."Herb\\fools_cap.tga",
 		[464] = icon_path.."Herb\\snow_lily.tga",
