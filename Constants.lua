@@ -719,6 +719,11 @@ local node_minharvest = {
 		[246] = 575,
 		[247] = 600,
 		[248] = 600,
+		-- TODO: these values aren't real, you can harvest them anytime
+		[249] = 600,
+		[250] = 600,
+		[251] = 600,
+		[252] = 600,
 	},
 	["Extract Gas"] = {
 		[301] = 305,
@@ -798,6 +803,13 @@ local node_minharvest = {
 		[466] = 500,
 		[467] = 525,
 		[468] = 575,
+		-- TODO: these values aren't real, you can harvest them anytime
+		[469] = 600,
+		[470] = 600,
+		[471] = 600,
+		[472] = 600,
+		[473] = 600,
+		[474] = 600,
 	},
 }
 GatherMate.nodeMinHarvest = node_minharvest
