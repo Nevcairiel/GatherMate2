@@ -475,40 +475,41 @@ do
 	local mapInfo = {} --table { width, height, left, top, right, bottom }
 
 	local function processZone(id, name)
-		if not id or idToMap[id] then return end
+		if not id or mapInfo[id] then return end
 		SetMapByID(id)
 		local mapFile = GetMapInfo()
 		local numFloors = GetNumDungeonMapLevels()
 		idToMap[id] = mapFile
-		if mapToId[mapFile] then return end
 
-		mapToId[mapFile] = id
-		mapLocalized[mapFile] = name or GetMapNameByID(id)
+		if not mapToId[mapFile] then mapToId[mapFile] = id end
+		mapLocalized[id] = name or GetMapNameByID(id)
 
 		local _, left, top, right, bottom = GetCurrentMapZone()
 		if (left and top and right and bottom and (left ~= 0 or top ~= 0 or right ~= 0 or bottom ~= 0)) then
-			mapInfo[mapFile] = { left - right, top - bottom, left, top, right, bottom }
-		elseif not mapInfo[mapFile] then
-			mapInfo[mapFile] = {0, 0}
+			mapInfo[id] = { left - right, top - bottom, left, top, right, bottom }
+		elseif not mapInfo[id] then
+			mapInfo[id] = { 0, 0, 0, 0, 0, 0}
 		end
 
-		mapInstances[id] = GetAreaMapInfo(id)
+		mapInfo[id].instance = GetAreaMapInfo(id)
 
 		if numFloors == 0 and GetCurrentMapDungeonLevel() == 1 then
 			numFloors = 1
+			mapInfo[id].fakefloor = true
 		end
 
 		if DungeonUsesTerrainMap() then
 			numFloors = numFloors - 1
 		end
 
-		mapInfo[mapFile].floors = {}
+		mapInfo[id].floors = {}
 		if numFloors > 0 then
 			for f = 1, numFloors do
 				SetDungeonMapLevel(f)
 				local _, right, bottom, left, top  = GetCurrentMapDungeonLevel()
 				if left and top and right and bottom then
-					mapInfo[mapFile].floors[f] = { left - right, top - bottom, left, top, right, bottom }
+					mapInfo[id].floors[f] = { left - right, top - bottom, left, top, right, bottom }
+					mapInfo[id].floors[f].instance = mapInfo[id].instance
 				end
 			end
 		end
@@ -536,13 +537,13 @@ do
 	--[[
 		Get the localized name of the map
 	]]
-	function GatherMate:MapLocalize(mapFile)
-		if mapFile == WORLDMAP_COSMIC_ID then return WORLD_MAP end
-		if type(mapFile) == "number" then
-			mapFile = idToMap[mapFile]
+	function GatherMate:MapLocalize(mapId)
+		if mapId == WORLDMAP_COSMIC_ID then return WORLD_MAP end
+		if type(mapId) == "string" then
+			mapId = mapToId[mapId]
 		end
-		assert(mapLocalized[mapFile])
-		return mapLocalized[mapFile]
+		assert(mapLocalized[mapId])
+		return mapLocalized[mapId]
 	end
 
 	--[[
@@ -558,27 +559,42 @@ do
 	]]
 	function GatherMate:GetAllMapIDs()
 		local t = {}
-		for id in pairs(idToMap) do
+		for id in pairs(mapInfo) do
 			tinsert(t, id)
 		end
 		return t
 	end
 
+	function GatherMate:GetDataTable(mapId, level)
+		if mapId == WORLDMAP_COSMIC_ID then return nil end
+		if type(mapId) == "string" then
+			mapId = mapToId[mapId]
+		end
+		local data = mapInfo[mapId]
+		if not data then return nil end
+
+		if (level == nil or level == 0) and data.fakefloor then
+			level = 1
+		end
+
+		if level and level > 0 and data.floors[level] then
+			return data.floors[level]
+		else
+			return data
+		end
+	end
+
 	--[[
 		get the size of the zone, in yards
 	]]
-	function GatherMate:GetZoneSize(mapFile, level)
-		if mapFile == WORLDMAP_COSMIC_ID then return 0, 0 end
-		if type(mapFile) == "number" then
-			mapFile = idToMap[mapFile]
+	function GatherMate:GetZoneSize(mapId, level)
+		if type(mapId) == "string" then
+			mapId = mapToId[mapId]
 		end
-		local data = mapInfo[mapFile]
+		local data = self:GetDataTable(mapId, level)
 		if not data then return 0, 0 end
-		if level and level > 0 and data.floors[level] then
-			return data.floors[level][1], data.floors[level][2]
-		else
-			return data[1],data[2]
-		end
+
+		return data[1],data[2]
 	end
 
 	--[[
@@ -610,23 +626,12 @@ do
 	--[[
 		get the player position in yards
 	]]
-	function GatherMate:PlayerPositionYards(mapFile, level)
-		if mapFile == WORLDMAP_COSMIC_ID then return 0, 0 end
-		local zoneId
-		if type(mapFile) == "number" then
-			zoneId = mapFile
-			mapFile = idToMap[mapFile]
-		else
-			zoneId = mapToId[mapFile]
-		end
-		local data = mapInfo[mapFile]
+	function GatherMate:PlayerPositionYards(mapId, level)
+		local data = self:GetDataTable(mapId, level)
 		if not data then return 0, 0 end
-		if level and level > 0 and data.floors[level] then
-			data = data.floors[level]
-		end
 
 		local y, x, z, instanceId = UnitPosition("player")
-		if zoneId and mapInstances[zoneId] ~= instanceId then return 0, 0 end
+		if data.instance ~= instanceId then return 0, 0 end
 		local left, top, right, bottom = data[3], data[4], data[5], data[6]
 		x = (left - x)
 		y = (top - y)
