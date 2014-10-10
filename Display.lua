@@ -332,7 +332,13 @@ function Display:DigsitesChanged()
 	local activeMap = GetCurrentMapAreaID()
 	if GatherMate.phasing[activeMap] then activeMap = GatherMate.phasing[activeMap] end
 	table.wipe(digSites)
-	for continent, zone in pairs({GetMapContinents()}) do
+	local continentList = {GetMapContinents()}
+	for cID = #continentList,1,-1 do -- oscarucb: trim new GetMapContinents() output in 6.0
+	        if type(continentList[cID]) == "number" then
+	                table.remove(continentList, cID)
+	        end
+	end
+	for continent, zone in pairs(continentList) do
 		SetMapZoom(continent)
 		local totalPOIs = GetNumMapLandmarks()
 		for index = 1,totalPOIs do
