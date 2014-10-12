@@ -229,7 +229,6 @@ function Display:OnEnable()
 	rotateMinimap = GetCVar("rotateMinimap") == "1"
 	if not self.updateFrame then
 		GatherMate.Visible = {}
-		WorldMapFrame:HookScript("OnHide", function() SetMapToCurrentZone() end)
 		self.updateFrame = CreateFrame("Frame")
 		self.updateFrame:SetScript("OnUpdate", function(frame, elapsed)
 			last_update = last_update + elapsed
