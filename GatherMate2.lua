@@ -620,6 +620,7 @@ do
 	]]
 	function GatherMate:YardToPoints(x, y, zone, level)
 		local width, height = self:GetZoneSize(zone, level)
+		if width == 0 or height == 0 then return 0, 0 end
 		return x / width, y / height
 	end
 
