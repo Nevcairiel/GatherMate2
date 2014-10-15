@@ -1152,8 +1152,7 @@ function ConversionHelper:PopulateZoneList()
 	for cID = 1, #continentList / 2 do
 		local zones = {GetMapZones(cID)}
 		for i = 1, #zones, 2 do
-			local zID = (i + 1) / 2
-			SetMapZoom(cID, zID)
+			SetMapByID(zones[i])
 			local mapfile = GetMapInfo()
 			ConversionHelper.zoneList[mapfile] = zones[i+1]
 		end
