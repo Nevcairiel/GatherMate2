@@ -990,10 +990,11 @@ importOptions.args.GatherMateData = {
 	name = "GatherMate2Data", -- addon name to import from, don't localize
 	handler = ImportHelper,
 	disabled = function()
-		local name, title, notes, enabled, loadable, reason, security = GetAddOnInfo("GatherMate2_Data")
+		local name, title, notes, loadable, reason, security, newVersion = GetAddOnInfo("GatherMate2_Data")
+		local enabled = GetAddOnEnableState(UnitName("player"), "GatherMate2_Data") > 0
 		-- disable if the addon is not enabled, or
 		-- disable if there is a reason why it can't be loaded ("MISSING" or "DISABLED")
-		return not enabled or (reason ~= nil)
+		return not enabled or (reason ~= nil and reason ~= "DEMAND_LOADED")
 	end,
 	args = {
 		desc = {
