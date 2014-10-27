@@ -346,7 +346,6 @@ local minimapOptions = {
 }
 
 -- Setup some storage arrays by db to sort node names and zones alphabetically
-local withLvlFormat = "(%d) %s"
 local delocalizedZones = {}
 local denormalizedNames = {}
 local sortedFilter = setmetatable({}, {__index = function(t, k)
@@ -365,7 +364,17 @@ local sortedFilter = setmetatable({}, {__index = function(t, k)
 			new[idx] = name
 			denormalizedNames[name] = name
 		end
-		table.sort(new)
+		local expansion = GatherMate.nodeExpansion[k]
+		if expansion then
+			-- We only end up creating one function per tracked type anyway
+			table.sort(new, function(a, b)
+				local mA, mB = expansion[map[a]], expansion[map[b]]
+				if not mA or not mB or mA == mB then return map[a] > map[b]
+				else return mA > mB end
+			end)
+		else
+			table.sort(new)
+		end
 	end
 	rawset(t, k, new)
 	return new
