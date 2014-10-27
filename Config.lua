@@ -365,21 +365,7 @@ local sortedFilter = setmetatable({}, {__index = function(t, k)
 			new[idx] = name
 			denormalizedNames[name] = name
 		end
-		local minSkill = GatherMate.nodeMinHarvest[k]
-		if minSkill then
-			-- We only end up creating one function per tracked type anyway
-			table.sort(new, function(a, b)
-				local mA, mB = minSkill[map[a]], minSkill[map[b]]
-				if mA == mB then return map[a] > map[b]
-				else return mA > mB end
-			end)
-			for i, v in next, new do
-				new[i] = withLvlFormat:format(minSkill[map[v]], v)
-				denormalizedNames[new[i]] = v
-			end
-		else
-			table.sort(new)
-		end
+		table.sort(new)
 	end
 	rawset(t, k, new)
 	return new
