@@ -120,6 +120,14 @@ local generalOptions = {
 			values = prof_options4,
 			arg = "Archaeology"
 		},
+		showTimber = {
+			order = 7,
+			name = L["Show Timber Nodes"],
+			desc = L["Toggle showing timber nodes."],
+			type = "select",
+			values = prof_options3,
+			arg = "Logging"
+		},
 	},
 }
 

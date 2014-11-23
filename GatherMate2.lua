@@ -19,6 +19,7 @@ local defaults = {
 		alpha       = 1,
 		show = {
 			["Treasure"] = "always",
+			["Logging"]  = "active",
 			["*"] = "with_profession"
 		},
 		showMinimap = true,
@@ -36,6 +37,7 @@ local defaults = {
 			["Extract Gas"]    = {Red = 0, Green = 1, Blue = 1, Alpha = 1},
 			["Treasure"]       = {Red = 1, Green = 0, Blue = 1, Alpha = 1},
 			["Archaeology"]    = {Red = 1, Green = 1, Blue = 0.5, Alpha = 1},
+			["Logging"]        = {Red = 0, Green = 0.8, Blue = 1, Alpha = 1},
 			["*"]              = {Red = 1, Green = 0, Blue = 1, Alpha = 1},
 		},
 		trackDistance = 100,
@@ -48,6 +50,7 @@ local defaults = {
 			["Extract Gas"]    = 50,
 			["Treasure"]	   = 15,
 			["Archaeology"]    = 10,
+			["Logging"]        = 20,
 		},
 		dbLocks = {
 			["Herb Gathering"] = false,
@@ -56,6 +59,7 @@ local defaults = {
 			["Extract Gas"]    = false,
 			["Treasure"]	   = false,
 			["Archaeology"]    = false,
+			["Logging"]        = false,
 		},
 		importers = {
 			["*"] = {
@@ -89,6 +93,7 @@ function GatherMate:OnInitialize()
 	GatherMate2FishDB = GatherMate2FishDB or {}
 	GatherMate2TreasureDB = GatherMate2TreasureDB or {}
 	GatherMate2ArchaeologyDB = GatherMate2ArchaeologyDB or {}
+	GatherMate2LoggingDB = GatherMate2LoggingDB or {}
 	self.gmdbs = {}
 	self.db_types = {}
 	gmdbs = self.gmdbs
@@ -98,6 +103,7 @@ function GatherMate:OnInitialize()
 	self:RegisterDBType("Extract Gas", GatherMate2GasDB)
 	self:RegisterDBType("Treasure", GatherMate2TreasureDB)
 	self:RegisterDBType("Archaeology", GatherMate2ArchaeologyDB)
+	self:RegisterDBType("Logging", GatherMate2LoggingDB)
 	db = self.db.profile
 	filter = db.filter
 	-- Phasing version fix
@@ -195,6 +201,7 @@ function GatherMate:ClearDB(dbx)
 	elseif dbx == "Mining" then GatherMate2MineDB = {}; gmdbs[dbx] = GatherMate2MineDB
 	elseif dbx == "Treasure" then GatherMate2TreasureDB = {}; gmdbs[dbx] = GatherMate2TreasureDB
 	elseif dbx == "Archaeology" then GatherMate2ArchaeologyDB = {}; gmdbs[dbx] = GatherMate2ArchaeologyDB
+	elseif dbx == "Logging" then GatherMate2LoggingDB = {}; gmdbs[dbx] = GatherMate2LoggingDB
 	else -- for custom DBs we dont know the global name, so we clear it old-fashion style
 		local db = gmdbs[dbx]
 		if not db then error("Trying to clear unknown database: "..dbx) end

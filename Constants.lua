@@ -310,7 +310,12 @@ local node_ids = {
 		[NL["Arakkoa Archaeology Find"]]		= 614,
 		[NL["Draenor Clans Archaeology Find"]]	= 615,
 		[NL["Ogre Archaeology Find"]]			= 616,
-	}
+	},
+	["Logging"] = {
+		[NL["Small Timber"]]					= 701,
+		[NL["Timber"]]							= 702,
+		[NL["Large Timber"]]					= 703,
+	},
 }
 GatherMate.nodeIDs = node_ids
 local reverse = {}
@@ -370,6 +375,7 @@ Display:SetTrackingSpell("Mining", 2580)
 Display:SetTrackingSpell("Herb Gathering", 2383)
 Display:SetTrackingSpell("Fishing", 43308)
 Display:SetTrackingSpell("Treasure", 2481) -- Left this in, however it appears that the spell no longer exists. Maybe added as a potion TreasureFindingPotion
+Display:SetTrackingSpell("Logging", 167924)
 -- Profession markers
 Display:SetSkillProfession("Herb Gathering", L["Herbalism"])
 Display:SetSkillProfession("Mining", L["Mining"])
@@ -668,6 +674,11 @@ local node_textures = {
 		[614] = icon_path.."Archaeology\\shovel.tga",
 		[615] = icon_path.."Archaeology\\shovel.tga",
 		[616] = icon_path.."Archaeology\\shovel.tga",
+	},
+	["Logging"] = {
+		[701] = icon_path.."Logging\\timber.tga",
+		[702] = icon_path.."Logging\\timber.tga",
+		[703] = icon_path.."Logging\\timber.tga",
 	},
 }
 GatherMate.nodeTextures = node_textures

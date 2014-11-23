@@ -21,6 +21,7 @@ local openNoTextSpell = (GetSpellInfo(22810))
 local pickSpell = (GetSpellInfo(1804))
 local archSpell = (GetSpellInfo(73979)) -- Searching for Artifacts spell
 local sandStormSpell = (GetSpellInfo(93473)) -- Sandstorm spell cast by the camel
+local loggingSpell = (GetSpellInfo(167895))
 
 local spells = { -- spellname to "database name"
 	[miningSpell] = "Mining",
@@ -32,6 +33,7 @@ local spells = { -- spellname to "database name"
 	[pickSpell] = "Treasure",
 	[archSpell] = "Archaeology",
 	[sandStormSpell] = "Treasure",
+	[loggingSpell] = "Logging",
 }
 local tooltipLeftText1 = _G["GameTooltipTextLeft1"]
 local strfind, stringmatch = string.find, string.match
@@ -195,6 +197,8 @@ function Collector:UIError(event,msg)
 		self:addItem(herbSpell,what)
 	elseif strfind(msg, pickSpell) or strfind(msg, openSpell) then -- locked box or failed pick
 		self:addItem(openSpell, what)
+	elseif strfind(msg, NL["Lumber Mill"]) then -- timber requires lumber mill
+		self:addItem(loggingSpell, what)
 	end
 end
 
