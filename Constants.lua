@@ -291,6 +291,7 @@ local node_ids = {
 		[NL["Dark Soil"]]						= 545,
 		[NL["Onyx Egg"]]						= 546,
 		[NL["Trove of the Thunder King"]]		= 547,
+		[NL["Highmaul Reliquary"]]				= 548,
 	},
 	["Archaeology"] = {
 		-- cata archeolgy objects
@@ -636,7 +637,7 @@ local node_textures = {
 		[525] = icon_path.."Treasure\\mushroom.tga",
 		[526] = icon_path.."Treasure\\treasure.tga",
 		[527] = icon_path.."Treasure\\treasure.tga",
-		[528] = icon_path.."Treasure\\tresure.tga",
+		[528] = icon_path.."Treasure\\treasure.tga",
 		[529] = icon_path.."Treasure\\treasure.tga",
 		[530] = icon_path.."Treasure\\treasure.tga",
 		[531] = icon_path.."Treasure\\egg.tga",
@@ -656,6 +657,7 @@ local node_textures = {
 		[545] = icon_path.."Treasure\\soil.tga",
 		[546] = icon_path.."Treasure\\egg.tga",
 		[547] = icon_path.."Treasure\\footlocker.tga",
+		[548] = icon_path.."Treasure\\treasure.tga",
 	},
 	["Archaeology"] = {
 		[601] = icon_path.."Archaeology\\shovel.tga",
