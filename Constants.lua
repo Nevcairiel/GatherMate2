@@ -242,6 +242,7 @@ local node_ids = {
 		[NL["Gorgrond Flytrap"]]				= 472,
 		[NL["Fireweed"]]						= 473,
 		[NL["Frostweed"]]						= 474,
+		[NL["Withered Herb"]]					= 475,
 	},
 	["Treasure"] = {
 		[NL["Giant Clam"]] 						= 501,
@@ -608,6 +609,7 @@ local node_textures = {
 		[472] = icon_path.."Herb\\flytrap.tga",
 		[473] = icon_path.."Herb\\fireweed.tga",
 		[474] = icon_path.."Herb\\frostweed.tga",
+		[475] = icon_path.."Herb\\shaherb.tga",
 	},
 	["Treasure"] = {
 		[501] = icon_path.."Treasure\\clam.tga",
@@ -821,6 +823,7 @@ local node_expansion = {
 		[472] = WOD,
 		[473] = WOD,
 		[474] = WOD,
+		[475] = WOD,
 	},
 }
 GatherMate.nodeExpansion = node_expansion
