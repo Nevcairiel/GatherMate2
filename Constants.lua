@@ -97,6 +97,7 @@ local node_ids = {
 		[NL["Savage Piranha Pool"]]				= 178,
 		--[NL["Lagoon Pool"]]						= 179,
 		--[NL["Sparkling Pool"]]					= 180,
+		[NL["Felmouth Frenzy School"]]			= 181,
 	},
 	["Mining"] = {
 		[NL["Copper Vein"]] 					= 201,
@@ -470,6 +471,7 @@ local node_textures = {
 		[178] = icon_path.."Fish\\piranha.tga",
 		[179] = icon_path.."Fish\\fish_hook.tga",
 		[180] = icon_path.."Fish\\fish_hook.tga",
+		[181] = icon_path.."Fish\\suckerfish.tga",
 	},
 	["Mining"] = {
 		[201] = icon_path.."Mine\\copper.tga",
