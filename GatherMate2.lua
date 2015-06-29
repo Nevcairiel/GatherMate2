@@ -500,6 +500,11 @@ do
 
 		mapInfo[id].instance = GetAreaMapInfo(id)
 
+		-- HACK: Tanaan Jungle reports a different instance id here than UnitPosition
+		if id == 945 then
+			mapInfo[id].instance = 1464
+		end
+
 		if numFloors == 0 and GetCurrentMapDungeonLevel() == 1 then
 			numFloors = 1
 			mapInfo[id].fakefloor = true
