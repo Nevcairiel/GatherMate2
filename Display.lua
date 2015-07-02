@@ -721,18 +721,6 @@ function Display:UpdateMiniMap(force)
 		zone = nil
 		return
 	end
-	-- microduneon check
-	local mapName, textureWidth, textureHeight, isMicroDungeon, microDungeonName = GetMapInfo()
-	if isMicroDungeon then
-		if not WorldMapFrame:IsShown() then
-			-- return to the main map of this zone
-			ZoomOut()
-		else
-			-- can't do anything while in a micro dungeon and the main map is visible
-			clearpins(minimapPins)
-			return
-		end
-	end	--end check
 	-- get current player position
 	local x, y = GatherMate:PlayerPositionYards(zone, level)
 	if (x == 0 or y == 0 ) then
