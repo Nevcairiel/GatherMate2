@@ -13,7 +13,7 @@ local pinCache = {}
 -- last x,y of the player.
 -- total number of pins we have created
 local lastXY, lastYY, pinCount = 0, 0, 0
-local lastLevel, lastZone = 0, -1
+local lastLevel = 0
 -- reference to the pin generating the UIDropDown
 local pinClickedOn
 -- our current zone
@@ -730,7 +730,6 @@ function Display:UpdateMiniMap(force)
 		else
 			-- can't do anything while in a micro dungeon and the main map is visible
 			clearpins(minimapPins)
-			zone = nil
 			return
 		end
 	end	--end check
@@ -738,7 +737,6 @@ function Display:UpdateMiniMap(force)
 	local x, y = GatherMate:PlayerPositionYards(zone, level)
 	if (x == 0 or y == 0 ) then
 		level = lastLevel
-		zone = lastZone
 		x, y = GatherMate:PlayerPositionYards(zone, level)
 	end
 
@@ -779,7 +777,6 @@ function Display:UpdateMiniMap(force)
 		lastFacing = facing
 		lastXY, lastYY = x, y
 		lastLevel = level
-		lastZone = zone
 
 		if rotateMinimap then
 			sin = math_sin(facing)
