@@ -360,7 +360,7 @@ local sortedFilter = setmetatable({}, {__index = function(t, k)
 	local new = {}
 	table.wipe(delocalizedZones)
 	if k == "zones" then
-		for index, zoneID in pairs(GatherMate:GetAllMapIDs()) do
+		for index, zoneID in pairs(GatherMate.HBD:GetAllMapIDs()) do
 			local name = GatherMate:MapLocalize(zoneID)
 			new[name] = name
 			delocalizedZones[name] = zoneID

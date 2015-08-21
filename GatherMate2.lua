@@ -8,6 +8,8 @@ local GatherMate = LibStub("AceAddon-3.0"):NewAddon("GatherMate2","AceConsole-3.
 local L = LibStub("AceLocale-3.0"):GetLocale("GatherMate2",false)
 _G["GatherMate2"] = GatherMate
 
+GatherMate.HBD = LibStub("HereBeDragons-1.0")
+
 -- locals
 local db, gmdbs, filter
 local reverseTables = {}
@@ -116,8 +118,6 @@ function GatherMate:OnInitialize()
 		self:RemoveDepracatedNodes()
 		self.db.global.data_version = 2
 	end
-
-	self:GetMapInfo()
 end
 
 function GatherMate:RemoveDepracatedNodes()
@@ -286,7 +286,7 @@ do
 		local tbl = next(tablestack) or {}
 		tablestack[tbl] = nil
 		tbl.data = gmdbs[nodeType][zone] or emptyTbl
-		tbl.yw, tbl.yh =  self:GetZoneSize(zone,level)
+		tbl.yw, tbl.yh = self.HBD:GetZoneSize(zone,level)
 		tbl.radiusSquared = radius * radius
 		tbl.xLocal, tbl.yLocal = x, y
 		tbl.mLevel = level
@@ -398,7 +398,7 @@ end
 function GatherMate:SweepDatabase()
 	local Collector = GatherMate:GetModule("Collector")
 	local rares = Collector.rareNodes
-	for v,zone in pairs(GatherMate:GetAllMapIDs()) do
+	for v,zone in pairs(GatherMate.HBD:GetAllMapIDs()) do
 		--self:Print(L["Processing "]..zone)
 		coroutine.yield()
 		for profession in pairs(gmdbs) do
@@ -472,182 +472,6 @@ function GatherMate:DecodeLoc(id)
 	return floor(id/1000000)/10000, floor(id % 1000000 / 100)/10000, id % 100
 end
 
---[[
-	Map Info block
-]]
-do
-	local mapToId, idToMap = {}, {}
-	local mapLocalized = {}
-	local mapInstances = {}
-	local mapInfo = {} --table { width, height, left, top, right, bottom }
-
-	local function processZone(id, name)
-		if not id or mapInfo[id] then return end
-		SetMapByID(id)
-		local mapFile = GetMapInfo()
-		local numFloors = GetNumDungeonMapLevels()
-		idToMap[id] = mapFile
-
-		if not mapToId[mapFile] then mapToId[mapFile] = id end
-		mapLocalized[id] = name or GetMapNameByID(id)
-
-		local _, left, top, right, bottom = GetCurrentMapZone()
-		if (left and top and right and bottom and (left ~= 0 or top ~= 0 or right ~= 0 or bottom ~= 0)) then
-			mapInfo[id] = { left - right, top - bottom, left, top, right, bottom }
-		elseif not mapInfo[id] then
-			mapInfo[id] = { 0, 0, 0, 0, 0, 0}
-		end
-
-		mapInfo[id].instance = GetAreaMapInfo(id)
-
-		-- HACK: Tanaan Jungle reports a different instance id here than UnitPosition
-		if id == 945 then
-			mapInfo[id].instance = 1464
-		end
-
-		if numFloors == 0 and GetCurrentMapDungeonLevel() == 1 then
-			numFloors = 1
-			mapInfo[id].fakefloor = true
-		end
-
-		if DungeonUsesTerrainMap() then
-			numFloors = numFloors - 1
-		end
-
-		mapInfo[id].floors = {}
-		if numFloors > 0 then
-			for f = 1, numFloors do
-				SetDungeonMapLevel(f)
-				local _, right, bottom, left, top  = GetCurrentMapDungeonLevel()
-				if left and top and right and bottom then
-					mapInfo[id].floors[f] = { left - right, top - bottom, left, top, right, bottom }
-					mapInfo[id].floors[f].instance = mapInfo[id].instance
-				end
-			end
-		end
-	end
-
-	--[[
-		load map data into the map info tables
-	]]
-	function GatherMate:GetMapInfo()
-		local continents = {GetMapContinents()}
-		for i = 1, #continents, 2 do
-			processZone(continents[i], continents[i+1])
-			local zones = {GetMapZones((i + 1) / 2)}
-			for z =  1, #zones, 2 do
-				processZone(zones[z], zones[z+1])
-			end
-		end
-
-		local areas = GetAreaMaps()
-		for idx, zoneId in pairs(areas) do
-			processZone(zoneId)
-		end
-	end
-
-	--[[
-		Get the localized name of the map
-	]]
-	function GatherMate:MapLocalize(mapId)
-		if mapId == WORLDMAP_COSMIC_ID then return WORLD_MAP end
-		if type(mapId) == "string" then
-			mapId = mapToId[mapId]
-		end
-		assert(mapLocalized[mapId])
-		return mapLocalized[mapId]
-	end
-
-	--[[
-		get the area id of the map
-	]]
-	function GatherMate:MapAreaId(mapFile)
-		assert(mapToId[mapFile])
-		return mapToId[mapFile]
-	end
-
-	--[[
-		get a list of all map ids
-	]]
-	function GatherMate:GetAllMapIDs()
-		local t = {}
-		for id in pairs(mapInfo) do
-			tinsert(t, id)
-		end
-		return t
-	end
-
-	function GatherMate:GetDataTable(mapId, level)
-		if mapId == WORLDMAP_COSMIC_ID then return nil end
-		if type(mapId) == "string" then
-			mapId = mapToId[mapId]
-		end
-		local data = mapInfo[mapId]
-		if not data then return nil end
-
-		if (level == nil or level == 0) and data.fakefloor then
-			level = 1
-		end
-
-		if level and level > 0 and data.floors[level] then
-			return data.floors[level]
-		else
-			return data
-		end
-	end
-
-	--[[
-		get the size of the zone, in yards
-	]]
-	function GatherMate:GetZoneSize(mapId, level)
-		if type(mapId) == "string" then
-			mapId = mapToId[mapId]
-		end
-		local data = self:GetDataTable(mapId, level)
-		if not data then return 0, 0 end
-
-		return data[1],data[2]
-	end
-
-	--[[
-		Get the distance between 2 points in a zone
-	]]
-	function GatherMate:Distance(zone, level, x1, y1, x2, y2)
-		local width, height = self:GetZoneSize(zone, level)
-		local x = (x2 - x1) * width
-		local y = (y2 - y1) * height
-		return (x*x + y*y)^0.5
-	end
-
-	--[[
-		convert a point on the map to yard values
-	]]
-	function GatherMate:PointToYards(x, y, zone, level)
-		local width, height = self:GetZoneSize(zone, level)
-		return x * width, y * height
-	end
-
-	--[[
-		convert yard values to a point on the map
-	]]
-	function GatherMate:YardToPoints(x, y, zone, level)
-		local width, height = self:GetZoneSize(zone, level)
-		if width == 0 or height == 0 then return 0, 0 end
-		return x / width, y / height
-	end
-
-	--[[
-		get the player position in yards
-	]]
-	function GatherMate:PlayerPositionYards(mapId, level)
-		local data = self:GetDataTable(mapId, level)
-		if not data then return 0, 0 end
-
-		local y, x, z, instanceId = UnitPosition("player")
-		if data.instance ~= instanceId then return 0, 0 end
-		local left, top, right, bottom = data[3], data[4], data[5], data[6]
-		x = (left - x)
-		y = (top - y)
-		return x, y
-	end
+function GatherMate:MapLocalize(map)
+	return self.HBD:GetLocalizedMap(map)
 end

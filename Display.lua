@@ -511,14 +511,14 @@ function Display:getMiniPin(coord, nodeID, nodeType, zone, index)
 		pin.texture:SetTexCoord(0, 1, 0, 1)
 		pin.texture:SetVertexColor(1, 1, 1, 1)
 		pin.x, pin.y, pin.level = GatherMate:DecodeLoc(coord)
-		pin.x1, pin.y1 = GatherMate:PointToYards(pin.x,pin.y,zone,pin.level)
+		pin.x1, pin.y1 = GatherMate.HBD:GetWorldCoordinatesFromZone(pin.x,pin.y,zone,pin.level)
 		minimapPins[index] = pin
 	end
 	return pin
 end
 
 function Display:addMiniPin(pin, refresh)
-	local xDist, yDist = pin.x1 - lastXY, pin.y1 - lastYY
+	local xDist, yDist = lastXY - pin.x1, lastYY - pin.y1
 	-- calculate relative position and distance to the player
 	local dist_2 = xDist*xDist + yDist*yDist
 	-- if distance <= db.trackDistance, convert to the circle texture
@@ -665,7 +665,8 @@ function Display:UpdateIconPositions()
 	if GetCurrentMapAreaID() == zone then
 		level = GetCurrentMapDungeonLevel()
 	end
-	local x, y = GatherMate:PlayerPositionYards(zone, level)
+
+	local x, y = GatherMate.HBD:GetPlayerWorldPosition()
 
 	-- for rotating minimap support
 	local facing
@@ -721,12 +722,9 @@ function Display:UpdateMiniMap(force)
 		zone = nil
 		return
 	end
+
 	-- get current player position
-	local x, y = GatherMate:PlayerPositionYards(zone, level)
-	if (x == 0 or y == 0 ) then
-		level = lastLevel
-		x, y = GatherMate:PlayerPositionYards(zone, level)
-	end
+	local x, y = GatherMate.HBD:GetPlayerWorldPosition()
 
 	-- get data from the API for calculations
 	local zoom = Minimap:GetZoom()
@@ -760,6 +758,13 @@ function Display:UpdateMiniMap(force)
 		minimapStrata = Minimap:GetFrameStrata()
 		minimapFrameLevel = Minimap:GetFrameLevel() + 5
 
+		local x1, y1 = GatherMate.HBD:GetZoneCoordinatesFromWorld(x,y,zone,level)
+		if not x1 then
+			level = lastLevel
+			x1, y1 = GatherMate.HBD:GetZoneCoordinatesFromWorld(x,y,zone,level)
+			if not x1 then return end
+		end
+
 		-- update upvalues for icon placement
 		lastZoom = zoom
 		lastFacing = facing
@@ -771,7 +776,6 @@ function Display:UpdateMiniMap(force)
 			cos = math_cos(facing)
 		end
 		-- iterate the node databases and add the nodes
-		local x1, y1 = GatherMate:YardToPoints(x,y,zone,level)
 		for i,db_type in pairs(GatherMate.db_types) do
 			if GatherMate.Visible[db_type] then
 				for coord, nodeID in GatherMate:FindNearbyNode(zone, x1, y1, level, db_type, mapRadius*nodeRange) do
