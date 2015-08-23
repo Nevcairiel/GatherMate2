@@ -231,25 +231,19 @@ local lastNode = ""
 local lastNodeCoords = 0
 
 function Collector:addItem(skill,what)
+	local x, y, zone, level, mapName, isMicroDungeon = GatherMate.HBD:GetPlayerZonePosition()
+
 	-- check for microdungeon
-	local mapName, textureWidth, textureHeight, isMicroDungeon, microDungeonName = GetMapInfo()
 	if isMicroDungeon then
 		-- we wont do any collection events inside of a micro dungeon
-		--SetMapByID(GetCurrentMapAreaID())
 		return
 	end
-	-- end check
-	local x, y = GetPlayerMapPosition("player")
-	if x == 0 and y == 0 then return end
 	-- Temporary fix, the map "ScarletEnclave" and "EasternPlaguelands"
 	-- both have the same English display name as "Eastern Plaguelands"
 	-- so we ignore the new Death Knight starting zone for now.
-	if GetMapInfo() == "ScarletEnclave" then return end
-	--self:GatherCompleted()
-	local zone = GetCurrentMapAreaID()
+	if mapName == "ScarletEnclave" then return end
 	if GatherMate.phasing[zone] then zone = GatherMate.phasing[zone] end
 
-	local level = GetCurrentMapDungeonLevel()
 	local node_type = spells[skill]
 	if not node_type or not what then return end
 	-- db lock check
