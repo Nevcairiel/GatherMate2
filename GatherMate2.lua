@@ -118,6 +118,17 @@ function GatherMate:OnInitialize()
 		self:RemoveDepracatedNodes()
 		self.db.global.data_version = 2
 	end
+	if self.db.global.data_version == 2 then
+		self:RemoveGarrisonNodes()
+		self.db.global.data_version = 3
+	end
+end
+
+function GatherMate:RemoveGarrisonNodes()
+	for _, database in pairs({"Herb Gathering", "Mining"}) do
+		gmdbs[database][971] = {}
+		gmdbs[database][976] = {}
+	end
 end
 
 function GatherMate:RemoveDepracatedNodes()

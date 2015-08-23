@@ -242,6 +242,8 @@ function Collector:addItem(skill,what)
 	-- both have the same English display name as "Eastern Plaguelands"
 	-- so we ignore the new Death Knight starting zone for now.
 	if mapName == "ScarletEnclave" then return end
+	-- don't collect any data in the garrison, its always the same location and spams the map
+	if zone == 971 or zone == 976 then return end
 	if GatherMate.phasing[zone] then zone = GatherMate.phasing[zone] end
 
 	local node_type = spells[skill]
