@@ -232,6 +232,7 @@ local lastNodeCoords = 0
 
 function Collector:addItem(skill,what)
 	local x, y, zone, level, mapName, isMicroDungeon = GatherMate.HBD:GetPlayerZonePosition()
+	if not x or not y then return end -- no valid data
 
 	-- check for microdungeon
 	if isMicroDungeon then
