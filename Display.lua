@@ -241,13 +241,13 @@ function Display:OnEnable()
 	SetMapToCurrentZone()
 	self:RegisterMapEvents()
 	self:RegisterEvent("WORLD_MAP_UPDATE", "UpdateWorldMap")
-	self:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 	self:RegisterEvent("SKILL_LINES_CHANGED")
 	self:RegisterEvent("MINIMAP_UPDATE_TRACKING")
 	self:RegisterEvent("PLAYER_ENTERING_WORLD","UpdateMaps")
+	GatherMate.HBD.RegisterCallback(self, "PlayerZoneChanged")
 	self:SKILL_LINES_CHANGED()
 	self:MINIMAP_UPDATE_TRACKING()
-	self:ZONE_CHANGED_NEW_AREA()
+	self:PlayerZoneChanged()
 	self:DigsitesChanged()
 	--self:UpdateMaps()  -- already in DigsitesChanged()
 	fullInit = true
@@ -285,25 +285,19 @@ end
 function Display:OnDisable()
 	self:UnregisterMapEvents()
 	self:UnregisterEvent("WORLD_MAP_UPDATE")
-	self:UnregisterEvent("ZONE_CHANGED_NEW_AREA")
 	self:UnregisterEvent("SKILL_LINES_CHANGED")
 	self:UnregisterEvent("MINIMAP_UPDATE_TRACKING")
 	self:UnregisterEvent("ARTIFACT_DIG_SITE_UPDATED")
+	GatherMate.HBD.UnregisterCallback(self, "PlayerZoneChanged")
 end
 
-function Display:ZONE_CHANGED_NEW_AREA()
-	local areaID, dungeonLevel = GetCurrentMapAreaID(), GetCurrentMapDungeonLevel()
-	SetMapToCurrentZone()
-	zone = GetCurrentMapAreaID()
-	if GatherMate.phasing[zone] then zone = GatherMate.phasing[zone] end
-	if zone ~= areaID then
-		SetMapByID(areaID)
+function Display:PlayerZoneChanged()
+	local newZone = GatherMate.HBD:GetPlayerZone()
+	if GatherMate.phasing[newZone] then newZone = GatherMate.phasing[newZone] end
+	if newZone ~= zone then
+		zone = newZone
+		self:UpdateMaps()
 	end
-	if dungeonLevel and dungeonLevel > 0 then
-		SetDungeonMapLevel(dungeonLevel)
-	end
-
-	self:UpdateMaps()
 end
 
 function Display:SKILL_LINES_CHANGED()
