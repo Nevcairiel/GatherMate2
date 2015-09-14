@@ -118,9 +118,9 @@ function GatherMate:OnInitialize()
 		self:RemoveDepracatedNodes()
 		self.db.global.data_version = 2
 	end
-	if self.db.global.data_version == 2 then
+	if self.db.global.data_version < 4 then
 		self:RemoveGarrisonNodes()
-		self.db.global.data_version = 3
+		self.db.global.data_version = 4
 	end
 end
 
