@@ -294,6 +294,9 @@ local node_ids = {
 		[NL["Onyx Egg"]]						= 546,
 		[NL["Trove of the Thunder King"]]		= 547,
 		[NL["Highmaul Reliquary"]]				= 548,
+		[NL["Suspiciously Glowing Chest"]]		= 549,
+		[NL["Radiating Apexis Shard"]]			= 550,
+		[NL["Gleaming Draenic Chest"]]			= 551,
 	},
 	["Archaeology"] = {
 		-- cata archeolgy objects
@@ -662,6 +665,9 @@ local node_textures = {
 		[546] = icon_path.."Treasure\\egg.tga",
 		[547] = icon_path.."Treasure\\footlocker.tga",
 		[548] = icon_path.."Treasure\\treasure.tga",
+		[549] = icon_path.."Treasure\\treasure.tga",
+		[550] = icon_path.."Treasure\\treasure.tga",
+		[551] = icon_path.."Treasure\\treasure.tga",
 	},
 	["Archaeology"] = {
 		[601] = icon_path.."Archaeology\\shovel.tga",
