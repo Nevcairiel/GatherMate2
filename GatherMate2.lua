@@ -247,6 +247,8 @@ function GatherMate:InjectNode(zone, coords, nodeType, nodeID)
 	if GatherMate.db.profile.dbLocks[nodeType] then
 		return
 	end
+	-- HACK: don't accept garrison notes
+	if (nodeType == "Mining" or nodeType == "Herb Gathering") and (zone == 971 or zone == 976) then return end
 	db[zone] = db[zone] or {}
 	db[zone][coords] = nodeID
 end
