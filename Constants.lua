@@ -49,6 +49,7 @@ local node_ids = {
 		[NL["Schooner Wreckage"]]			    = 133,
 		[NL["Waterlogged Wreckage Pool"]]		= 134,
 		[NL["Bloodsail Wreckage Pool"]]			= 135,
+		[NL["Mixed Ocean School"]]				= 136,
 		-- Begin tediuous prefix mapping
 		--[NL["Lesser Sagefish School"]]		= 136, -- sagefish.tga
 		--[NL["Lesser Oily Blackmouth School"]] = 137, -- oilyblackmouth.tga
@@ -429,6 +430,7 @@ local node_textures = {
 		[133] = icon_path.."Fish\\treasure.tga",
 		[134] = icon_path.."Fish\\treasure.tga",
 		[135] = icon_path.."Fish\\treasure.tga",
+		[136] = icon_path.."Fish\\fish_hook.tga",
 		--[136] = icon_path.."Fish\\sagefish.tga",
 		--[137] = icon_path.."Fish\\oilyblackmouth.tga",
 		--[138] = icon_path.."Fish\\oilyblackmouth.tga",
