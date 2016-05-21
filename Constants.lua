@@ -245,6 +245,13 @@ local node_ids = {
 		[NL["Fireweed"]]						= 473,
 		[NL["Frostweed"]]						= 474,
 		[NL["Withered Herb"]]					= 475,
+-- legion nodes
+		[NL["Aethril"]]							= 476,
+		[NL["Dreamleaf"]]						= 477,
+		[NL["Felwort"]]							= 478,
+		[NL["Fjarnskaggl"]]						= 479,
+		[NL["Foxflower"]]						= 480,
+		[NL["Starlight Rose"]]					= 481,
 	},
 	["Treasure"] = {
 		[NL["Giant Clam"]] 						= 501,
@@ -363,6 +370,7 @@ local rare_spawns = {
 	[242] = {[241]=true}, -- rich ghost iron
 	[247] = {[242]=true,[241]=true}, -- trillium
 	[248] = {[242]=true,[241]=true}, -- rich trillium
+	[478] = {[476]=true,[477]=true,[479]=true,[480]=true,[481]=true}, -- felwort
 }
 Collector.rareNodes = rare_spawns
 -- Format zone = { "Database", "new node id"}
@@ -617,6 +625,12 @@ local node_textures = {
 		[473] = icon_path.."Herb\\fireweed.tga",
 		[474] = icon_path.."Herb\\frostweed.tga",
 		[475] = icon_path.."Herb\\shaherb.tga",
+		[476] = icon_path.."Herb\\peacebloom.tga",--PH
+		[477] = icon_path.."Herb\\peacebloom.tga",--PH
+		[478] = icon_path.."Herb\\peacebloom.tga",--PH
+		[479] = icon_path.."Herb\\peacebloom.tga",--PH
+		[480] = icon_path.."Herb\\peacebloom.tga",--PH
+		[481] = icon_path.."Herb\\peacebloom.tga",--PH
 	},
 	["Treasure"] = {
 		[501] = icon_path.."Treasure\\clam.tga",
@@ -703,6 +717,7 @@ local WRATH   = 3
 local CATA    = 4
 local MOP     = 5
 local WOD     = 6
+local LEGION  = 7
 local node_expansion = {
 	["Mining"] = {
 		[201] = CLASSIC,
@@ -834,6 +849,12 @@ local node_expansion = {
 		[473] = WOD,
 		[474] = WOD,
 		[475] = WOD,
+		[476] = LEGION,
+		[477] = LEGION,
+		[478] = LEGION,
+		[479] = LEGION,
+		[480] = LEGION,
+		[481] = LEGION,
 	},
 }
 GatherMate.nodeExpansion = node_expansion
