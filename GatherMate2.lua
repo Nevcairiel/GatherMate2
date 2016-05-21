@@ -158,7 +158,6 @@ function GatherMate:UpgradePhasing()
 				end
 			end
 		end
-		print("Fixing nodes("..count..") phasing for "..database)
 		for k,v in pairs(moved_nodes) do
 			for c,v in pairs(v) do
 				storage[k][c] = v
