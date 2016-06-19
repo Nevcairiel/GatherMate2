@@ -156,6 +156,13 @@ local node_ids = {
 		[NL["Rich True Iron Deposit"]]			= 250,
 		[NL["Blackrock Deposit"]]				= 251,
 		[NL["Rich Blackrock Deposit"]]			= 252,
+-- legion nodes
+		[NL["Leystone Deposit"]]				= 253,
+		[NL["Rich Leystone Deposit"]]			= 254,
+		[NL["Leystone Seam"]]					= 255,
+		[NL["Felslate Deposit"]]				= 256,
+		[NL["Rich Felslate Deposit"]]			= 257,
+		[NL["Felslate Seam"]]					= 258,
 	},
 	["Extract Gas"] = {
 		[NL["Windy Cloud"]] 					= 301,
@@ -371,6 +378,8 @@ local rare_spawns = {
 	[247] = {[242]=true,[241]=true}, -- trillium
 	[248] = {[242]=true,[241]=true}, -- rich trillium
 	[478] = {[476]=true,[477]=true,[479]=true,[480]=true,[481]=true}, -- felwort
+	[254] = {[253]=true} -- rich leystone deposit
+	[257] = {[256]=true} -- rich feslate deposit
 }
 Collector.rareNodes = rare_spawns
 -- Format zone = { "Database", "new node id"}
@@ -539,6 +548,12 @@ local node_textures = {
 		[250] = icon_path.."Mine\\trueiron.tga",
 		[251] = icon_path.."Mine\\blackrock.tga",
 		[252] = icon_path.."Mine\\blackrock.tga",
+		[253] = icon_path.."Mine\\tin.tga",--PH
+		[254] = icon_path.."Mine\\tin.tga",--PH
+		[255] = icon_path.."Mine\\tin.tga",--PH
+		[256] = icon_path.."Mine\\tin.tga",--PH
+		[257] = icon_path.."Mine\\tin.tga",--PH
+		[258] = icon_path.."Mine\\tin.tga",--PH
 	},
 	["Extract Gas"] = {
 		[301] = icon_path.."Gas\\windy_cloud.tga",
@@ -772,6 +787,12 @@ local node_expansion = {
 		[250] = WOD,
 		[251] = WOD,
 		[252] = WOD,
+		[253] = LEGION,
+		[254] = LEGION,
+		[255] = LEGION,
+		[256] = LEGION,
+		[257] = LEGION,
+		[258] = LEGION,
 	},
 	["Herb Gathering"] = {
 		[401] = CLASSIC,
