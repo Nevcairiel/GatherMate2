@@ -378,8 +378,8 @@ local rare_spawns = {
 	[247] = {[242]=true,[241]=true}, -- trillium
 	[248] = {[242]=true,[241]=true}, -- rich trillium
 	[478] = {[476]=true,[477]=true,[479]=true,[480]=true,[481]=true}, -- felwort
-	[254] = {[253]=true} -- rich leystone deposit
-	[257] = {[256]=true} -- rich feslate deposit
+	[254] = {[253]=true}, -- rich leystone deposit
+	[257] = {[256]=true}, -- rich feslate deposit
 }
 Collector.rareNodes = rare_spawns
 -- Format zone = { "Database", "new node id"}
