@@ -99,6 +99,13 @@ local node_ids = {
 		--[NL["Lagoon Pool"]]						= 179,
 		--[NL["Sparkling Pool"]]					= 180,
 		[NL["Felmouth Frenzy School"]]			= 181,
+		-- Legion Pools
+		[NL["Black Barracuda School"]]			= 182,
+		[NL["Cursed Queenfish School"]]			= 183,
+		[NL["Runescale Koi School"]]			= 184,
+		[NL["Fever of Stormrays"]]				= 185,
+		[NL["Highmountain Salmon School"]]		= 186,
+		[NL["Mossgill Perch School"]]			= 187,
 	},
 	["Mining"] = {
 		[NL["Copper Vein"]] 					= 201,
@@ -494,6 +501,12 @@ local node_textures = {
 		[179] = icon_path.."Fish\\fish_hook.tga",
 		[180] = icon_path.."Fish\\fish_hook.tga",
 		[181] = icon_path.."Fish\\suckerfish.tga",
+		[182] = icon_path.."Fish\\fish_hook.tga",
+		[183] = icon_path.."Fish\\fish_hook.tga",
+		[184] = icon_path.."Fish\\fish_hook.tga",
+		[185] = icon_path.."Fish\\fish_hook.tga",
+		[186] = icon_path.."Fish\\fish_hook.tga",
+		[187] = icon_path.."Fish\\fish_hook.tga",
 	},
 	["Mining"] = {
 		[201] = icon_path.."Mine\\copper.tga",
