@@ -332,12 +332,18 @@ local node_ids = {
 		[NL["Vrykul Archaeology Find"]]         = 608,
 		[NL["Tol'vir Archaeology Find"]]        = 609,
 		[NL["Other Archaeology Find"]]          = 610,
+		-- pandaria
 		[NL["Pandaren Archaeology Find"]]		= 611,
 		[NL["Mogu Archaeology Find"]]			= 612,
 		[NL["Mantid Archaeology Find"]]			= 613,
+		-- draenor
 		[NL["Arakkoa Archaeology Find"]]		= 614,
 		[NL["Draenor Clans Archaeology Find"]]	= 615,
 		[NL["Ogre Archaeology Find"]]			= 616,
+		-- legion
+		[NL["Demonic Archaeology Find"]]		= 617,
+		[NL["Highborne Archaeology Find"]]		= 618,
+		[NL["Highmountain Tauren Archaeology Find"]]	= 619,
 	},
 	["Logging"] = {
 		[NL["Small Timber"]]					= 701,
@@ -730,6 +736,9 @@ local node_textures = {
 		[614] = icon_path.."Archaeology\\shovel.tga",
 		[615] = icon_path.."Archaeology\\shovel.tga",
 		[616] = icon_path.."Archaeology\\shovel.tga",
+		[617] = icon_path.."Archaeology\\shovel.tga",
+		[618] = icon_path.."Archaeology\\shovel.tga",
+		[619] = icon_path.."Archaeology\\shovel.tga",
 	},
 	["Logging"] = {
 		[701] = icon_path.."Logging\\timber.tga",
