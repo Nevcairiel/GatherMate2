@@ -188,7 +188,7 @@ end
 --[[
 	UI Error from gathering when you dont have the required skill
 ]]
-function Collector:UIError(event,msg)
+function Collector:UIError(event,token,msg)
 	local what = tooltipLeftText1:GetText();
 	if not what then return end
 	if strfind(msg, miningSpell) then
