@@ -342,7 +342,7 @@ function Display:DigsitesChanged()
 		SetMapZoom(continent)
 		local totalPOIs = GetNumMapLandmarks()
 		for index = 1,totalPOIs do
-			local name, description, textureIndex, px, py = GetMapLandmarkInfo(index)
+			local landmarkType, name, description, textureIndex, px, py = GetMapLandmarkInfo(index)
 			if textureIndex == 177 then
 				local zoneName, mapFile, texPctX, texPctY, texX, texY, scrollX, scrollY = UpdateMapHighlight(px, py)
 				digSites[mapFile] = true
