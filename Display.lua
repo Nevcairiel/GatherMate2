@@ -674,7 +674,7 @@ function Display:UpdateIconPositions()
 		facing = lastFacing
 	end
 
-	if not x or not y or not facing then
+	if not x or not y or (rotateMinimap and not facing) then
 		self:UpdateMiniMap()
 		return
 	end
@@ -742,7 +742,7 @@ function Display:UpdateMiniMap(force)
 	end
 
 	--  disable all pins if no position is available
-	if not x or not y or not facing then
+	if not x or not y or (rotateMinimap and not facing) then
 		minimapPinCount = 0
 		for k,v in pairs(minimapPins) do
 			recyclePin(v)
