@@ -674,6 +674,11 @@ function Display:UpdateIconPositions()
 		facing = lastFacing
 	end
 
+	if not x or not y or not facing then
+		self:UpdateMiniMap()
+		return
+	end
+
 	local refresh
 
 	local newScale = Minimap:GetScale()
@@ -734,6 +739,16 @@ function Display:UpdateMiniMap(force)
 		end
 	else
 		facing = lastFacing
+	end
+
+	--  disable all pins if no position is available
+	if not x or not y or not facing then
+		minimapPinCount = 0
+		for k,v in pairs(minimapPins) do
+			recyclePin(v)
+			minimapPins[k] = nil
+		end
+		return
 	end
 
 	local newScale = Minimap:GetScale()
