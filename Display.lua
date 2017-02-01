@@ -345,11 +345,13 @@ function Display:DigsitesChanged()
 			local landmarkType, name, description, textureIndex, px, py = GetMapLandmarkInfo(index)
 			if textureIndex == 177 then
 				local zoneName, mapFile, texPctX, texPctY, texX, texY, scrollX, scrollY = UpdateMapHighlight(px, py)
-				digSites[mapFile] = true
-				-- Hack for STV
-				if (mapFile == "StranglethornVale") then
-					digSites["StranglethornJungle"] = true
-					digSites["TheCapeOfStranglethorn"] = true
+				if mapFile then
+					digSites[mapFile] = true
+					-- Hack for STV
+					if (mapFile == "StranglethornVale") then
+						digSites["StranglethornJungle"] = true
+						digSites["TheCapeOfStranglethorn"] = true
+					end
 				end
 			end
 		end
