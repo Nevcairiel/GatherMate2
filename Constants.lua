@@ -266,6 +266,7 @@ local node_ids = {
 		[NL["Fjarnskaggl"]]						= 479,
 		[NL["Foxflower"]]						= 480,
 		[NL["Starlight Rose"]]					= 481,
+		[NL["Fel-encrusted Herb"]]				= 482,
 	},
 	["Treasure"] = {
 		[NL["Giant Clam"]] 						= 501,
@@ -676,6 +677,7 @@ local node_textures = {
 		[479] = icon_path.."Herb\\fjarnskaggl.tga",
 		[480] = icon_path.."Herb\\foxflower.tga",
 		[481] = icon_path.."Herb\\starlightrose.tga",
+		[482] = icon_path.."Herb\\fjarnskaggl.tga", -- temporary icon
 	},
 	["Treasure"] = {
 		[501] = icon_path.."Treasure\\clam.tga",
@@ -917,6 +919,7 @@ local node_expansion = {
 		[479] = LEGION,
 		[480] = LEGION,
 		[481] = LEGION,
+		[482] = LEGION,
 	},
 }
 GatherMate.nodeExpansion = node_expansion
