@@ -267,6 +267,7 @@ local node_ids = {
 		[NL["Foxflower"]]						= 480,
 		[NL["Starlight Rose"]]					= 481,
 		[NL["Fel-encrusted Herb"]]				= 482,
+		[NL["Fel-encrusted Herb Cluster"]]		= 483,
 	},
 	["Treasure"] = {
 		[NL["Giant Clam"]] 						= 501,
@@ -405,6 +406,7 @@ local rare_spawns = {
 	[257] = {[256]=true}, -- rich feslate deposit
 	[553] = {[552]=true}, -- ancient mana chunk
 	[554] = {[552]=true,[553]=true}, -- ancient mana crystal
+	[483] = {[482]=true}, -- Fel-encrusted Herb Cluster
 }
 Collector.rareNodes = rare_spawns
 -- Format zone = { "Database", "new node id"}
@@ -678,6 +680,7 @@ local node_textures = {
 		[480] = icon_path.."Herb\\foxflower.tga",
 		[481] = icon_path.."Herb\\starlightrose.tga",
 		[482] = icon_path.."Herb\\fjarnskaggl.tga", -- temporary icon
+		[483] = icon_path.."Herb\\fjarnskaggl.tga", -- temporary icon
 	},
 	["Treasure"] = {
 		[501] = icon_path.."Treasure\\clam.tga",
@@ -920,6 +923,7 @@ local node_expansion = {
 		[480] = LEGION,
 		[481] = LEGION,
 		[482] = LEGION,
+		[483] = LEGION,
 	},
 }
 GatherMate.nodeExpansion = node_expansion
