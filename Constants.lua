@@ -269,9 +269,8 @@ local node_ids = {
 		[NL["Fjarnskaggl"]]						= 479,
 		[NL["Foxflower"]]						= 480,
 		[NL["Starlight Rose"]]					= 481,
-		[NL["Fel-encrusted Herb"]]				= 482,
-		[NL["Fel-Encrusted Herb"]]				= 482, -- Argus
-		[NL["Fel-encrusted Herb Cluster"]]		= 483,
+		[NL["Fel-Encrusted Herb"]]				= 482,
+		[NL["Fel-Encrusted Herb Cluster"]]		= 483,
 		[NL["Astral Glory"]]					= 484,
 	},
 	["Treasure"] = {
