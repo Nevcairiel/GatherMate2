@@ -689,7 +689,7 @@ local node_textures = {
 		[481] = icon_path.."Herb\\starlightrose.tga",
 		[482] = icon_path.."Herb\\felherb.tga",
 		[483] = icon_path.."Herb\\felherb.tga",
-		[484] = icon_path.."Herb\\felherb.tga", -- PH
+		[484] = icon_path.."Herb\\astralglory.tga",
 	},
 	["Treasure"] = {
 		[501] = icon_path.."Treasure\\clam.tga",
