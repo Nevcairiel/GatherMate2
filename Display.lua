@@ -610,11 +610,7 @@ function Display:UpdateIconPositions()
 	-- for rotating minimap support
 	local facing
 	if rotateMinimap then
-		if GetPlayerFacing then
-			facing = GetPlayerFacing()
-		else
-			facing = -MiniMapCompassRing:GetFacing()
-		end
+		facing = GetPlayerFacing()
 	else
 		facing = lastFacing
 	end
@@ -675,11 +671,7 @@ function Display:UpdateMiniMap(force)
 	-- for rotating minimap support
 	local facing
 	if rotateMinimap then
-		if GetPlayerFacing then
-			facing = GetPlayerFacing()
-		else
-			facing = -MiniMapCompassRing:GetFacing()
-		end
+		facing = GetPlayerFacing()
 	else
 		facing = lastFacing
 	end

@@ -50,19 +50,6 @@ local strtrim = strtrim
 --local sub_string = GetLocale() == "deDE" and "%%%d$s" or "%%s"
 --buffSearchString = string.gsub(AURAADDEDOTHERHELPFUL, sub_string, "(.+)")
 
-local function getArrowDirection(...)
-	if GetPlayerFacing then
-		return GetPlayerFacing()
-	else
-		if(GetCVar("rotateMinimap") == "1") then return -MiniMapCompassRing:GetFacing()	end
-		for i=select("#",...),1,-1 do
-			local model=select(i,...)
-			if model:IsObjectType("Model") and not model:GetName() then	return model and model:GetFacing() end
-		end
-		return nil
-	end
-end
-
 --[[
 	Enable the collector
 ]]
@@ -297,7 +284,7 @@ end
 	move the node 20 yards in the direction the player is looking at
 ]]
 function Collector:GetFloatingNodeLocation(x,y,yardWidth,yardHeight)
-	local facing = getArrowDirection(Minimap:GetChildren())
+	local facing = GetPlayerFacing()
 	if not facing then	-- happens when minimap rotation is on
 		return x,y
 	else
