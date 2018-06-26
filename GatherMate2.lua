@@ -8,7 +8,8 @@ local GatherMate = LibStub("AceAddon-3.0"):NewAddon("GatherMate2","AceConsole-3.
 local L = LibStub("AceLocale-3.0"):GetLocale("GatherMate2",false)
 _G["GatherMate2"] = GatherMate
 
-GatherMate.HBD = LibStub("HereBeDragons-1.0")
+GatherMate.HBD = LibStub("HereBeDragons-2.0")
+local HBDMigrate = LibStub("HereBeDragons-Migrate")
 
 -- locals
 local db, gmdbs, filter
@@ -108,11 +109,6 @@ function GatherMate:OnInitialize()
 	self:RegisterDBType("Logging", GatherMate2LoggingDB)
 	db = self.db.profile
 	filter = db.filter
-	-- Phasing version fix
-	if not self.db.global.data_version then
-		self:UpgradePhasing()
-		self.db.global.data_version = 1
-	end
 	-- depractaion scan
 	if self.db.global.data_version == 1 then
 		self:RemoveDepracatedNodes()
@@ -121,6 +117,10 @@ function GatherMate:OnInitialize()
 	if self.db.global.data_version < 4 then
 		self:RemoveGarrisonNodes()
 		self.db.global.data_version = 4
+	end
+	if self.db.global.data_version < 5 then
+		self:MigrateData80()
+		self.db.global.data_version = 5
 	end
 end
 
@@ -144,27 +144,26 @@ function GatherMate:RemoveDepracatedNodes()
 	end
 end
 
-function GatherMate:UpgradePhasing()
+function GatherMate:MigrateData80()
 	for database,storage in pairs(self.gmdbs) do
-		local moved_nodes = {}
-		-- copy the nodes
-		local count = 0
+		local migrated_storage = {}
 		for zone,data in pairs(storage) do
-			if self.phasing[zone] then -- Hyjal Phased terrain
-				moved_nodes[self.phasing[zone]] = {}
-				for coord,value in pairs(data) do
-					moved_nodes[self.phasing[zone]][coord] = value
-					count = count + 1
+			for coord,value in pairs(data) do
+				local level = coord % 100
+				local newzone = HBDMigrate:GetUIMapIDFromMapAreaId(zone, level)
+				if newzone then
+					newzone = self.phasing[newzone] or newzone
+					if not migrated_storage[newzone] then
+						migrated_storage[newzone] = {}
+					end
+					migrated_storage[newzone][coord] = value
 				end
 			end
+			storage[zone] = nil
 		end
-		for k,v in pairs(moved_nodes) do
-			for c,v in pairs(v) do
-				storage[k][c] = v
-			end
-		end
-		for k,v in pairs(self.phasing) do
-			storage[k] = nil
+		for zone,data in pairs(migrated_storage) do
+			storage[zone] = migrated_storage[zone]
+			migrated_storage[zone] = nil
 		end
 	end
 end
@@ -224,9 +223,9 @@ end
 --[[
 	Add an item to the DB
 ]]
-function GatherMate:AddNode(zone, x, y, level, nodeType, name)
+function GatherMate:AddNode(zone, x, y, nodeType, name)
 	local db = gmdbs[nodeType]
-	local id = self:EncodeLoc(x,y,level)
+	local id = self:EncodeLoc(x,y)
 	-- db lock check
 	if GatherMate.db.profile.dbLocks[nodeType] then
 		return
@@ -240,18 +239,19 @@ end
 	These 2 functions are only called by the importer/sharing. These
 	do NOT fire GatherMateNodeAdded or GatherMateNodeDeleted messages.
 ]]
-function GatherMate:InjectNode(zone, coords, nodeType, nodeID)
+function GatherMate:InjectNode2(zone, coords, nodeType, nodeID)
 	local db = gmdbs[nodeType]
 	-- db lock check
 	if GatherMate.db.profile.dbLocks[nodeType] then
 		return
 	end
 	-- HACK: don't accept garrison notes
+	-- TODO: change ids
 	if (nodeType == "Mining" or nodeType == "Herb Gathering") and (zone == 971 or zone == 976) then return end
 	db[zone] = db[zone] or {}
 	db[zone][coords] = nodeID
 end
-function GatherMate:DeleteNode(zone, coords, nodeType)
+function GatherMate:DeleteNode2(zone, coords, nodeType)
 	-- db lock check
 	if GatherMate.db.profile.dbLocks[nodeType] then
 		return
@@ -272,15 +272,14 @@ do
 		local data = t.data
 		local state, value = next(data, prestate)
 		local xLocal, yLocal, yw, yh = t.xLocal, t.yLocal, t.yw, t.yh
-		local mLevel = t.mLevel
 		local radiusSquared, filterTable, ignoreFilter = t.radiusSquared, t.filterTable, t.ignoreFilter
 		while state do
 			if filterTable[value] or ignoreFilter then
 				-- inline the :getXY() here in critical minimap update loop
-				local x2, y2, level2 = floor(state/1000000)/10000, floor(state % 1000000 / 100)/10000, state % 100
+				local x2, y2 = floor(state/1000000)/10000, floor(state % 1000000 / 100)/10000
 				local x = (x2 - xLocal) * yw
 				local y = (y2 - yLocal) * yh
-				if x*x + y*y <= radiusSquared and level2 == mLevel then
+				if x*x + y*y <= radiusSquared then
 					return state, value
 				end
 			end
@@ -294,14 +293,13 @@ do
 		Find all nearby nodes within the radius of the given (x,y) for a nodeType and zone
 		this function returns an iterator
 	]]
-	function GatherMate:FindNearbyNode(zone, x, y, level, nodeType, radius, ignoreFilter)
+	function GatherMate:FindNearbyNode(zone, x, y, nodeType, radius, ignoreFilter)
 		local tbl = next(tablestack) or {}
 		tablestack[tbl] = nil
 		tbl.data = gmdbs[nodeType][zone] or emptyTbl
-		tbl.yw, tbl.yh = self.HBD:GetZoneSize(zone,level)
+		tbl.yw, tbl.yh = self.HBD:GetZoneSize(zone)
 		tbl.radiusSquared = radius * radius
 		tbl.xLocal, tbl.yLocal = x, y
-		tbl.mLevel = level
 		tbl.filterTable = filter[nodeType]
 		tbl.ignoreFilter = ignoreFilter
 		return dbCoordIterNearby, tbl, nil
@@ -353,9 +351,9 @@ end
 --[[
 	Remove an item from the DB
 ]]
-function GatherMate:RemoveNode(zone, x, y, level, nodeType)
+function GatherMate:RemoveNode(zone, x, y, nodeType)
 	local db = gmdbs[nodeType][zone]
-	local coord = self:EncodeLoc(x,y,level)
+	local coord = self:EncodeLoc(x,y)
 	if db[coord] then
 		local t = self.reverseNodeIDs[nodeType][db[coord]]
 		db[coord] = nil
@@ -416,8 +414,8 @@ function GatherMate:SweepDatabase()
 		for profession in pairs(gmdbs) do
 			local range = db.cleanupRange[profession]
 			for coord, nodeID in self:GetNodesForZone(zone, profession, true) do
-				local x,y,level = self:DecodeLoc(coord)
-				for _coord, _nodeID in self:FindNearbyNode(zone, x, y, level, profession, range, true) do
+				local x,y = self:DecodeLoc(coord)
+				for _coord, _nodeID in self:FindNearbyNode(zone, x, y, profession, range, true) do
 					if coord ~= _coord and (nodeID == _nodeID or (rares[_nodeID] and rares[_nodeID][nodeID])) then
 						self:RemoveNodeByID(zone, profession, _coord)
 					end
@@ -466,22 +464,21 @@ end
 --[[
 	Encode location
 ]]
-function GatherMate:EncodeLoc(x, y, level)
-	local level = level or 0
+function GatherMate:EncodeLoc(x, y)
 	if x > 0.9999 then
 		x = 0.9999
 	end
 	if y > 0.9999 then
 		y = 0.9999
 	end
-	return floor( x * 10000 + 0.5 ) * 1000000 + floor( y * 10000  + 0.5 ) * 100 + level
+	return floor( x * 10000 + 0.5 ) * 1000000 + floor( y * 10000  + 0.5 ) * 100
 end
 
 --[[
 	Decode location
 ]]
 function GatherMate:DecodeLoc(id)
-	return floor(id/1000000)/10000, floor(id % 1000000 / 100)/10000, id % 100
+	return floor(id/1000000)/10000, floor(id % 1000000 / 100)/10000
 end
 
 function GatherMate:MapLocalize(map)

@@ -986,9 +986,6 @@ local minimap_shapes = {
 Display.minimapShapes = minimap_shapes
 
 local map_phasing = {
-	[683] = 606,
-	[748] = 720,
-	[770] = 700
 }
 
 GatherMate.phasing = map_phasing

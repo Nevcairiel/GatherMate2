@@ -128,8 +128,9 @@ end
 	or get a better event instead of cha msg parsing
 	UNIT_DISSIPATES,0x0000000000000000,nil,0x80000000,0xF1307F0A00002E94,"Cinder Cloud",0xa28 now fires in cataclysm so hack not needed any more
 ]]
-function Collector:GasBuffDetector(b,timestamp, eventType, hideCaster, srcGUID, srcName, srcFlags, srcRaidFlags, dstGUID, dstName, dstFlags, dstRaidFlags, spellId,spellName,spellSchool,auraType)
+function Collector:GasBuffDetector(b)
 	if foundTarget or (prevSpell and prevSpell ~= gasSpell) then return end
+	local timestamp, eventType, hideCaster, srcGUID, srcName, srcFlags, srcRaidFlags, dstGUID, dstName, dstFlags, dstRaidFlags, spellId,spellName = CombatLogGetCurrentEventInfo()
 
 	if eventType == "SPELL_CAST_SUCCESS" and  spellName == gasSpell then
 		ga = gasSpell
@@ -205,11 +206,12 @@ end
 --[[
 	spell cast started
 ]]
-function Collector:SpellStarted(event,unit,spellcast,rank,target)
+function Collector:SpellStarted(event,unit,target,guid,spellcast)
 	if unit ~= "player" then return end
 	foundTarget = false
 	ga ="No"
-	if spells[spellcast] then
+	spellcast = GetSpellInfo(spellcast)
+	if spellcast and spells[spellcast] then
 		curSpell = spellcast
 		prevSpell = spellcast
 		local nodeID = GatherMate:GetIDForNode(spells[prevSpell], target)
@@ -231,19 +233,11 @@ local lastNode = ""
 local lastNodeCoords = 0
 
 function Collector:addItem(skill,what)
-	local x, y, zone, level, mapName, isMicroDungeon = GatherMate.HBD:GetPlayerZonePosition()
+	local x, y, zone = GatherMate.HBD:GetPlayerZonePosition()
 	if not x or not y then return end -- no valid data
 
-	-- check for microdungeon
-	if isMicroDungeon then
-		-- we wont do any collection events inside of a micro dungeon
-		return
-	end
-	-- Temporary fix, the map "ScarletEnclave" and "EasternPlaguelands"
-	-- both have the same English display name as "Eastern Plaguelands"
-	-- so we ignore the new Death Knight starting zone for now.
-	if mapName == "ScarletEnclave" then return end
 	-- don't collect any data in the garrison, its always the same location and spams the map
+	-- TODO: garrison ids
 	if zone == 971 or zone == 976 then return end
 	if GatherMate.phasing[zone] then zone = GatherMate.phasing[zone] end
 
@@ -255,7 +249,7 @@ function Collector:addItem(skill,what)
 	local range = GatherMate.db.profile.cleanupRange[node_type]
 	-- special case for fishing and gas extraction guage the pointing direction
 	if node_type == fishSpell or node_type == gasSpell then
-		local yw, yh = GatherMate.HBD:GetZoneSize(zone,level)
+		local yw, yh = GatherMate.HBD:GetZoneSize(zone)
 		if yw == 0 or yh == 0 then return end -- No zone size data
 		x,y = self:GetFloatingNodeLocation(x, y, yw, yh)
 	end
@@ -265,7 +259,7 @@ function Collector:addItem(skill,what)
 	local rares = self.rareNodes
 	-- run through the nearby's
 	local skip = false
-	local foundCoord = GatherMate:EncodeLoc(x, y, level)
+	local foundCoord = GatherMate:EncodeLoc(x, y)
 	local specialNode = false
 	local specialWhat = what
 	if foundCoord == lastNodeCoords and what == lastNode then return end
@@ -275,7 +269,7 @@ function Collector:addItem(skill,what)
 		specialNode = true
 	end
 	--]]
-	for coord, nodeID in GatherMate:FindNearbyNode(zone, x, y, level, node_type, range, true) do
+	for coord, nodeID in GatherMate:FindNearbyNode(zone, x, y, node_type, range, true) do
 		if (nodeID == nid or rares[nodeID] and rares[nodeID][nid]) then
 			GatherMate:RemoveNodeByID(zone, node_type, coord)
 		-- we're trying to add a rare node, but there is already a normal node present, skip the adding
@@ -289,9 +283,9 @@ function Collector:addItem(skill,what)
 
 	if not skip then
 		if specialNode then
-			GatherMate:AddNode(zone, x, y, level, node_type, specialWhat)
+			GatherMate:AddNode(zone, x, y, node_type, specialWhat)
 		else
-			GatherMate:AddNode(zone, x, y, level, node_type, what)
+			GatherMate:AddNode(zone, x, y, node_type, what)
 		end
 		lastNode = what
 		lastNodeCoords = foundCoord

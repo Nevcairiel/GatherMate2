@@ -1,4 +1,4 @@
-## Interface: 70300
+## Interface: 80000
 ## Notes: Collects Herbs, Mines, Gas Clouds, Archaeology, Treasure and Fishing locations and adds them to the worldmap and minimap
 ## Notes-frFR: Enregistre les positions des herbes, mines, nuages de gaz et poissons et les ajoute sur la carte du monde et la minicarte.
 ## Notes-ruRU: Собирает информацию о расположении трав, руды, газовых облаков и рыбных мест и показывает её на карте и миникарте
@@ -15,7 +15,7 @@
 ## X-Category: Map
 ## Version: @project-version@
 ## X-License: ARR
-## OptionalDeps: Ace3, LibDataBroker-1.1, HereBeDragons-1.0
+## OptionalDeps: Ace3, LibDataBroker-1.1, HereBeDragons
 ## LoadManagers: AddonLoader
 ## X-LoadOn-Always: delayed
 
@@ -32,7 +32,8 @@ Libs\AceConsole-3.0\AceConsole-3.0.xml
 Libs\AceConfig-3.0\AceConfig-3.0.xml
 Libs\AceDBOptions-3.0\AceDBOptions-3.0.xml
 
-Libs\HereBeDragons-1.0\HereBeDragons-1.0.lua
+Libs\HereBeDragons\HereBeDragons-2.0.lua
+Libs\HereBeDragons\HereBeDragons-Migrate.lua
 #@end-no-lib-strip@
 
 Locales\GatherMate2-enUS.lua
@@ -52,3 +53,6 @@ Collector.lua
 Display.lua
 Constants.lua
 Config.lua
+
+## XML loads last because it only contains the pin template
+GatherMate2.xml
