@@ -238,6 +238,8 @@ end
 --[[
 	These 2 functions are only called by the importer/sharing. These
 	do NOT fire GatherMateNodeAdded or GatherMateNodeDeleted messages.
+
+	Renamed to InjectNode2/DeleteNode2 to ensure data addon compatibility with 8.0 zone IDs
 ]]
 function GatherMate:InjectNode2(zone, coords, nodeType, nodeID)
 	local db = gmdbs[nodeType]
