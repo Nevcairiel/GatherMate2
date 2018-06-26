@@ -173,6 +173,15 @@ local node_ids = {
 		[NL["Empyrium Deposit"]]				= 259,
 		[NL["Rich Empyrium Deposit"]]			= 260,
 		[NL["Empyrium Seam"]]					= 261,
+-- bfa nodes
+		[NL["Monelite Deposit"]]				= 262,
+		[NL["Rich Monelite Deposit"]]			= 263,
+		[NL["Monelite Seam"]]					= 264,
+		[NL["Platinum Deposit"]]				= 265,
+		[NL["Rich Platinum Deposit"]]			= 266,
+		[NL["Storm Silver Deposit"]]			= 267,
+		[NL["Rich Storm Silver Deposit"]]		= 268,
+		[NL["Storm Silver Seam"]]				= 269,
 	},
 	["Extract Gas"] = {
 		[NL["Windy Cloud"]] 					= 301,
@@ -272,6 +281,14 @@ local node_ids = {
 		[NL["Fel-Encrusted Herb"]]				= 482,
 		[NL["Fel-Encrusted Herb Cluster"]]		= 483,
 		[NL["Astral Glory"]]					= 484,
+-- bfa nodes
+		[NL["Akunda's Bite"]]					= 485,
+		[NL["Anchor Weed"]]						= 486,
+		[NL["Riverbud"]]						= 487,
+		[NL["Sea Stalk"]]						= 488,
+		[NL["Siren's Sting"]]					= 489,
+		[NL["Star Moss"]]						= 490,
+		[NL["Winter's Kiss"]]					= 491,
 	},
 	["Treasure"] = {
 		[NL["Giant Clam"]] 						= 501,
@@ -412,6 +429,9 @@ local rare_spawns = {
 	[553] = {[552]=true}, -- ancient mana chunk
 	[554] = {[552]=true,[553]=true}, -- ancient mana crystal
 	[483] = {[482]=true}, -- Fel-encrusted Herb Cluster
+	[263] = {[262]=true}, -- rich monelite deposit
+	[266] = {[265]=true}, -- rich platinum deposit
+	[268] = {[267]=true}, -- rich storm silver deposit
 }
 Collector.rareNodes = rare_spawns
 -- Format zone = { "Database", "new node id"}
@@ -595,6 +615,14 @@ local node_textures = {
 		[259] = icon_path.."Mine\\empyrium.tga",
 		[260] = icon_path.."Mine\\empyrium.tga",
 		[261] = icon_path.."Mine\\empyrium.tga",
+		[262] = icon_path.."Mine\\empyrium.tga", -- todo
+		[263] = icon_path.."Mine\\empyrium.tga", -- todo
+		[264] = icon_path.."Mine\\empyrium.tga", -- todo
+		[265] = icon_path.."Mine\\empyrium.tga", -- todo
+		[266] = icon_path.."Mine\\empyrium.tga", -- todo
+		[267] = icon_path.."Mine\\empyrium.tga", -- todo
+		[268] = icon_path.."Mine\\empyrium.tga", -- todo
+		[269] = icon_path.."Mine\\empyrium.tga", -- todo
 	},
 	["Extract Gas"] = {
 		[301] = icon_path.."Gas\\windy_cloud.tga",
@@ -690,6 +718,13 @@ local node_textures = {
 		[482] = icon_path.."Herb\\felherb.tga",
 		[483] = icon_path.."Herb\\felherb.tga",
 		[484] = icon_path.."Herb\\astralglory.tga",
+		[485] = icon_path.."Herb\\astralglory.tga", -- todo
+		[486] = icon_path.."Herb\\astralglory.tga", -- todo
+		[487] = icon_path.."Herb\\astralglory.tga", -- todo
+		[488] = icon_path.."Herb\\astralglory.tga", -- todo
+		[489] = icon_path.."Herb\\astralglory.tga", -- todo
+		[490] = icon_path.."Herb\\astralglory.tga", -- todo
+		[491] = icon_path.."Herb\\astralglory.tga", -- todo
 	},
 	["Treasure"] = {
 		[501] = icon_path.."Treasure\\clam.tga",
@@ -788,6 +823,7 @@ local CATA    = 4
 local MOP     = 5
 local WOD     = 6
 local LEGION  = 7
+local BFA     = 8
 local node_expansion = {
 	["Mining"] = {
 		[201] = CLASSIC,
@@ -851,6 +887,14 @@ local node_expansion = {
 		[259] = LEGION,
 		[260] = LEGION,
 		[261] = LEGION,
+		[262] = BFA,
+		[263] = BFA,
+		[264] = BFA,
+		[265] = BFA,
+		[266] = BFA,
+		[267] = BFA,
+		[268] = BFA,
+		[269] = BFA,
 	},
 	["Herb Gathering"] = {
 		[401] = CLASSIC,
@@ -937,6 +981,13 @@ local node_expansion = {
 		[482] = LEGION,
 		[483] = LEGION,
 		[484] = LEGION,
+		[485] = BFA,
+		[486] = BFA,
+		[487] = BFA,
+		[488] = BFA,
+		[489] = BFA,
+		[490] = BFA,
+		[491] = BFA,
 	},
 }
 GatherMate.nodeExpansion = node_expansion
