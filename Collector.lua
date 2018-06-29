@@ -225,7 +225,7 @@ function Collector:addItem(skill,what)
 
 	-- don't collect any data in the garrison, its always the same location and spams the map
 	-- TODO: garrison ids
-	if zone == 971 or zone == 976 then return end
+	if GatherMate.mapBlacklist[zone] then return end
 	if GatherMate.phasing[zone] then zone = GatherMate.phasing[zone] end
 
 	local node_type = spells[skill]

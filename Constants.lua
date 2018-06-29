@@ -1040,3 +1040,10 @@ local map_phasing = {
 }
 
 GatherMate.phasing = map_phasing
+
+local map_blacklist = {
+	[582] = true, -- Alliance Garrison
+	[590] = true, -- Horde Garrison
+}
+
+GatherMate.mapBlacklist = map_blacklist
