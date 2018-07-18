@@ -144,14 +144,13 @@ end
 ]]
 local function addTomTomWaypoint(button,pin)
 	if TomTom then
-		--[[local mapId = GetCurrentMapAreaID()
 		local x, y = GatherMate:DecodeLoc(pin.coords)
-		TomTom:AddMFWaypoint(mapId, level, x, y, {
+		TomTom:AddWaypoint(pin.zone, x, y, {
 			title = pin.title,
 			persistent = nil,
 			minimap = true,
 			world = true
-		})]]
+		})
 	end
 end
 --[[
