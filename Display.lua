@@ -430,12 +430,12 @@ function Display:getMapPin()
 	end
 	-- create a new pin
 	pinCount = pinCount + 1
-	pin = CreateFrame("Button", "GatherMatePin"..pinCount, WorldMapButton)
+	pin = CreateFrame("Button", "GatherMatePin"..pinCount, Minimap)
 	pin:SetFrameLevel(5)
 	pin:EnableMouse(true)
 	pin:SetWidth(16)
 	pin:SetHeight(16)
-	pin:SetPoint("CENTER", WorldMapButton, "CENTER")
+	pin:SetPoint("CENTER", Minimap, "CENTER")
 	local texture = pin:CreateTexture(nil, "OVERLAY")
 	pin.texture = texture
 	texture:SetAllPoints(pin)
