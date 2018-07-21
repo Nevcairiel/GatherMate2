@@ -110,15 +110,15 @@ function GatherMate:OnInitialize()
 	db = self.db.profile
 	filter = db.filter
 	-- depractaion scan
-	if self.db.global.data_version == 1 then
+	if (self.db.global.data_version or 0) == 1 then
 		self:RemoveDepracatedNodes()
 		self.db.global.data_version = 2
 	end
-	if self.db.global.data_version < 4 then
+	if (self.db.global.data_version or 0) < 4 then
 		self:RemoveGarrisonNodes()
 		self.db.global.data_version = 4
 	end
-	if self.db.global.data_version < 5 then
+	if (self.db.global.data_version or 0) < 5 then
 		self:MigrateData80()
 		self.db.global.data_version = 5
 	end
