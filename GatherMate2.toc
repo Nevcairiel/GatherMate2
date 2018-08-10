@@ -38,6 +38,7 @@ Libs\HereBeDragons\HereBeDragons-Migrate.lua
 
 Locales\GatherMate2-enUS.lua
 Locales\GatherMate2-esES.lua
+Locales\GatherMate2-esMX.lua
 Locales\GatherMate2-frFR.lua
 Locales\GatherMate2-deDE.lua
 Locales\GatherMate2-koKR.lua
