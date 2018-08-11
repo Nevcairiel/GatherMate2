@@ -386,6 +386,9 @@ local node_ids = {
 		[NL["Demonic Archaeology Find"]]		= 617,
 		[NL["Highborne Archaeology Find"]]		= 618,
 		[NL["Highmountain Tauren Archaeology Find"]]	= 619,
+		-- bfa
+		[NL["Drust Archaeology Find"]]			= 620,
+		[NL["Zandalari Archaeology Find"]]		= 621,
 	},
 	["Logging"] = {
 		[NL["Small Timber"]]					= 701,
@@ -826,6 +829,8 @@ local node_textures = {
 		[617] = icon_path.."Archaeology\\shovel.tga",
 		[618] = icon_path.."Archaeology\\shovel.tga",
 		[619] = icon_path.."Archaeology\\shovel.tga",
+		[620] = icon_path.."Archaeology\\shovel.tga",
+		[621] = icon_path.."Archaeology\\shovel.tga",
 	},
 	["Logging"] = {
 		[701] = icon_path.."Logging\\timber.tga",
