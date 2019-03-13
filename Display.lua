@@ -127,11 +127,7 @@ end
 	Pin OnLeave
 ]]
 local function hidePin(self)
-	if self.worldmap then
-		WorldMapTooltip:Hide()
-	else
-		GameTooltip:Hide()
-	end
+	GameTooltip:Hide()
 end
 --[[
 	Pin click handler
