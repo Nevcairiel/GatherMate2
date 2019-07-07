@@ -369,6 +369,7 @@ local node_ids = {
 		[NL["Glowing Tome"]]					= 557,
 		[NL["Mana-Infused Gem"]]				= 558,
 		[NL["Twice-Fortified Arcwine"]]			= 559,
+		[NL["Mechanized Chest"]]				= 560,
 	},
 	["Archaeology"] = {
 		-- cata archeolgy objects
@@ -826,6 +827,7 @@ local node_textures = {
 		[557] = icon_path.."Treasure\\ancient_mana.tga",
 		[558] = icon_path.."Treasure\\ancient_mana.tga",
 		[559] = icon_path.."Treasure\\ancient_mana.tga",
+		[560] = icon_path.."Treasure\\treasure.tga",
 	},
 	["Archaeology"] = {
 		[601] = icon_path.."Archaeology\\shovel.tga",
