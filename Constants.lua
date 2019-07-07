@@ -657,9 +657,9 @@ local node_textures = {
 		[267] = icon_path.."Mine\\stormsilver.tga",
 		[268] = icon_path.."Mine\\stormsilver.tga",
 		[269] = icon_path.."Mine\\stormsilver.tga",
-		[270] = icon_path.."Mine\\ghostiron.tga", -- osmenite TODO
-		[271] = icon_path.."Mine\\ghostiron.tga", -- osmenite TODO
-		[272] = icon_path.."Mine\\ghostiron.tga", -- osmenite TODO
+		[270] = icon_path.."Mine\\osmenite.tga",
+		[271] = icon_path.."Mine\\osmenite.tga",
+		[272] = icon_path.."Mine\\osmenite.tga",
 	},
 	["Extract Gas"] = {
 		[301] = icon_path.."Gas\\windy_cloud.tga",
@@ -762,7 +762,7 @@ local node_textures = {
 		[489] = icon_path.."Herb\\sirens_pollen.tga",
 		[490] = icon_path.."Herb\\star_moss.tga",
 		[491] = icon_path.."Herb\\winters_kiss.tga",
-		[492] = icon_path.."Herb\\rain_poppy.tga", -- Zin'anthid TODO
+		[492] = icon_path.."Herb\\zinanthid.tga",
 	},
 	["Treasure"] = {
 		[501] = icon_path.."Treasure\\clam.tga",
