@@ -587,6 +587,7 @@ local node_textures = {
 		[197] = icon_path.."Fish\\fish_hook.tga", -- 8.2 fish TODO
 		[198] = icon_path.."Fish\\fish_hook.tga", -- 8.2 fish TODO
 		[199] = icon_path.."Fish\\fish_hook.tga", -- 8.2 fish TODO
+		[1101] = icon_path.."Fish\\fish_hook.tga", -- 8.2 fish TODO
 	},
 	["Mining"] = {
 		[201] = icon_path.."Mine\\copper.tga",
