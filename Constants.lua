@@ -119,6 +119,7 @@ local node_ids = {
 		[NL["Mauve Stinger School"]]			= 197,
 		[NL["Viper Fish School"]]				= 198,
 		[NL["Ionized Minnows"]]					= 199,
+		[NL["Sentry Fish School"]]				= 1101,
 	},
 	["Mining"] = {
 		[NL["Copper Vein"]] 					= 201,
