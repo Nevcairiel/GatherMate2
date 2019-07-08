@@ -369,7 +369,10 @@ local node_ids = {
 		[NL["Glowing Tome"]]					= 557,
 		[NL["Mana-Infused Gem"]]				= 558,
 		[NL["Twice-Fortified Arcwine"]]			= 559,
+		-- bfa 8.2 treasures
 		[NL["Mechanized Chest"]]				= 560,
+		[NL["Glimmering Chest"]]				= 561,
+		[NL["Prismatic Crystal"]]				= 562,
 	},
 	["Archaeology"] = {
 		-- cata archeolgy objects
@@ -828,6 +831,8 @@ local node_textures = {
 		[558] = icon_path.."Treasure\\ancient_mana.tga",
 		[559] = icon_path.."Treasure\\ancient_mana.tga",
 		[560] = icon_path.."Treasure\\treasure.tga",
+		[561] = icon_path.."Treasure\\treasure.tga",
+		[562] = icon_path.."Treasure\\ancient_mana.tga",
 	},
 	["Archaeology"] = {
 		[601] = icon_path.."Archaeology\\shovel.tga",
