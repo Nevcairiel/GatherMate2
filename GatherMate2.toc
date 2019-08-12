@@ -18,7 +18,8 @@
 ## OptionalDeps: Ace3, LibDataBroker-1.1, HereBeDragons
 ## LoadManagers: AddonLoader
 ## X-LoadOn-Always: delayed
-
+## X-Curse-Project-ID: 26120
+## X-WoWI-ID: 21293
 
 #@no-lib-strip@
 Libs\LibStub\LibStub.lua
