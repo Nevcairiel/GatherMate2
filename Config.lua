@@ -387,13 +387,17 @@ local sortedFilter = setmetatable({}, {__index = function(t, k)
 			delocalizedZones[name] = zoneID
 		end
 	else
+		local expansion = GatherMate.nodeExpansion[k]
 		local map = GatherMate.nodeIDs[k]
 		for name in pairs(map) do
-			local idx = #new+1
-			new[idx] = name
+			if WoWClassic and expansion and expansion[map[name]] > 1 then
+				-- skip
+			else
+				local idx = #new+1
+				new[idx] = name
+			end
 			denormalizedNames[name] = name
 		end
-		local expansion = GatherMate.nodeExpansion[k]
 		if expansion then
 			-- We only end up creating one function per tracked type anyway
 			table.sort(new, function(a, b)
