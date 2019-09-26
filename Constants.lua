@@ -375,6 +375,7 @@ local node_ids = {
 		[NL["Prismatic Crystal"]]				= 562,
 		-- 8.2.5
 		[NL["Jelly Deposit"]]					= 563,
+		[NL["Large Jelly Deposit"]]				= 564,
 	},
 	["Archaeology"] = {
 		-- cata archeolgy objects
@@ -461,6 +462,7 @@ local rare_spawns = {
 	[268] = {[267]=true}, -- rich storm silver deposit
 	[486] = {[485]=true,[487]=true,[488]=true,[491]=true,[492]=true}, -- anchor weed
 	[271] = {[270]=true}, -- rich osmenite deposit
+	[564] = {[563]=true}, -- large jelly deposit
 }
 Collector.rareNodes = rare_spawns
 -- Format zone = { "Database", "new node id"}
@@ -836,6 +838,7 @@ local node_textures = {
 		[561] = icon_path.."Treasure\\treasure.tga",
 		[562] = icon_path.."Treasure\\ancient_mana.tga",
 		[563] = icon_path.."Treasure\\honey.tga",
+		[564] = icon_path.."Treasure\\honey.tga",
 	},
 	["Archaeology"] = {
 		[601] = icon_path.."Archaeology\\shovel.tga",
