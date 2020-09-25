@@ -120,6 +120,13 @@ local node_ids = {
 		[NL["Viper Fish School"]]				= 198,
 		[NL["Ionized Minnows"]]					= 199,
 		[NL["Sentry Fish School"]]				= 1101,
+		-- Shadowlands pools
+		[NL["Iridescent Amberjack School"]]		= 1102,
+		[NL["Pocked Bonefish School"]]			= 1103,
+		[NL["Silvergill Pike School"]]			= 1104,
+		[NL["Elysian Thade School"]]			= 1105,
+		[NL["Lost Sole School"]]				= 1106,
+		[NL["Spinefin Piranha School"]]			= 1107,
 	},
 	["Mining"] = {
 		[NL["Copper Vein"]] 					= 201,
@@ -626,6 +633,12 @@ local node_textures = {
 		[198] = icon_path.."Fish\\viperfish.tga",
 		[199] = icon_path.."Fish\\ionizedminnow.tga",
 		[1101] = icon_path.."Fish\\sentryfish.tga",
+		[1102] = icon_path.."Fish\\fish_hook.tga", -- TODO
+		[1103] = icon_path.."Fish\\fish_hook.tga", -- TODO
+		[1104] = icon_path.."Fish\\fish_hook.tga", -- TODO
+		[1105] = icon_path.."Fish\\fish_hook.tga", -- TODO
+		[1106] = icon_path.."Fish\\fish_hook.tga", -- TODO
+		[1107] = icon_path.."Fish\\fish_hook.tga", -- TODO
 	},
 	["Mining"] = {
 		[201] = icon_path.."Mine\\copper.tga",
