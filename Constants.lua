@@ -506,6 +506,7 @@ local rare_spawns = {
 	[283] = {[282]=true}, -- rich solenium deposit
 	[285] = {[284]=true,[286]=true}, -- rich sinvyr deposit
 	[286] = {[284]=true,[285]=true}, -- menacing sinvyr deposit
+	[494] = {[493]=true,[495]=true,[496]=true,[497]=true,[498]=true}, -- nightshade
 }
 Collector.rareNodes = rare_spawns
 -- Format zone = { "Database", "new node id"}
