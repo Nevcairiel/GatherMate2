@@ -498,14 +498,14 @@ local rare_spawns = {
 	[486] = {[485]=true,[487]=true,[488]=true,[491]=true,[492]=true}, -- anchor weed
 	[271] = {[270]=true}, -- rich osmenite deposit
 	[564] = {[563]=true}, -- large jelly deposit
-	[274] = {[273]=true}, -- rich laestrite deposit
+	[273] = {[275]=true,[276]=true,[277]=true,[278]=true,[282]=true,[283]=true,[284]=true,[285]=true}, -- laestrite deposit
+	[274] = {[273]=true,[275]=true,[276]=true,[277]=true,[278]=true,[282]=true,[283]=true,[284]=true,[285]=true}, -- rich laestrite deposit
 	[276] = {[275]=true}, -- rich phaedrum deposit
 	[278] = {[277]=true,[279]=true}, -- rich oxxein deposit
-	[279] = {[277]=true,[278]=true}, -- monolithic oxxein deposit
-	[281] = {[280]=true}, -- rich elethium deposit
+	[280] = {[273]=true,[274]=true,[275]=true,[276]=true,[277]=true,[278]=true,[282]=true,[283]=true,[284]=true,[285]=true}, -- elethium deposit
+	[281] = {[280]=true,[273]=true,[274]=true,[275]=true,[276]=true,[277]=true,[278]=true,[282]=true,[283]=true,[284]=true,[285]=true}, -- rich elethium deposit
 	[283] = {[282]=true}, -- rich solenium deposit
 	[285] = {[284]=true,[286]=true}, -- rich sinvyr deposit
-	[286] = {[284]=true,[285]=true}, -- menacing sinvyr deposit
 	[494] = {[493]=true,[495]=true,[496]=true,[497]=true,[498]=true}, -- nightshade
 	[493] = {[495]=true,[496]=true,[497]=true,[498]=true}, -- death blossom shares spawn with zone-specific herbs
 }
