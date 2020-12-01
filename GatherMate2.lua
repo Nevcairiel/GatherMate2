@@ -266,6 +266,8 @@ function GatherMate:AddNodeChecked(zone, x, y, nodeType, name)
 	if not skip then
 		GatherMate:AddNode(zone, x, y, nodeType, name)
 	end
+
+	return not skip
 end
 
 --[[
