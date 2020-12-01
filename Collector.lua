@@ -242,7 +242,6 @@ function Collector:addItem(skill,what)
 	-- db lock check
 	if GatherMate.db.profile.dbLocks[node_type] then return	end
 
-	local range = GatherMate.db.profile.cleanupRange[node_type]
 	-- special case for fishing and gas extraction guage the pointing direction
 	if node_type == fishSpell or node_type == gasSpell then
 		local yw, yh = GatherMate.HBD:GetZoneSize(zone)
