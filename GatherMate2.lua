@@ -253,7 +253,7 @@ function GatherMate:AddNodeChecked(zone, x, y, nodeType, name)
 
 	-- check for existing nodes
 	local skip = false
-	local rares = GatherMate:GetModule("Collector").rareNodes
+	local rares = self.rareNodes
 	for coord, nodeID in GatherMate:FindNearbyNode(zone, x, y, nodeType, range, true) do
 		if (nodeID == nid or rares[nodeID] and rares[nodeID][nid]) then
 			GatherMate:RemoveNodeByID(zone, nodeType, coord)
@@ -445,8 +445,7 @@ function GatherMate:IsCleanupRunning()
 end
 
 function GatherMate:SweepDatabase()
-	local Collector = GatherMate:GetModule("Collector")
-	local rares = Collector.rareNodes
+	local rares = self.rareNodes
 	for v,zone in pairs(GatherMate.HBD:GetAllMapIDs()) do
 		--self:Print(L["Processing "]..zone)
 		coroutine.yield()
