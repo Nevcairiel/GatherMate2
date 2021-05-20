@@ -1,4 +1,5 @@
-## Interface: 11305
+## Interface: 20501
+## Interface-Classic: 11307
 ## Notes: Collects Herbs, Mines, Gas Clouds, Archaeology, Treasure and Fishing locations and adds them to the worldmap and minimap
 ## Notes-frFR: Enregistre les positions des herbes, mines, nuages de gaz et poissons et les ajoute sur la carte du monde et la minicarte.
 ## Notes-ruRU: Собирает информацию о расположении трав, руды, газовых облаков и рыбных мест и показывает её на карте и миникарте
@@ -11,7 +12,7 @@
 ## Author: kagaro, xinhuan, nevcairiel
 ## X-Email: sal.scotto@gmail.com
 ## X-Credits: OttoDeFe for the launher icon.
-## SavedVariables: GatherMate2DB, GatherMate2HerbDB, GatherMate2MineDB, GatherMate2FishDB, GatherMate2GasDB, GatherMate2TreasureDB, GatherMate2ArchaeologyDB, GatherMate2LoggingDB
+## SavedVariables: GatherMate2DB, GatherMate2HerbDB, GatherMate2MineDB, GatherMate2FishDB, GatherMate2GasDB, GatherMate2TreasureDB
 ## X-Category: Map
 ## Version: @project-version@
 ## X-License: ARR
