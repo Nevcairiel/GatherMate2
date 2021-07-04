@@ -1180,6 +1180,7 @@ function Config:OnInitialize()
 	acd:AddToBlizOptions("GM2/FAQ", "FAQ", "GatherMate 2")
 
 	local function openOptions()
+		InterfaceOptionsFrame_Show()
 		InterfaceOptionsFrame_OpenToCategory("GatherMate 2")
 	end
 
