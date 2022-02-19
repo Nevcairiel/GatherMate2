@@ -225,6 +225,8 @@ local node_ids = {
 		[NL["Sinvyr Deposit"]]					= 284,
 		[NL["Rich Sinvyr Deposit"]]				= 285,
 		--[NL["Menacing Sinvyr Deposit"]]			= 286,
+		[NL["Progenium Deposit"]]				= 287,
+		[NL["Rich Progenium Deposit"]]			= 288,
 	},
 	["Extract Gas"] = {
 		[NL["Windy Cloud"]] 					= 301,
@@ -739,6 +741,8 @@ local node_textures = {
 		[284] = icon_path.."Mine\\sinvyr.tga",
 		[285] = icon_path.."Mine\\sinvyr.tga",
 		[286] = icon_path.."Mine\\sinvyr.tga",
+		[287] = icon_path.."Mine\\elethium.tga",
+		[288] = icon_path.."Mine\\elethium.tga",
 	},
 	["Extract Gas"] = {
 		[301] = icon_path.."Gas\\windy_cloud.tga",
@@ -1045,6 +1049,8 @@ local node_expansion = {
 		[284] = SL,
 		[285] = SL,
 		[286] = SL,
+		[287] = SL,
+		[288] = SL,
 	},
 	["Herb Gathering"] = {
 		[401] = CLASSIC,
