@@ -129,6 +129,7 @@ local node_ids = {
 		[NL["Elysian Thade School"]]			= 1105,
 		[NL["Lost Sole School"]]				= 1106,
 		[NL["Spinefin Piranha School"]]			= 1107,
+		[NL["Precursor Placoderm School"]]		= 1108,
 	},
 	["Mining"] = {
 		[NL["Copper Vein"]] 					= 201,
@@ -653,6 +654,7 @@ local node_textures = {
 		[1105] = icon_path.."Fish\\elysianthade.tga",
 		[1106] = icon_path.."Fish\\lostsole.tga",
 		[1107] = icon_path.."Fish\\spinefinpiranha.tga",
+		[1108] = icon_path.."Fish\\fish_hook.tga",
 	},
 	["Mining"] = {
 		[201] = icon_path.."Mine\\copper.tga",
