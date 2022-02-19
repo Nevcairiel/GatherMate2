@@ -342,6 +342,7 @@ local node_ids = {
 		[NL["Vigil's Torch"]]					= 496,
 		[NL["Rising Glory"]]					= 497,
 		[NL["Widowbloom"]]						= 498,
+		[NL["First Flower"]]					= 499,
 	},
 	["Treasure"] = {
 		[NL["Giant Clam"]] 						= 501,
@@ -847,6 +848,7 @@ local node_textures = {
 		[496] = icon_path.."Herb\\vigilstorch.tga",
 		[497] = icon_path.."Herb\\risingglory.tga",
 		[498] = icon_path.."Herb\\widowbloom.tga",
+		[499] = icon_path.."Herb\\nightshade.tga",
 	},
 	["Treasure"] = {
 		[501] = icon_path.."Treasure\\clam.tga",
@@ -1143,6 +1145,7 @@ local node_expansion = {
 		[496] = SL,
 		[497] = SL,
 		[498] = SL,
+		[499] = SL,
 	},
 }
 GatherMate.nodeExpansion = node_expansion
