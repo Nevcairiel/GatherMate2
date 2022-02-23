@@ -346,6 +346,7 @@ local node_ids = {
 		[NL["Rising Glory"]]					= 497,
 		[NL["Widowbloom"]]						= 498,
 		[NL["First Flower"]]					= 499,
+		[NL["Lush Nightshade"]]					= 1401,
 	},
 	["Treasure"] = {
 		[NL["Giant Clam"]] 						= 501,
@@ -513,6 +514,7 @@ local rare_spawns = {
 	[283] = {[282]=true}, -- rich solenium deposit
 	[285] = {[284]=true}, -- rich sinvyr deposit
 	[494] = {[493]=true,[495]=true,[496]=true,[497]=true,[498]=true}, -- nightshade
+	[1401] = {[494]=true,[493]=true,[495]=true,[496]=true,[497]=true,[498]=true}, -- lush nightshade
 	[493] = {[495]=true,[496]=true,[497]=true,[498]=true}, -- death blossom shares spawn with zone-specific herbs
 }
 GatherMate.rareNodes = rare_spawns
@@ -855,6 +857,7 @@ local node_textures = {
 		[497] = icon_path.."Herb\\risingglory.tga",
 		[498] = icon_path.."Herb\\widowbloom.tga",
 		[499] = icon_path.."Herb\\nightshade.tga",
+		[1401] = icon_path.."Herb\\nightshade.tga",
 	},
 	["Treasure"] = {
 		[501] = icon_path.."Treasure\\clam.tga",
@@ -1154,6 +1157,7 @@ local node_expansion = {
 		[497] = SL,
 		[498] = SL,
 		[499] = SL,
+		[1401] = SL,
 	},
 }
 GatherMate.nodeExpansion = node_expansion
