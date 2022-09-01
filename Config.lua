@@ -939,8 +939,8 @@ or
 }
 ImportHelper.expac_data = {
 	["TBC"] = L["The Burning Crusades"],
-	--[[
 	["WRATH"] = L["Wrath of the Lich King"],
+	--[[
 	["CATACLYSM"] = L["Cataclysm"],
 	["MISTS"] = L["Mists of Pandaria"],
 	["WOD"] = L["Warlords of Draenor"],
