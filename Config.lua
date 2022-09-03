@@ -8,6 +8,7 @@ local DataBroker = LibStub:GetLibrary("LibDataBroker-1.1",true)
 
 local WoWClassic = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC)
 local WoWBC = (WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC)
+local WoWWrath = (WOW_PROJECT_ID == WOW_PROJECT_WRATH_CLASSIC)
 local SaveBindings = SaveBindings or AttemptToSaveBindings
 
 --[[
@@ -107,7 +108,7 @@ local generalOptions = {
 			type = "select",
 			values = prof_options2,
 			arg = "Extract Gas",
-			hidden = not WoWBC,
+			hidden = WoWClassic,
 		},
 		showTreasure = {
 			order = 5,
@@ -307,7 +308,7 @@ local minimapOptions = {
 					type = "color",
 					hasAlpha = true,
 					arg = "Extract Gas",
-					hidden = not WoWBC,
+					hidden = WoWClassic,
 				},
 				trackingColorTreasure = {
 					order = 6,
@@ -368,6 +369,8 @@ local sortedFilter = setmetatable({}, {__index = function(t, k)
 			if WoWClassic and expansion and expansion[map[name]] > 1 then
 				-- skip
 			elseif WoWBC and expansion and expansion[map[name]] > 2 then
+				-- skip
+			elseif WoWWrath and expansion and expansion[map[name]] > 3 then
 				-- skip
 			else
 				local idx = #new+1
@@ -575,7 +578,7 @@ filterOptions.args.fish = {
 filterOptions.args.gas = {
 	type = "group",
 	name = L["Gas Clouds"],
-	hidden = not WoWBC,
+	hidden = WoWClassic,
 	args = {
 		select_all = {
 			order = 1,
@@ -709,7 +712,7 @@ local maintenanceOptions = {
 					type = "range",
 					min = 0, max = 100, step = 1,
 					arg = "Extract Gas",
-					hidden = not WoWBC,
+					hidden = WoWClassic,
 				},
 				Treasure = {
 					order = 5,
@@ -838,7 +841,7 @@ local maintenanceOptions = {
 					arg = "Extract Gas",
 					confirm = true,
 					confirmText = L["Are you sure you want to delete all nodes from this database?"],
-					hidden = not WoWBC,
+					hidden = WoWClassic,
 				},
 				Treasure = {
 					order = 5,
@@ -894,7 +897,7 @@ local maintenanceOptions = {
 					desc = L["Database locking"],
 					type = "toggle",
 					arg = "Extract Gas",
-					hidden = not WoWBC,
+					hidden = WoWClassic,
 				},
 				Treasure = {
 					order = 5,
@@ -1050,7 +1053,7 @@ importOptions.args.GatherMateData = {
 				if db["importers"]["GatherMate2_Data"].Databases["Mines"] then cm = 1 end
 				if db["importers"]["GatherMate2_Data"].Databases["Herbs"] then cm = 1 end
 				if db["importers"]["GatherMate2_Data"].Databases["Fish"] then cm = 1 end
-				if WoWBC then
+				if not WoWClassic then
 					if db["importers"]["GatherMate2_Data"].Databases["Gases"] then cm = 1 end
 				end
 				return imported["GatherMate2_Data"] or (cm == 0 and not imported["GatherMate2_Data"])

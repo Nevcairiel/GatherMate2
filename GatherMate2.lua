@@ -11,7 +11,7 @@ _G["GatherMate2"] = GatherMate
 GatherMate.HBD = LibStub("HereBeDragons-2.0")
 local HBDMigrate = LibStub("HereBeDragons-Migrate")
 
-local WoWBC = (WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC)
+local WoWClassic = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC)
 
 -- locals
 local db, gmdbs, filter
@@ -97,7 +97,7 @@ function GatherMate:OnInitialize()
 	GatherMate2MineDB = GatherMate2MineDB or {}
 	GatherMate2FishDB = GatherMate2FishDB or {}
 	GatherMate2TreasureDB = GatherMate2TreasureDB or {}
-	if WoWBC then
+	if not WoWClassic then
 		GatherMate2GasDB = GatherMate2GasDB or {}
 	end
 	self.gmdbs = {}
@@ -107,7 +107,7 @@ function GatherMate:OnInitialize()
 	self:RegisterDBType("Mining", GatherMate2MineDB)
 	self:RegisterDBType("Fishing", GatherMate2FishDB)
 	self:RegisterDBType("Treasure", GatherMate2TreasureDB)
-	if WoWBC then
+	if not WoWClassic then
 		self:RegisterDBType("Extract Gas", GatherMate2GasDB)
 	end
 	db = self.db.profile
@@ -211,7 +211,7 @@ function GatherMate:ClearDB(dbx)
 	elseif dbx == "Fishing" then GatherMate2FishDB = {}; gmdbs[dbx] = GatherMate2FishDB
 	elseif dbx == "Mining" then GatherMate2MineDB = {}; gmdbs[dbx] = GatherMate2MineDB
 	elseif dbx == "Treasure" then GatherMate2TreasureDB = {}; gmdbs[dbx] = GatherMate2TreasureDB
-	elseif WoWBC and dbx == "Extract Gas" then GatherMate2GasDB = {}; gmdbs[dbx] = GatherMate2GasDB
+	elseif not WoWClassic and dbx == "Extract Gas" then GatherMate2GasDB = {}; gmdbs[dbx] = GatherMate2GasDB
 	else -- for custom DBs we dont know the global name, so we clear it old-fashion style
 		local db = gmdbs[dbx]
 		if not db then error("Trying to clear unknown database: "..dbx) end
