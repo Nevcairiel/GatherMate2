@@ -8,7 +8,7 @@ local Display = nil
 local prevSpell, curSpell, foundTarget, gatherEvents, ga
 
 local WoWClassic = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC)
-local WoWWrath = select(4, GetBuildInfo()) >= 30400
+local WoWWrath = (WOW_PROJECT_ID == WOW_PROJECT_WRATH_CLASSIC)
 
 --[[
 Convert for 2.4 spell IDs
