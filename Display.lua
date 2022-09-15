@@ -784,6 +784,11 @@ function GatherMate2WorldMapPinMixin:OnAcquired(coord, nodeID, nodeType, zone)
 	self.texture:SetTexCoord(0, 1, 0, 1)
 	self.texture:SetVertexColor(1, 1, 1, 1)
 	self:EnableMouse(db.worldMapIconsInteractive)
+
+	-- enable right-click interactivity
+	if db.worldMapIconsInteractive and self.SetPassThroughButtons then
+		self:SetPassThroughButtons("")
+	end
 end
 
 function GatherMate2WorldMapPinMixin:OnMouseEnter()
