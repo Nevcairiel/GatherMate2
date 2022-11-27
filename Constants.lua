@@ -130,6 +130,21 @@ local node_ids = {
 		[NL["Lost Sole School"]]				= 1106,
 		[NL["Spinefin Piranha School"]]			= 1107,
 		[NL["Precursor Placoderm School"]]		= 1108,
+		-- Dragonflight pools
+		-- general
+		[NL["Islefin Dorado Pool"]]				= 1109,
+		[NL["Shimmering Treasure Pool"]]		= 1110,
+		-- freshwater
+		[NL["Temporal Dragonhead Pool"]]		= 1111,
+		[NL["Thousandbite Pirahna Swarm"]]		= 1112,
+		-- saltwater
+		[NL["Aileron Seamoth School"]]			= 1113,
+		[NL["Cerulean Spinefish School"]]		= 1114,
+		-- special
+		[NL["Rimefin Tuna Pool"]]				= 1115,
+		[NL["Magma Thresher Pool"]]				= 1116,
+		[NL["Prismatic Leaper School"]]			= 1117,
+
 	},
 	["Mining"] = {
 		[NL["Copper Vein"]] 					= 201,
@@ -774,6 +789,15 @@ local node_textures = {
 		[1106] = icon_path.."Fish\\lostsole.tga",
 		[1107] = icon_path.."Fish\\spinefinpiranha.tga",
 		[1108] = icon_path.."Fish\\fish_hook.tga",
+		[1109] = icon_path.."Fish\\fish_hook.tga",
+		[1110] = icon_path.."Fish\\fish_hook.tga",
+		[1111] = icon_path.."Fish\\fish_hook.tga",
+		[1112] = icon_path.."Fish\\fish_hook.tga",
+		[1113] = icon_path.."Fish\\fish_hook.tga",
+		[1114] = icon_path.."Fish\\fish_hook.tga",
+		[1115] = icon_path.."Fish\\fish_hook.tga",
+		[1116] = icon_path.."Fish\\fish_hook.tga",
+		[1117] = icon_path.."Fish\\fish_hook.tga",
 	},
 	["Mining"] = {
 		[201] = icon_path.."Mine\\copper.tga",
