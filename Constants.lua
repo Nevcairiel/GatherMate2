@@ -492,6 +492,10 @@ local node_ids = {
 		[NL["Large Jelly Deposit"]]				= 564,
 		-- Shadowlands
 		[NL["Ground Wart"]]						= 565,
+		-- Dragonflight,
+		[NL["Expedition Scout's Pack"]]    = 566,
+		[NL["Disturbed Dirt"]]             = 567,
+		[NL["Magic-Bound Chest"]]          = 568,
 	},
 	["Archaeology"] = {
 		-- cata archeolgy objects

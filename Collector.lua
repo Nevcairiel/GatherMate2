@@ -26,6 +26,7 @@ local pickSpell = (GetSpellInfo(1804))
 local archSpell = (GetSpellInfo(73979)) -- Searching for Artifacts spell
 local sandStormSpell = (GetSpellInfo(93473)) -- Sandstorm spell cast by the camel
 local loggingSpell = (GetSpellInfo(167895))
+local digDisturbedDirt = (GetSpellInfo(370349)) -- Dragonflight Disturbed Dirt
 
 local spells =
 { -- spellname to "database name"
@@ -41,6 +42,7 @@ local spells =
 	[sandStormSpell] = "Treasure",
 	[loggingSpell] = "Logging",
 	[205243] = "Treasure", -- skinning ground warts
+	[digDisturbedDirt] = "Treasure",
 }
 local tooltipLeftText1 = _G["GameTooltipTextLeft1"]
 local strfind, stringmatch = string.find, string.match
