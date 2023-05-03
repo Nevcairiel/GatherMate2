@@ -265,6 +265,10 @@ local node_ids = {
 		[NL["Hardened Draconium Deposit"]]		= 1213,
 		[NL["Infurious Draconium Deposit"]]		= 1214,
 		[NL["Titan-Touched Draconium Deposit"]]	= 1215,
+
+-- 10.1 additions
+		[NL["Metamorphic Serevite Deposit"]]	= 1216,
+		[NL["Metamorphic Draconium Deposit"]]	= 1217,
 	},
 	["Extract Gas"] = {
 		[NL["Windy Cloud"]] 					= 301,
@@ -421,6 +425,12 @@ local node_ids = {
 		[NL["Windswept Writhebark"]]			= 1432,
 		[NL["Infurious Writhebark"]]			= 1433,
 		[NL["Titan-Touched Writhebark"]]		= 1434,
+
+-- 10.1 variants
+		[NL["Lambent Hochenblume"]]				= 1435,
+		[NL["Lambent Bubble Poppy"]]			= 1436,
+		[NL["Lambent Saxifrage"]]				= 1437,
+		[NL["Lambent Writhebark"]]				= 1438,
 	},
 	["Treasure"] = {
 		[NL["Giant Clam"]] 						= 501,
@@ -608,6 +618,7 @@ local rare_spawns = {
 	[1411] = {[1407]=true},
 	[1412] = {[1407]=true},
 	[1413] = {[1407]=true},
+	[1435] = {[1407]=true},
 
 	-- Bubble Poppy
 	[1415] = {[1414]=true},
@@ -616,6 +627,7 @@ local rare_spawns = {
 	[1418] = {[1414]=true},
 	[1419] = {[1414]=true},
 	[1420] = {[1414]=true},
+	[1436] = {[1414]=true},
 
 	-- Saxifrage
 	[1422] = {[1421]=true},
@@ -624,6 +636,7 @@ local rare_spawns = {
 	[1425] = {[1421]=true},
 	[1426] = {[1421]=true},
 	[1427] = {[1421]=true},
+	[1437] = {[1421]=true},
 
 	-- Writhebark
 	[1429] = {[1428]=true},
@@ -632,6 +645,7 @@ local rare_spawns = {
 	[1432] = {[1428]=true},
 	[1433] = {[1428]=true},
 	[1434] = {[1428]=true},
+	[1438] = {[1428]=true},
 
 	-- Serevite
 	[1202] = {[1201]=true},
@@ -640,6 +654,7 @@ local rare_spawns = {
 	[1205] = {[1201]=true},
 	[1206] = {[1201]=true},
 	[1207] = {[1201]=true},
+	[1216] = {[1201]=true},
 
 	-- Draconium
 	[1210] = {[1209]=true},
@@ -648,6 +663,7 @@ local rare_spawns = {
 	[1213] = {[1209]=true},
 	[1214] = {[1209]=true},
 	[1215] = {[1209]=true},
+	[1217] = {[1209]=true},
 }
 GatherMate.rareNodes = rare_spawns
 Collector.rareNodes = rare_spawns
@@ -908,6 +924,8 @@ local node_textures = {
 		[1213] = icon_path.."Mine\\draconium.tga",
 		[1214] = icon_path.."Mine\\draconium.tga",
 		[1215] = icon_path.."Mine\\draconium.tga",
+		[1216] = icon_path.."Mine\\serevite.tga",
+		[1217] = icon_path.."Mine\\draconium.tga",
 	},
 	["Extract Gas"] = {
 		[301] = icon_path.."Gas\\windy_cloud.tga",
@@ -1052,6 +1070,10 @@ local node_textures = {
 		[1432] = icon_path.."Herb\\writhebark.tga",
 		[1433] = icon_path.."Herb\\writhebark.tga",
 		[1434] = icon_path.."Herb\\writhebark.tga",
+		[1435] = icon_path.."Herb\\hochenblume.tga",
+		[1436] = icon_path.."Herb\\bubblepoppy.tga",
+		[1437] = icon_path.."Herb\\saxifrage.tga",
+		[1438] = icon_path.."Herb\\writhebark.tga",
 	},
 	["Treasure"] = {
 		[501] = icon_path.."Treasure\\clam.tga",
@@ -1271,6 +1293,8 @@ local node_expansion = {
 		[1213] = DF,
 		[1214] = DF,
 		[1215] = DF,
+		[1216] = DF,
+		[1217] = DF,
 	},
 	["Herb Gathering"] = {
 		[401] = CLASSIC,
@@ -1406,6 +1430,10 @@ local node_expansion = {
 		[1432] = DF,
 		[1433] = DF,
 		[1434] = DF,
+		[1435] = DF,
+		[1436] = DF,
+		[1437] = DF,
+		[1438] = DF,
 	},
 }
 GatherMate.nodeExpansion = node_expansion
