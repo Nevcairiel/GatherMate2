@@ -809,6 +809,9 @@ function GatherMate2WorldMapPinMixin:OnClick(button)
 	return pinClick(self, button)
 end
 
+-- hack to avoid error in combat in 10.1.5
+GatherMate2WorldMapPinMixin.SetPassThroughButtons = function() end
+
 function Display:UpdateWorldMap()
 	self.WorldMapDataProvider:RefreshAllData()
 end
