@@ -8,7 +8,6 @@ local Display = nil
 local prevSpell, curSpell, foundTarget, gatherEvents, ga
 
 local WoWClassic = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC)
-local WoWWrath = (WOW_PROJECT_ID == WOW_PROJECT_WRATH_CLASSIC)
 
 --[[
 Convert for 2.4 spell IDs
@@ -75,11 +74,7 @@ function Collector:RegisterGatherEvents()
 	self:RegisterEvent("UNIT_SPELLCAST_STOP","SpellStopped")
 	self:RegisterEvent("UNIT_SPELLCAST_FAILED","SpellFailed")
 	self:RegisterEvent("UNIT_SPELLCAST_INTERRUPTED","SpellFailed")
-	if WoWWrath then
-		self:RegisterEvent("CURSOR_CHANGED","CursorChange")
-	else
-		self:RegisterEvent("CURSOR_UPDATE","CursorChange")
-	end
+	self:RegisterEvent("CURSOR_CHANGED","CursorChange")
 	self:RegisterEvent("UI_ERROR_MESSAGE","UIError")
 	--self:RegisterEvent("LOOT_CLOSED","GatherCompleted")
 	self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", "GasBuffDetector")
@@ -96,11 +91,7 @@ function Collector:UnregisterGatherEvents()
 	self:UnregisterEvent("UNIT_SPELLCAST_STOP")
 	self:UnregisterEvent("UNIT_SPELLCAST_FAILED")
 	self:UnregisterEvent("UNIT_SPELLCAST_INTERRUPTED")
-	if WoWWrath then
-		self:UnregisterEvent("CURSOR_CHANGED","CursorChange")
-	else
-		self:UnregisterEvent("CURSOR_UPDATE","CursorChange")
-	end
+	self:UnregisterEvent("CURSOR_CHANGED","CursorChange")
 	self:UnregisterEvent("UI_ERROR_MESSAGE")
 	--self:UnregisterEvent("LOOT_CLOSED")
 	self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
