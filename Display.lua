@@ -100,6 +100,8 @@ end
 	Pin OnEnter
 ]]
 local tooltip_template = "|c%02x%02x%02x%02x%s|r"
+local mouseoveredPins = {}
+local checkMoused = false
 local function showPin(self)
 	if (self.title) then
 		local pinset
@@ -115,14 +117,23 @@ local function showPin(self)
 		else
 			GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
 		end
-
 		local t = db.trackColors
+		if not checkMoused then
+			for id, pin in pairs(pinset) do --Cache mouseovered pins to improve tooltip perf
+				if pin.title and pin:IsMouseOver() then
+					mouseoveredPins[pin] = format(tooltip_template, t[pin.nodeType].Alpha*255, t[pin.nodeType].Red*255, t[pin.nodeType].Green*255, t[pin.nodeType].Blue*255, pin.title)
+				end
+			end
+			checkMoused = true
+		end
 		local text = format(tooltip_template, t[self.nodeType].Alpha*255, t[self.nodeType].Red*255, t[self.nodeType].Green*255, t[self.nodeType].Blue*255, self.title)
-		for id, pin in pairs(pinset) do
-			if pin:IsMouseOver() and pin.title and pin ~= self then
-				text = text .. "\n" .. format(tooltip_template, t[pin.nodeType].Alpha*255, t[pin.nodeType].Red*255, t[pin.nodeType].Green*255, t[pin.nodeType].Blue*255, pin.title)
+
+		for pin, pin_text in pairs(mouseoveredPins) do
+			if pin ~= self then
+				text = text .. "\n" .. pin_text
 			end
 		end
+
 		GameTooltip:SetText(text)
 		GameTooltip:Show()
 	end
@@ -132,6 +143,8 @@ end
 ]]
 local function hidePin(self)
 	GameTooltip:Hide()
+	wipe(mouseoveredPins)
+	checkMoused = false
 end
 --[[
 	Pin click handler
@@ -180,14 +193,12 @@ local function generatePinMenu(self,level)
 		info.disabled     = nil
 		info.isTitle      = nil
 		info.notCheckable = nil
-		for id, pin in pairs(worldmapPins) do
-			if pin:IsMouseOver() and pin.title then
-				info.text = L["Delete"] .. " :" ..pin.title
-				info.icon = nodeTextures[pin.nodeType][GatherMate:GetIDForNode(pin.nodeType, pin.title)]
-				info.func = deletePin
-				info.arg1 = pin
-				UIDropDownMenu_AddButton(info, level);
-			end
+		for pin, pin_text in pairs(mouseoveredPins) do --Reuse here, not as significant since this is ran occasionally
+			info.text = L["Delete"] .. " :" ..pin.title
+			info.icon = nodeTextures[pin.nodeType][GatherMate:GetIDForNode(pin.nodeType, pin.title)]
+			info.func = deletePin
+			info.arg1 = pin
+			UIDropDownMenu_AddButton(info, level);
 		end
 
 		if TomTom then
@@ -476,30 +487,34 @@ end
 
 function Display:addMiniPin(pin, refresh)
 	local xDist, yDist = lastXY - pin.x1, lastYY - pin.y1
-	-- calculate relative position and distance to the player
-	local dist_2 = xDist*xDist + yDist*yDist
 	-- if distance <= db.trackDistance, convert to the circle texture
-	if (not pin.isCircle or refresh) and trackShow[pin.nodeType] and dist_2 <= db.trackDistance^2 then
-		pin.texture:SetTexture(trackingCircle)
-		local t = db.trackColors[pin.nodeType]
-		pin.texture:SetVertexColor(t.Red, t.Green, t.Blue, t.Alpha)
-		pin:SetHeight(12 / minimapScale)
-		pin:SetWidth(12 / minimapScale)
-		pin.isCircle = true
-		pin.texture:SetTexCoord(0, 1, 0, 1)
-		pin.texture:ClearAllPoints()
-		pin.texture:SetPoint("TOPLEFT", -1, 1)
-		pin.texture:SetPoint("BOTTOMRIGHT", -1, 1)
+	if (not pin.isCircle or refresh) and trackShow[pin.nodeType] then
+		local dist_2 = xDist*xDist + yDist*yDist  -- calculate relative position and distance to the player
+		if dist_2 <= db.trackDistance^2  then
+			pin.texture:SetTexture(trackingCircle)
+			local t = db.trackColors[pin.nodeType]
+			pin.texture:SetVertexColor(t.Red, t.Green, t.Blue, t.Alpha)
+			pin:SetHeight(12 / minimapScale)
+			pin:SetWidth(12 / minimapScale)
+			pin.isCircle = true
+			pin.texture:SetTexCoord(0, 1, 0, 1)
+			pin.texture:ClearAllPoints()
+			pin.texture:SetPoint("TOPLEFT", -1, 1)
+			pin.texture:SetPoint("BOTTOMRIGHT", -1, 1)
+		end
 	-- if distance > 100, set back to the node texture
-	elseif (pin.isCircle or refresh) and dist_2 > db.trackDistance^2 then
-		pin:SetHeight(12 * db.miniscale / minimapScale)
-		pin:SetWidth(12 * db.miniscale / minimapScale)
-		pin.texture:SetTexture(nodeTextures[pin.nodeType][pin.nodeID])
-		pin.texture:SetVertexColor(1, 1, 1, 1)
-		pin.texture:SetTexCoord(0, 1, 0, 1)
-		pin.texture:ClearAllPoints()
-		pin.texture:SetAllPoints()
-		pin.isCircle = false
+	elseif (pin.isCircle or refresh) then
+		local dist_2 = xDist*xDist + yDist*yDist  -- calculate relative position and distance to the player
+		if dist_2 > db.trackDistance^2  then
+			pin:SetHeight(12 * db.miniscale / minimapScale)
+			pin:SetWidth(12 * db.miniscale / minimapScale)
+			pin.texture:SetTexture(nodeTextures[pin.nodeType][pin.nodeID])
+			pin.texture:SetVertexColor(1, 1, 1, 1)
+			pin.texture:SetTexCoord(0, 1, 0, 1)
+			pin.texture:ClearAllPoints()
+			pin.texture:SetAllPoints()
+			pin.isCircle = false
+		end
 	end
 
 	-- support for rotating minimap - transpose coordinates for the circular movement
@@ -748,7 +763,8 @@ function Display.WorldMapDataProvider:RefreshAllData(fromOnShow)
 	-- update visibility for archaeology blobs
 	Display:UpdateVisibility()
 
-	local uiMapID = self:GetMap():GetMapID()
+	local map = self:GetMap()
+	local uiMapID = map:GetMapID()
 	if not uiMapID then return end
 
 	if GatherMate.phasing[uiMapID] then uiMapID = GatherMate.phasing[uiMapID] end
@@ -757,7 +773,7 @@ function Display.WorldMapDataProvider:RefreshAllData(fromOnShow)
 	for i,db_type in pairs(GatherMate.db_types) do
 		if GatherMate.Visible[db_type] then
 			for coord, nodeID in GatherMate:GetNodesForZone(uiMapID, db_type) do
-				local pin = self:GetMap():AcquirePin("GatherMate2WorldMapPinTemplate", coord,  nodeID, db_type, uiMapID)
+				local pin = map:AcquirePin("GatherMate2WorldMapPinTemplate", coord,  nodeID, db_type, uiMapID)
 				table.insert(worldmapPins, pin)
 			end
 		end
