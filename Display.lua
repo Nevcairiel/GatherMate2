@@ -104,12 +104,6 @@ local mouseoveredPins = {}
 local checkMoused = false
 local function showPin(self)
 	if (self.title) then
-		local pinset
-		if self.worldmap then
-			pinset = worldmapPins
-		else
-			pinset = minimapPins
-		end
 		local x, y = self:GetCenter()
 		local parentX, parentY = UIParent:GetCenter()
 		if ( x > parentX ) then
@@ -119,6 +113,12 @@ local function showPin(self)
 		end
 		local t = db.trackColors
 		if not checkMoused then
+			local pinset
+			if self.worldmap then
+				pinset = worldmapPins
+			else
+				pinset = minimapPins
+			end
 			for id, pin in pairs(pinset) do --Cache mouseovered pins to improve tooltip perf
 				if pin.title and pin:IsMouseOver() then
 					mouseoveredPins[pin] = format(tooltip_template, t[pin.nodeType].Alpha*255, t[pin.nodeType].Red*255, t[pin.nodeType].Green*255, t[pin.nodeType].Blue*255, pin.title)
