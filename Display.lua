@@ -112,6 +112,7 @@ local function showPin(self)
 			GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
 		end
 		local t = db.trackColors
+		local dbtable
 		if not checkMoused then
 			local pinset
 			if self.worldmap then
@@ -121,12 +122,14 @@ local function showPin(self)
 			end
 			for id, pin in pairs(pinset) do --Cache mouseovered pins to improve tooltip perf
 				if pin.title and pin:IsMouseOver() then
-					mouseoveredPins[pin] = format(tooltip_template, t[pin.nodeType].Alpha*255, t[pin.nodeType].Red*255, t[pin.nodeType].Green*255, t[pin.nodeType].Blue*255, pin.title)
+					dbtable = t[pin.nodeType]
+					mouseoveredPins[pin] = format(tooltip_template, dbtable.Alpha*255, dbtable.Red*255, dbtable.Green*255, dbtable.Blue*255, pin.title)
 				end
 			end
 			checkMoused = true
 		end
-		local text = format(tooltip_template, t[self.nodeType].Alpha*255, t[self.nodeType].Red*255, t[self.nodeType].Green*255, t[self.nodeType].Blue*255, self.title)
+		dbtable = t[self.nodeType]
+		local text = format(tooltip_template, dbtable.Alpha*255, dbtable.Red*255, dbtable.Green*255, dbtable.Blue*255, self.title)
 
 		for pin, pin_text in pairs(mouseoveredPins) do
 			if pin ~= self then
