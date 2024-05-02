@@ -566,7 +566,7 @@ end
 	Minimap rotation changed
 ]]
 function Display:ChangedVars(event,cvar,value)
-	if cvar == "ROTATE_MINIMAP" then
+	if cvar == "ROTATE_MINIMAP" or cvar == "rotateMinimap" then
 		rotateMinimap = value == "1"
 	end
 	forceNextUpdate = true
