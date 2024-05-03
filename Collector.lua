@@ -43,6 +43,7 @@ or
 	[openSpell] = "Treasure",
 	[openNoTextSpell] = "Treasure",
 	[pickSpell] = "Treasure",
+	[archSpell or "Searching for Artifacts"] = "Archaeology",
 }
 local tooltipLeftText1 = _G["GameTooltipTextLeft1"]
 local strfind, stringmatch = string.find, string.match
@@ -91,7 +92,7 @@ function Collector:UnregisterGatherEvents()
 	self:UnregisterEvent("UNIT_SPELLCAST_STOP")
 	self:UnregisterEvent("UNIT_SPELLCAST_FAILED")
 	self:UnregisterEvent("UNIT_SPELLCAST_INTERRUPTED")
-	self:UnregisterEvent("CURSOR_CHANGED","CursorChange")
+	self:UnregisterEvent("CURSOR_CHANGED")
 	self:UnregisterEvent("UI_ERROR_MESSAGE")
 	--self:UnregisterEvent("LOOT_CLOSED")
 	self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")

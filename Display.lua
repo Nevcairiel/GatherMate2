@@ -265,7 +265,7 @@ function Display:OnEnable()
 	ExpandSkillHeader(0)
 	self:MINIMAP_UPDATE_TRACKING()
 	self:PlayerZoneChanged()
-	--self:UpdateMaps()  -- already in DigsitesChanged()
+	--self:UpdateMaps()
 	fullInit = true
 end
 
