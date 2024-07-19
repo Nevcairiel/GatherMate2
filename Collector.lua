@@ -10,22 +10,24 @@ local Display = nil
 -- gatherevents if a flag for wether we are listening to events
 local prevSpell, curSpell, foundTarget, gatherEvents, ga
 
+local GetSpellName = C_Spell and C_Spell.GetSpellName or GetSpellInfo
+
 --[[
 Convert for 2.4 spell IDs
 ]]
-local miningSpell = (GetSpellInfo(2575))
-local miningSpell2 = (GetSpellInfo(195122))
-local herbSpell = (GetSpellInfo(2366))
-local herbSkill = ((GetSpellInfo(170691)) or (string.gsub((GetSpellInfo(9134)),"%A","")))
-local fishSpell = (GetSpellInfo(7620)) or (GetSpellInfo(131476))
-local gasSpell = (GetSpellInfo(30427))
---local gasSpell = (GetSpellInfo(48929))  --other gasspell
-local openSpell = (GetSpellInfo(3365))
-local openNoTextSpell = (GetSpellInfo(22810))
-local pickSpell = (GetSpellInfo(1804))
-local archSpell = (GetSpellInfo(73979)) -- Searching for Artifacts spell
-local sandStormSpell = (GetSpellInfo(93473)) -- Sandstorm spell cast by the camel
-local loggingSpell = (GetSpellInfo(167895))
+local miningSpell = (GetSpellName(2575))
+local miningSpell2 = (GetSpellName(195122))
+local herbSpell = (GetSpellName(2366))
+local herbSkill = ((GetSpellName(170691)) or (string.gsub((GetSpellName(9134)),"%A","")))
+local fishSpell = (GetSpellName(7620)) or (GetSpellName(131476))
+local gasSpell = (GetSpellName(30427))
+--local gasSpell = (GetSpellName(48929))  --other gasspell
+local openSpell = (GetSpellName(3365))
+local openNoTextSpell = (GetSpellName(22810))
+local pickSpell = (GetSpellName(1804))
+local archSpell = (GetSpellName(73979)) -- Searching for Artifacts spell
+local sandStormSpell = (GetSpellName(93473)) -- Sandstorm spell cast by the camel
+local loggingSpell = (GetSpellName(167895))
 
 local spells =
 { -- spellname to "database name"
@@ -96,8 +98,8 @@ function Collector:UnregisterGatherEvents()
 	gatherEvents = false
 end
 
-local CrystalizedWater = (GetItemInfo(37705)) or ""
-local MoteOfAir = (GetItemInfo(22572)) or ""
+local CrystalizedWater = (C_Item.GetItemNameByID(37705)) or ""
+local MoteOfAir = (C_Item.GetItemNameByID(22572)) or ""
 
 function Collector:SecondaryGasCheck(event,msg)
 	if ga ~= gasSpell then return end
@@ -204,7 +206,7 @@ function Collector:SpellStarted(event,unit,target,guid,spellcast)
 	if unit ~= "player" then return end
 	foundTarget = false
 	ga ="No"
-	local spellname = GetSpellInfo(spellcast)
+	local spellname = GetSpellName(spellcast)
 	if spellname and (spells[spellname] or spells[spellcast]) then
 		if spells[spellname] then
 			curSpell = spellname
