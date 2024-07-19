@@ -76,8 +76,6 @@ local defaults = {
 		}
 	},
 }
-local floor = floor
-local next = next
 
 --[[
 	Setup a few databases, we sub divide namespaces for resetting/importing

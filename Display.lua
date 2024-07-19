@@ -24,27 +24,23 @@ local pinClickedOn
 -- our current zone
 local zone = -1
 -- cache of table insert functions
-local tinsert, tremove, next, pairs = tinsert, tremove, next, pairs
+local next, pairs = next, pairs
 -- minimap rotation
 local rotateMinimap = GetCVar("rotateMinimap") == "1"
 -- shape of the minimap
 local minimapShape
--- is the minimap indoors or outdoors
-local indoors = GetCVar("minimapZoom")+0 == Minimap:GetZoom() and "outdoor" or "indoor"
 -- diameter of the minimap
 local mapRadius, minimapWidth, minimapHeight, minimapScale, lastFacing, lastZoom
 local minimapStrata, minimapFrameLevel
 -- math function cache
-local math_sin, math_cos, abs, max = math.sin, math.cos, math.abs, math.max
+local math_sin, math_cos, max = math.sin, math.cos, math.max
 local sin, cos
 -- API function cache
-local GetRealZoneText = GetRealZoneText
 local GetProfessionInfo = GetProfessionInfo
-local strfind, format = string.find, string.format
+local format = string.format
 local trackingCircle, nodeTextures
 local db
 local Minimap = Minimap
-local inInstance
 local nodeRange = 2
 local forceNextUpdate
 local trackShow = {}

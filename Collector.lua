@@ -3,12 +3,9 @@ local Collector = GatherMate:NewModule("Collector", "AceEvent-3.0")
 local L = LibStub("AceLocale-3.0"):GetLocale("GatherMate2",true)
 local NL = LibStub("AceLocale-3.0"):GetLocale("GatherMate2Nodes")   -- for get the local name of Gas Cloud´s
 
-local WoW10 = select(4, GetBuildInfo()) >= 100000
-
-local Display = nil
 -- prevSpell, curSpell are markers for what has been cast now and the lastcast
 -- gatherevents if a flag for wether we are listening to events
-local prevSpell, curSpell, foundTarget, gatherEvents, ga
+local prevSpell, curSpell, foundTarget, ga
 
 local GetSpellName = C_Spell and C_Spell.GetSpellName or GetSpellInfo
 
@@ -45,12 +42,10 @@ local spells =
 	[205243] = "Treasure", -- skinning ground warts
 }
 local tooltipLeftText1 = _G["GameTooltipTextLeft1"]
-local strfind, stringmatch = string.find, string.match
+local strfind = string.find
 local pii = math.pi
 local sin = math.sin
 local cos = math.cos
-local gsub = gsub
-local strtrim = strtrim
 --[[
 	This search string code no longer needed since we use CombatEvent to detect gas clouds harvesting
 ]]
@@ -79,7 +74,6 @@ function Collector:RegisterGatherEvents()
 	--self:RegisterEvent("LOOT_CLOSED","GatherCompleted")
 	self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", "GasBuffDetector")
 	self:RegisterEvent("CHAT_MSG_LOOT","SecondaryGasCheck") -- for Storm Clouds
-	gatherEvents = true
 end
 
 --[[
@@ -95,7 +89,6 @@ function Collector:UnregisterGatherEvents()
 	self:UnregisterEvent("UI_ERROR_MESSAGE")
 	--self:UnregisterEvent("LOOT_CLOSED")
 	self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-	gatherEvents = false
 end
 
 local CrystalizedWater = (C_Item.GetItemNameByID(37705)) or ""
