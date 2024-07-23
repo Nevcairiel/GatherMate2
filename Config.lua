@@ -1014,8 +1014,8 @@ importOptions.args.GatherMateData = {
 	name = "GatherMate2Data", -- addon name to import from, don't localize
 	handler = ImportHelper,
 	disabled = function()
-		local name, title, notes, loadable, reason, security, newVersion = GetAddOnInfo("GatherMate2_Data")
-		local enabled = GetAddOnEnableState(UnitName("player"), "GatherMate2_Data") > 0
+		local name, title, notes, loadable, reason, security, newVersion = C_AddOns.GetAddOnInfo("GatherMate2_Data")
+		local enabled = C_AddOns.GetAddOnEnableState("GatherMate2_Data", UnitName("player")) > 0
 		-- disable if the addon is not enabled, or
 		-- disable if there is a reason why it can't be loaded ("MISSING" or "DISABLED")
 		return not enabled or (reason ~= nil and reason ~= "" and reason ~= "DEMAND_LOADED")
@@ -1087,7 +1087,7 @@ importOptions.args.GatherMateData = {
 			desc = L["Load GatherMate2Data and import the data to your database."],
 			type = "execute",
 			func = function()
-				local loaded, reason = LoadAddOn("GatherMate2_Data")
+				local loaded, reason = C_AddOns.LoadAddOn("GatherMate2_Data")
 				local GatherMateData = LibStub("AceAddon-3.0"):GetAddon("GatherMate2_Data")
 				if loaded and GatherMateData.generatedVersion then
 					local dataVersion = tonumber(GatherMateData.generatedVersion:match("%d+"))
@@ -1233,7 +1233,7 @@ end
 
 function Config:CheckAutoImport()
 	for k,v in pairs(db.importers) do
-		local verline = GetAddOnMetadata(k, "X-Generated-Version")
+		local verline = C_AddOns.GetAddOnMetadata(k, "X-Generated-Version")
 		if verline and v["autoImport"] then
 			local dataVersion = tonumber(verline:match("%d+"))
 			if dataVersion and dataVersion > v["lastImport"] then
