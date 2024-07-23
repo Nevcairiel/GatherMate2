@@ -1220,7 +1220,11 @@ function Config:OnInitialize()
 	acd:AddToBlizOptions("GM2/FAQ", "FAQ", "GatherMate 2")
 
 	local function openOptions()
-		InterfaceOptionsFrame_OpenToCategory("GatherMate 2")
+		if Settings and Settings.OpenToCategory then
+			Settings.OpenToCategory("GatherMate 2")
+		else
+			InterfaceOptionsFrame_OpenToCategory("GatherMate 2")
+		end
 	end
 
 	SLASH_GatherMate21 = "/gathermate"
