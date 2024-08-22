@@ -329,15 +329,14 @@ function Display:SKILL_LINES_CHANGED()
 end
 
 function Display:MINIMAP_UPDATE_TRACKING()
-	local count = GetNumTrackingTypes();
-	local info;
+	local count = C_Minimap.GetNumTrackingTypes()
 	for id=1, count do
-		local name, texture, active, category  = GetTrackingInfo(id);
-		if tracking_spells[name] and active then
-			active_tracking[tracking_spells[name]] = true
+		local info = C_Minimap.GetTrackingInfo(id)
+		if info.active and tracking_spells[info.name] then
+			active_tracking[tracking_spells[info.name]] = true
 		else
-			if tracking_spells[name] and not active then
-				active_tracking[tracking_spells[name]] = false
+			if tracking_spells[info.name] and not info.active then
+				active_tracking[tracking_spells[info.name]] = false
 			end
 		end
 	end
