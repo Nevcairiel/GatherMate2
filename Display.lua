@@ -54,7 +54,9 @@ local continentZoneList = {
 	[572] = true, -- Draenor
 	[619] = true, -- Broken Isles
 	[875] = true, -- Zandalar
-	[876] = true, -- Kul Tiras
+	[1550] = true, -- Shadowlands
+	[1978] = true, -- Dragon Isles
+	[2274] = true, -- Khaz Algar
 }
 
 --[[
@@ -342,8 +344,8 @@ local digSites = {}
 function Display:DigsitesChanged()
 	table.wipe(digSites)
 	for continent in pairs(continentZoneList) do
-		local digSites = C_ResearchInfo.GetDigSitesForMap(continent)
-		for i, digSiteInfo in ipairs(digSites) do
+		local digSitesOnMap = C_ResearchInfo.GetDigSitesForMap(continent)
+		for i, digSiteInfo in ipairs(digSitesOnMap) do
 			local positionMapInfo = C_Map.GetMapInfoAtPosition(continent, digSiteInfo.position.x, digSiteInfo.position.y)
 			if positionMapInfo and positionMapInfo.mapID ~= continent then
 				digSites[positionMapInfo.mapID] = true
