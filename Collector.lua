@@ -7,7 +7,7 @@ local NL = LibStub("AceLocale-3.0"):GetLocale("GatherMate2Nodes")   -- for get t
 -- gatherevents if a flag for wether we are listening to events
 local prevSpell, curSpell, foundTarget, ga
 
-local GetSpellName = C_Spell and C_Spell.GetSpellName or GetSpellInfo
+local GetSpellName = C_Spell.GetSpellName
 
 --[[
 Convert for 2.4 spell IDs

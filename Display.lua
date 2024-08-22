@@ -2,12 +2,6 @@ local GatherMate = LibStub("AceAddon-3.0"):GetAddon("GatherMate2")
 local Display = GatherMate:NewModule("Display","AceEvent-3.0")
 local L = LibStub("AceLocale-3.0"):GetLocale("GatherMate2")
 
--- WoW 10.0 tracking API compat
-local GetNumTrackingTypes = GetNumTrackingTypes or C_Minimap.GetNumTrackingTypes
-local GetTrackingInfo = GetTrackingInfo or C_Minimap.GetTrackingInfo
-
-local GetSpellName = C_Spell and C_Spell.GetSpellName or GetSpellInfo
-
 -- Current minimap pin set
 local minimapPins, minimapPinCount = {}, 0
 -- Current worldmap pin set
@@ -398,7 +392,7 @@ function Display:UpdateVisibility()
 end
 
 function Display:SetTrackingSpell(skill,spell)
-	local spellName = GetSpellName(spell)
+	local spellName = C_Spell.GetSpellName(spell)
 	if not spellName then return end
 	tracking_spells[spellName] = skill
 	if fullInit then self:MINIMAP_UPDATE_TRACKING() end
