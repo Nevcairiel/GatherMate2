@@ -54,6 +54,7 @@ local continentZoneList = {
 	[572] = true, -- Draenor
 	[619] = true, -- Broken Isles
 	[875] = true, -- Zandalar
+	[876] = true, -- Kul Tiras
 	[1550] = true, -- Shadowlands
 	[1978] = true, -- Dragon Isles
 	[2274] = true, -- Khaz Algar
