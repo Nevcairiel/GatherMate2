@@ -310,6 +310,8 @@ local node_ids = {
 		[NL["Webbed Ironclaw"]]					= 1239,
 		[NL["EZ-Mine Ironclaw"]]				= 1240,
 		[NL["Ironclaw Seam"]]					= 1241,
+
+		[NL["Webbed Ore Deposit"]]				= 1242,
 	},
 	["Extract Gas"] = {
 		[NL["Windy Cloud"]] 					= 301,
@@ -819,6 +821,9 @@ local rare_spawns = {
 	[1238] = {[1234]=true},
 	[1239] = {[1234]=true},
 	[1240] = {[1234]=true},
+
+	-- Webbed Ore Deposit
+	[1242] = {[1242]=true},
 }
 GatherMate.rareNodes = rare_spawns
 Collector.rareNodes = rare_spawns
@@ -1119,6 +1124,7 @@ local node_textures = {
 		[1239] = icon_path.."Mine\\tin.tga",
 		[1240] = icon_path.."Mine\\tin.tga",
 		[1241] = icon_path.."Mine\\tin.tga",
+		[1242] = icon_path.."Mine\\tin.tga",
 	},
 	["Extract Gas"] = {
 		[301] = icon_path.."Gas\\windy_cloud.tga",
@@ -1554,6 +1560,7 @@ local node_expansion = {
 		[1239] = TWW,
 		[1240] = TWW,
 		[1241] = TWW,
+		[1242] = TWW,
 	},
 	["Herb Gathering"] = {
 		[401] = CLASSIC,
