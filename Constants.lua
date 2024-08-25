@@ -158,6 +158,7 @@ local node_ids = {
 		[NL["Royal Ripple"]]					= 1128,
 		[NL["Shore Treasure"]]					= 1129,
 		[NL["Floating Deep Treasure"]]			= 1130,
+		[NL["Shadowblind Grouper School"]]		= 1131,
 	},
 	["Mining"] = {
 		[NL["Copper Vein"]] 					= 201,
@@ -984,6 +985,7 @@ local node_textures = {
 		[1128] = icon_path.."Fish\\fish_hook.tga",
 		[1129] = icon_path.."Fish\\debris.tga",
 		[1130] = icon_path.."Fish\\debris.tga",
+		[1131] = icon_path.."Fish\\fish_hook.tga",
 	},
 	["Mining"] = {
 		[201] = icon_path.."Mine\\copper.tga",
