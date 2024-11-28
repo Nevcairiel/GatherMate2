@@ -2,9 +2,6 @@ local GatherMate = LibStub("AceAddon-3.0"):GetAddon("GatherMate2")
 local Display = GatherMate:NewModule("Display","AceEvent-3.0")
 local L = LibStub("AceLocale-3.0"):GetLocale("GatherMate2")
 
-local GetNumTrackingTypes = C_Minimap and C_Minimap.GetNumTrackingTypes or GetNumTrackingTypes
-local GetTrackingInfo = C_Minimap and C_Minimap.GetTrackingInfo or GetTrackingInfo
-
 -- Current minimap pin set
 local minimapPins, minimapPinCount = {}, 0
 -- Current worldmap pin set
@@ -337,15 +334,14 @@ function Display:MINIMAP_UPDATE_TRACKING()
 			active_tracking[tracking_spells[texture]] = true
 		end
 	else
-		local count = GetNumTrackingTypes();
-		local info;
+		local count = C_Minimap.GetNumTrackingTypes()
 		for id=1, count do
-			local name, texture, active, category  = GetTrackingInfo(id);
-			if tracking_spells[name] and active then
-				active_tracking[tracking_spells[name]] = true
+			local info = C_Minimap.GetTrackingInfo(id)
+			if info.active and tracking_spells[info.name] then
+				active_tracking[tracking_spells[info.name]] = true
 			else
-				if tracking_spells[name] and not active then
-					active_tracking[tracking_spells[name]] = false
+				if tracking_spells[info.name] and not info.active then
+					active_tracking[tracking_spells[info.name]] = false
 				end
 			end
 		end
