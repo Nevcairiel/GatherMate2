@@ -1265,7 +1265,7 @@ function Config:CheckAutoImport()
 		if verline and v["autoImport"] then
 			local dataVersion = tonumber(verline:match("%d+"))
 			if dataVersion and dataVersion > v["lastImport"] then
-				local loaded, reason = LoadAddOn(k)
+				local loaded, reason = C_AddOns.LoadAddOn(k)
 				if loaded then
 					local addon = LibStub("AceAddon-3.0"):GetAddon(k)
 					local filter = nil
