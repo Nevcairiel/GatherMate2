@@ -1180,26 +1180,13 @@ local faqOptions = {
 local acr = LibStub("AceConfigRegistry-3.0")
 local acd = LibStub("AceConfigDialog-3.0")
 
-local function findPanel(name, parent)
-	for i, button in next, InterfaceOptionsFrameAddOns.buttons do
-		if button.element then
-			if name and button.element.name == name then return button
-			elseif parent and button.element.parent == parent then return button
-			end
-		end
-	end
-end
 function Config:OnInitialize()
 	db = GatherMate.db.profile
 
 	self.importHelper = ImportHelper
 
 	acr:RegisterOptionsTable("GatherMate 2", generalOptions)
-	local options = acd:AddToBlizOptions("GatherMate 2", "GatherMate 2")
-	options:HookScript("OnShow", function()
-		local p = findPanel("GatherMate 2")
-		if p and p.element.collapsed then OptionsListButtonToggle_OnClick(p.toggle) end
-	end)
+	acd:AddToBlizOptions("GatherMate 2", "GatherMate 2")
 
 	acr:RegisterOptionsTable("GM2/Minimap", minimapOptions)
 	acd:AddToBlizOptions("GM2/Minimap", "Minimap", "GatherMate 2")
