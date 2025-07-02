@@ -10,6 +10,7 @@ local WoWClassic = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC)
 local WoWBC = (WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC)
 local WoWWrath = (WOW_PROJECT_ID == WOW_PROJECT_WRATH_CLASSIC)
 local WoWCata = (WOW_PROJECT_ID == WOW_PROJECT_CATACLYSM_CLASSIC)
+local WoWMists = (WOW_PROJECT_ID == WOW_PROJECT_MISTS_CLASSIC)
 local SaveBindings = SaveBindings or AttemptToSaveBindings
 
 local HiddenArchaeology = (select(4, GetBuildInfo()) < 40400)
@@ -395,6 +396,8 @@ local sortedFilter = setmetatable({}, {__index = function(t, k)
 			elseif WoWWrath and expansion and expansion[map[name]] > 3 then
 				-- skip
 			elseif WoWCata and expansion and expansion[map[name]] > 4 then
+				-- skip
+			elseif WoWMists and expansion and expansion[map[name]] > 5 then
 				-- skip
 			else
 				local idx = #new+1
@@ -1017,7 +1020,7 @@ ImportHelper.db_tables = WoWClassic and {
 	["Fish"] = L["Fishing"],
 	["Treasure"] = L["Treasure"],
 }
-or WoWCata and
+or (WoWCata or WoWMists) and
 {
 	["Herbs"] = L["Herbalism"],
 	["Mines"] = L["Mining"],
@@ -1151,7 +1154,7 @@ importOptions.args.GatherMateData = {
 				if not WoWClassic then
 					if db["importers"]["GatherMate2_Data"].Databases["Gases"] then cm = 1 end
 				end
-				if WoWCata then
+				if WoWCata or WoWMists then
 					if db["importers"]["GatherMate2_Data"].Databases["Archaeology"] then cm = 1 end
 				end
 				return imported["GatherMate2_Data"] or (cm == 0 and not imported["GatherMate2_Data"])

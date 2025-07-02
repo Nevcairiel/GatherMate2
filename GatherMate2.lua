@@ -13,6 +13,7 @@ local HBDMigrate = LibStub("HereBeDragons-Migrate")
 
 local WoWClassic = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC)
 local WoWCata = (WOW_PROJECT_ID == WOW_PROJECT_CATACLYSM_CLASSIC)
+local WoWMists = (WOW_PROJECT_ID == WOW_PROJECT_MISTS_CLASSIC)
 
 -- locals
 local db, gmdbs, filter
@@ -110,7 +111,7 @@ function GatherMate:OnInitialize()
 	if not WoWClassic then
 		self:RegisterDBType("Extract Gas", GatherMate2GasDB)
 	end
-	if WoWCata then
+	if WoWCata or WoWMists then
 		self:RegisterDBType("Archaeology", GatherMate2ArchaeologyDB)
 	end
 	db = self.db.profile
