@@ -11,8 +11,10 @@
 ## Author: kagaro, xinhuan, nevcairiel
 ## X-Email: sal.scotto@gmail.com
 ## X-Credits: OttoDeFe for the launher icon.
+## LoadSavedVariablesFirst: 1
 ## SavedVariables: GatherMate2DB, GatherMate2HerbDB, GatherMate2MineDB, GatherMate2FishDB, GatherMate2GasDB, GatherMate2TreasureDB, GatherMate2ArchaeologyDB, GatherMate2LoggingDB
 ## X-Category: Map
+## Group: GatherMate2
 ## Version: @project-version@
 ## X-License: ARR
 ## OptionalDeps: Ace3, LibDataBroker-1.1, HereBeDragons

@@ -87,25 +87,17 @@ function GatherMate:OnInitialize()
 	self.db.RegisterCallback(self, "OnProfileCopied", "OnProfileChanged")
 	self.db.RegisterCallback(self, "OnProfileReset", "OnProfileChanged")
 
-	-- Setup our saved vars, we dont use AceDB, cause it over kills
-	-- These 4 savedvars are global and doesnt need char specific stuff in it
-	GatherMate2HerbDB = GatherMate2HerbDB or {}
-	GatherMate2MineDB = GatherMate2MineDB or {}
-	GatherMate2FishDB = GatherMate2FishDB or {}
-	GatherMate2TreasureDB = GatherMate2TreasureDB or {}
-	GatherMate2GasDB = GatherMate2GasDB or {}
-	GatherMate2ArchaeologyDB = GatherMate2ArchaeologyDB or {}
-	GatherMate2LoggingDB = GatherMate2LoggingDB or {}
 	self.gmdbs = {}
 	self.db_types = {}
+	self.db_storage_map = {}
 	gmdbs = self.gmdbs
-	self:RegisterDBType("Herb Gathering", GatherMate2HerbDB)
-	self:RegisterDBType("Mining", GatherMate2MineDB)
-	self:RegisterDBType("Fishing", GatherMate2FishDB)
-	self:RegisterDBType("Treasure", GatherMate2TreasureDB)
-	self:RegisterDBType("Extract Gas", GatherMate2GasDB)
-	self:RegisterDBType("Archaeology", GatherMate2ArchaeologyDB)
-	self:RegisterDBType("Logging", GatherMate2LoggingDB)
+	self:RegisterDBType("Herb Gathering", "Herb")
+	self:RegisterDBType("Mining", "Mine")
+	self:RegisterDBType("Fishing", "Fish")
+	self:RegisterDBType("Treasure", "Treasure")
+	self:RegisterDBType("Extract Gas", "Gas")
+	self:RegisterDBType("Archaeology", "Archaeology")
+	self:RegisterDBType("Logging", "Logging")
 	db = self.db.profile
 	filter = db.filter
 	-- depractaion scan
@@ -136,7 +128,8 @@ end
 
 function GatherMate:RemoveDepracatedNodes()
 	for database,storage in pairs(self.gmdbs) do
-		for zone,data in pairs(storage) do
+		local storeDB = storage and storage.__gm2_base_storage or storage
+		for zone,data in pairs(storeDB) do
 			for coord,value in pairs(data) do
 				local name = self:GetNameForNode(database,value)
 				if not name then
@@ -150,7 +143,8 @@ end
 function GatherMate:MigrateData80()
 	for database,storage in pairs(self.gmdbs) do
 		local migrated_storage = {}
-		for zone,data in pairs(storage) do
+		local storeDB = storage and storage.__gm2_base_storage or storage
+		for zone,data in pairs(storeDB) do
 			for coord,value in pairs(data) do
 				local level = coord % 100
 				local newzone = HBDMigrate:GetUIMapIDFromMapAreaId(zone, level)
@@ -162,21 +156,115 @@ function GatherMate:MigrateData80()
 					migrated_storage[newzone][coord] = value
 				end
 			end
-			storage[zone] = nil
+			storeDB[zone] = nil
 		end
 		for zone,data in pairs(migrated_storage) do
-			storage[zone] = migrated_storage[zone]
+			storeDB[zone] = migrated_storage[zone]
 			migrated_storage[zone] = nil
 		end
 	end
 end
 
+function GatherMate:GetNodeBaseStorage(db_meta, zone)
+	local storagePrefix = self.db_storage_map[zone]
+	if storagePrefix then
+		return db_meta.__gm2_storage_map[storagePrefix]
+	end
+
+	return db_meta.__gm2_base_storage
+end
+
+function GatherMate:GetNodeStorage(db_meta, zone)
+	local storage = self:GetNodeBaseStorage(db_meta, zone)
+	if storage then
+		return storage[zone]
+	end
+	return nil
+end
+
 --[[
 	Register a new node DB for usage in GatherMate
 ]]
-function GatherMate:RegisterDBType(name, db)
+function GatherMate:RegisterDBType(name, db_or_prefix)
 	tinsert(self.db_types, name)
-	self.gmdbs[name] = db
+
+	-- continue to support custom registrations with a database
+	if type(db_or_prefix) == "table" then
+		self.gmdbs[name] = db_or_prefix
+		return
+	end
+
+	local dbName = "GatherMate2" .. db_or_prefix .. "DB"
+
+	-- ensure the DB exists
+	_G[dbName] = _G[dbName] or {}
+
+	self.gmdbs[name] = setmetatable({__gm2_prefix = db_or_prefix, __gm2_storage_map = {}, __gm2_base_storage = _G[dbName]}, {
+		__index = function(t,k) return GatherMate:GetNodeStorage(t, k) end,
+		__newindex = function(t,k,v) local storage = GatherMate:GetNodeBaseStorage(t, k); storage[k] = v end
+	})
+end
+
+function GatherMate:RegisterStorage(storagePrefix, zones)
+	-- ensure the databases exist
+	for db_type, db_meta in pairs(self.gmdbs) do
+		local dbprefix = db_meta.__gm2_prefix
+		if dbprefix then
+			local dbStorageName = "GatherMate2" .. dbprefix .. "DB" .. storagePrefix
+			_G[dbStorageName] = _G[dbStorageName] or {}
+
+			db_meta.__gm2_storage_map[storagePrefix] = _G[dbStorageName]
+		end
+	end
+
+	for _, zone in pairs(zones) do
+		self.db_storage_map[zone] = storagePrefix
+	end
+
+	self:MigrateStorage(storagePrefix, zones)
+end
+
+function GatherMate:RegisterStorageAddOn(addOnName)
+	local tag = C_AddOns.GetAddOnMetadata(addOnName, "X-GM2-Storage-Tag")
+	local zoneList = C_AddOns.GetAddOnMetadata(addOnName, "X-GM2-Storage-Zones")
+
+	if not (tag and zoneList) then return end
+
+	local zoneTable = {}
+	for v in string.gmatch(zoneList, "[0-9]+") do
+		local zone = tonumber(v)
+		if zone and zone > 0 then
+			table.insert(zoneTable, zone)
+		end
+	end
+
+	if tag and #zoneTable > 0 then
+		self:RegisterStorage(tag, zoneTable)
+	end
+end
+
+function GatherMate:MigrateStorage(storagePrefix, zones)
+	for db_type, db_meta in pairs(self.gmdbs) do
+		local dbprefix = db_meta.__gm2_prefix
+		if dbprefix then
+			local dbName = "GatherMate2" .. dbprefix .. "DB"
+			local dbStorageName = "GatherMate2" .. dbprefix .. "DB" .. storagePrefix
+
+			local dbMain, dbStorage = _G[dbName], _G[dbStorageName]
+			for _, zone in pairs(zones) do
+				if dbMain[zone] then
+					if not dbStorage[zone] then
+						dbStorage[zone] = dbMain[zone]
+					else
+						for k,v in pairs(dbMain[zone]) do
+							dbStorage[zone][k] = v
+						end
+					end
+					dbMain[zone] = nil
+				end
+			end
+		end
+	end
 end
 
 function GatherMate:OnProfileChanged(db,name)
@@ -207,19 +295,15 @@ function GatherMate:ClearDB(dbx)
 	if GatherMate.db.profile.dbLocks[dbx] then
 		return
 	end
-	if dbx == "Herb Gathering" then	GatherMate2HerbDB = {}; gmdbs[dbx] = GatherMate2HerbDB
-	elseif dbx == "Fishing" then GatherMate2FishDB = {}; gmdbs[dbx] = GatherMate2FishDB
-	elseif dbx == "Mining" then GatherMate2MineDB = {}; gmdbs[dbx] = GatherMate2MineDB
-	elseif dbx == "Treasure" then GatherMate2TreasureDB = {}; gmdbs[dbx] = GatherMate2TreasureDB
-	elseif dbx == "Extract Gas" then GatherMate2GasDB = {}; gmdbs[dbx] = GatherMate2GasDB
-	elseif dbx == "Archaeology" then GatherMate2ArchaeologyDB = {}; gmdbs[dbx] = GatherMate2ArchaeologyDB
-	elseif dbx == "Logging" then GatherMate2LoggingDB = {}; gmdbs[dbx] = GatherMate2LoggingDB
-	else -- for custom DBs we dont know the global name, so we clear it old-fashion style
-		local db = gmdbs[dbx]
-		if not db then error("Trying to clear unknown database: "..dbx) end
-		for k in pairs(db) do
-			db[k] = nil
+	local db = gmdbs[dbx]
+	if not db then error("Trying to clear unknown database: "..dbx) end
+	if db.__gm2_prefix then
+		table.wipe(db.__gm2_base_storage)
+		for k,v in pairs(db.__gm2_storage_map) do
+			table.wipe(v)
 		end
+	else
+		table.wipe(db)
 	end
 end
 
@@ -243,9 +327,6 @@ end
 	Add an item to the DB, performing duplicate checks and cleanup
 ]]
 function GatherMate:AddNodeChecked(zone, x, y, nodeType, name)
-	local db = gmdbs[nodeType]
-	if not db then return end
-
 	-- get the node id for what we're adding
 	local nid = GatherMate:GetIDForNode(nodeType, name)
 	if not nid then return end
