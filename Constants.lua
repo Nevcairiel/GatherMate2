@@ -312,6 +312,9 @@ local node_ids = {
 		[NL["Ironclaw Seam"]]					= 1241,
 
 		[NL["Webbed Ore Deposit"]]				= 1242,
+
+		[NL["Desolate Deposit"]]				= 1243,
+		[NL["Rich Desolate Deposit"]]			= 1244,
 	},
 	["Extract Gas"] = {
 		[NL["Windy Cloud"]] 					= 301,
@@ -519,6 +522,9 @@ local node_ids = {
 		[NL["Crystallized Arathor's Spear"]]	= 1476,
 		[NL["Altered Arathor's Spear"]]			= 1477,
 		[NL["Camouflaged Arathor's Spear"]]		= 1478,
+
+		[NL["Phantom Bloom"]]					= 1479,
+		[NL["Lush Phantom Bloom"]]				= 1480,
 	},
 	["Treasure"] = {
 		[NL["Giant Clam"]] 						= 501,
@@ -821,6 +827,12 @@ local rare_spawns = {
 	[1238] = {[1234]=true},
 	[1239] = {[1234]=true},
 	[1240] = {[1234]=true},
+
+	-- Desolate Deposit
+	[1244] = {[1243]=true},
+
+	-- Phantom Bloom
+	[1480] = {[1479]=true},
 }
 GatherMate.rareNodes = rare_spawns
 Collector.rareNodes = rare_spawns
@@ -1121,6 +1133,8 @@ local node_textures = {
 		[1240] = icon_path.."Mine\\ironclaw.tga",
 		[1241] = icon_path.."Mine\\ironclaw.tga",
 		[1242] = icon_path.."Mine\\tin.tga", -- webbed deposit
+		[1243] = icon_path.."Mine\\karesh.tga",
+		[1244] = icon_path.."Mine\\karesh.tga",
 	},
 	["Extract Gas"] = {
 		[301] = icon_path.."Gas\\windy_cloud.tga",
@@ -1310,6 +1324,8 @@ local node_textures = {
 		[1476] = icon_path.."Herb\\arathorsspear.tga",
 		[1477] = icon_path.."Herb\\arathorsspear.tga",
 		[1478] = icon_path.."Herb\\arathorsspear.tga",
+		[1479] = icon_path.."Herb\\phantombloom.tga",
+		[1480] = icon_path.."Herb\\phantombloom.tga",
 	},
 	["Treasure"] = {
 		[501] = icon_path.."Treasure\\clam.tga",
@@ -1557,6 +1573,8 @@ local node_expansion = {
 		[1240] = TWW,
 		[1241] = TWW,
 		[1242] = TWW,
+		[1243] = TWW,
+		[1244] = TWW,
 	},
 	["Herb Gathering"] = {
 		[401] = CLASSIC,
@@ -1736,6 +1754,8 @@ local node_expansion = {
 		[1476] = TWW,
 		[1477] = TWW,
 		[1478] = TWW,
+		[1479] = TWW,
+		[1480] = TWW,
 	},
 }
 GatherMate.nodeExpansion = node_expansion
