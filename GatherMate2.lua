@@ -117,6 +117,14 @@ function GatherMate:OnInitialize()
 		self:RemoveDepracatedNodes()
 		self.db.global.data_version = 6
 	end
+
+end
+
+function GatherMate:OnEnable()
+	if (self.db.global.data_version or 0) < 7 then
+		self:UpgradeNodeIDs()
+		self.db.global.data_version = 7
+	end
 end
 
 function GatherMate:RemoveGarrisonNodes()
@@ -135,6 +143,27 @@ function GatherMate:RemoveDepracatedNodes()
 				if not name then
 					data[coord] = nil
 				end
+			end
+		end
+	end
+end
+
+local function replaceNodeIDs(storage, idMap)
+	for zone,data in pairs(storage) do
+		for coord,value in pairs(data) do
+			if idMap[value] then
+				data[coord] = idMap[value]
+			end
+		end
+	end
+end
+
+function GatherMate:UpgradeNodeIDs()
+	for database,storage in pairs(self.gmdbs) do
+		if storage.__gm2_base_storage then
+			replaceNodeIDs(storage.__gm2_base_storage, self.nodeIDReplacementMap)
+			for key,store in pairs(storage.__gm2_storage_map) do
+				replaceNodeIDs(store, self.nodeIDReplacementMap)
 			end
 		end
 	end
@@ -272,6 +301,40 @@ function GatherMate:OnProfileChanged(db,name)
 	filter = db.filter
 	GatherMate:SendMessage("GatherMate2ConfigChanged")
 end
+
+function GatherMate:CreateNodeLookupTables(node_data)
+	local nodeIdLookup, nodeReverseLookup = {}, {}
+	local nodeOldIdMap = {}
+
+	for db_type, db_data in pairs(node_data) do
+		nodeIdLookup[db_type], nodeReverseLookup[db_type] = {}, {}
+		for name, node in pairs(db_data) do
+			if type(node) == "table" then
+				nodeIdLookup[db_type][name] = node.id
+				nodeReverseLookup[db_type][node.id] = name
+
+				if node.variants then
+					for _, variantName in pairs(node.variants) do
+						nodeIdLookup[db_type][variantName] = node.id
+					end
+				end
+
+				if node.old_ids then
+					for _, old_id in pairs(node.old_ids) do
+						nodeOldIdMap[old_id] = node.id
+						nodeReverseLookup[db_type][old_id] = name
+					end
+				end
+			else
+				nodeIdLookup[db_type][name] = node
+				nodeReverseLookup[db_type][node] = name
+			end
+		end
+	end
+
+	return nodeIdLookup, nodeReverseLookup, nodeOldIdMap
+end
+
 --[[
 	create a reverse lookup table for input table (we use it for english names of nodes)
 ]]
@@ -368,7 +431,7 @@ function GatherMate:InjectNode2(zone, coords, nodeType, nodeID)
 	end
 	if (nodeType == "Mining" or nodeType == "Herb Gathering") and GatherMate.mapBlacklist[zone] then return end
 	db[zone] = db[zone] or {}
-	db[zone][coords] = nodeID
+	db[zone][coords] = self.nodeIDReplacementMap[nodeID] or nodeID
 end
 function GatherMate:DeleteNode2(zone, coords, nodeType)
 	if not gmdbs[nodeType] then return end
@@ -528,6 +591,8 @@ function GatherMate:IsCleanupRunning()
 end
 
 function GatherMate:SweepDatabase()
+	self:UpgradeNodeIDs()
+
 	local rares = self.rareNodes
 	for v,zone in pairs(GatherMate.HBD:GetAllMapIDs()) do
 		--self:Print(L["Processing "]..zone)
