@@ -9,5 +9,5 @@
 ## LoadSavedVariablesFirst: 1
 ## SavedVariables: GatherMate2HerbDBTWW, GatherMate2MineDBTWW, GatherMate2FishDBTWW, GatherMate2GasDBTWW, GatherMate2TreasureDBTWW, GatherMate2ArchaeologyDBTWW, GatherMate2LoggingDBTWW
 ## X-GM2-Storage-Tag: TWW
-## X-GM2-Storage-Zones: 2248, 2215, 2214, 2255, 2256, 2213, 2339, 2346, 2371
+## X-GM2-Storage-Zones: 2248, 2215, 2214, 2255, 2256, 2213, 2216, 2339, 2346, 2371
 ..\GatherMate2\LoadAddOnStorage.lua
