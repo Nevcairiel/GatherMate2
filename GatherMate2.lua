@@ -607,6 +607,7 @@ function GatherMate:SweepDatabase()
 					end
 				end
 			end
+			coroutine.yield()
 		end
 	end
 	self:RemoveDepracatedNodes()
