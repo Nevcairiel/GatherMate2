@@ -14,5 +14,5 @@ externals:
   Libs/HereBeDragons: git://git.wowace.com/wow/herebedragons/mainline.git
 
 move-folders:
-  Storage/Dragonflight: GatherMate2Storage_Dragonflight
-  Storage/TheWarWithin: GatherMate2Storage_TheWarWithin
+  GatherMate2/Storage/Dragonflight: GatherMate2Storage_Dragonflight
+  GatherMate2/Storage/TheWarWithin: GatherMate2Storage_TheWarWithin
