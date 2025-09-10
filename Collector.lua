@@ -1,6 +1,5 @@
 local GatherMate = LibStub("AceAddon-3.0"):GetAddon("GatherMate2")
 local Collector = GatherMate:NewModule("Collector", "AceEvent-3.0")
-local L = LibStub("AceLocale-3.0"):GetLocale("GatherMate2",true)
 local NL = LibStub("AceLocale-3.0"):GetLocale("GatherMate2Nodes")   -- for get the local name of Gas Cloud´s
 
 -- prevSpell, curSpell are markers for what has been cast now and the lastcast
@@ -121,7 +120,7 @@ end
 ]]
 function Collector:GasBuffDetector(b)
 	if foundTarget or (prevSpell and prevSpell ~= gasSpell) then return end
-	local timestamp, eventType, hideCaster, srcGUID, srcName, srcFlags, srcRaidFlags, dstGUID, dstName, dstFlags, dstRaidFlags, spellId,spellName = CombatLogGetCurrentEventInfo()
+	local _timestamp, eventType, _hideCaster, _srcGUID, srcName, _srcFlags, _srcRaidFlags, _dstGUID, dstName, _dstFlags, _dstRaidFlags, _spellId, spellName = CombatLogGetCurrentEventInfo()
 
 	if eventType == "SPELL_CAST_SUCCESS" and  spellName == gasSpell then
 		ga = gasSpell

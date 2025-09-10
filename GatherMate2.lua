@@ -296,7 +296,7 @@ function GatherMate:MigrateStorage(storagePrefix, zones)
 	end
 end
 
-function GatherMate:OnProfileChanged(db,name)
+function GatherMate:OnProfileChanged(_db,name)
 	db = self.db.profile
 	filter = db.filter
 	GatherMate:SendMessage("GatherMate2ConfigChanged")
@@ -358,15 +358,15 @@ function GatherMate:ClearDB(dbx)
 	if GatherMate.db.profile.dbLocks[dbx] then
 		return
 	end
-	local db = gmdbs[dbx]
-	if not db then error("Trying to clear unknown database: "..dbx) end
-	if db.__gm2_prefix then
-		table.wipe(db.__gm2_base_storage)
-		for k,v in pairs(db.__gm2_storage_map) do
+	local nodedb = gmdbs[dbx]
+	if not nodedb then error("Trying to clear unknown database: "..dbx) end
+	if nodedb.__gm2_prefix then
+		table.wipe(nodedb.__gm2_base_storage)
+		for k,v in pairs(nodedb.__gm2_storage_map) do
 			table.wipe(v)
 		end
 	else
-		table.wipe(db)
+		table.wipe(nodedb)
 	end
 end
 
@@ -374,15 +374,15 @@ end
 	Add an item to the DB
 ]]
 function GatherMate:AddNode(zone, x, y, nodeType, name)
-	local db = gmdbs[nodeType]
-	if not db then return end
+	local nodedb = gmdbs[nodeType]
+	if not nodedb then return end
 	local id = self:EncodeLoc(x,y)
 	-- db lock check
 	if GatherMate.db.profile.dbLocks[nodeType] then
 		return
 	end
-	db[zone] = db[zone] or {}
-	db[zone][id] = self.nodeIDs[nodeType][name]
+	nodedb[zone] = nodedb[zone] or {}
+	nodedb[zone][id] = self.nodeIDs[nodeType][name]
 	self:SendMessage("GatherMate2NodeAdded", zone, nodeType, id, name)
 end
 
@@ -423,15 +423,15 @@ end
 	Renamed to InjectNode2/DeleteNode2 to ensure data addon compatibility with 8.0 zone IDs
 ]]
 function GatherMate:InjectNode2(zone, coords, nodeType, nodeID)
-	local db = gmdbs[nodeType]
-	if not db then return end
+	local nodedb = gmdbs[nodeType]
+	if not nodedb then return end
 	-- db lock check
 	if GatherMate.db.profile.dbLocks[nodeType] then
 		return
 	end
 	if (nodeType == "Mining" or nodeType == "Herb Gathering") and GatherMate.mapBlacklist[zone] then return end
-	db[zone] = db[zone] or {}
-	db[zone][coords] = self.nodeIDReplacementMap[nodeID] or nodeID
+	nodedb[zone] = nodedb[zone] or {}
+	nodedb[zone][coords] = self.nodeIDReplacementMap[nodeID] or nodeID
 end
 function GatherMate:DeleteNode2(zone, coords, nodeType)
 	if not gmdbs[nodeType] then return end
@@ -439,9 +439,9 @@ function GatherMate:DeleteNode2(zone, coords, nodeType)
 	if GatherMate.db.profile.dbLocks[nodeType] then
 		return
 	end
-	local db = gmdbs[nodeType][zone]
-	if db then
-		db[coords] = nil
+	local nodedb = gmdbs[nodeType][zone]
+	if nodedb then
+		nodedb[coords] = nil
 	end
 end
 
@@ -536,11 +536,11 @@ end
 ]]
 function GatherMate:RemoveNode(zone, x, y, nodeType)
 	if not gmdbs[nodeType] then return end
-	local db = gmdbs[nodeType][zone]
+	local nodedb = gmdbs[nodeType][zone]
 	local coord = self:EncodeLoc(x,y)
-	if db[coord] then
-		local t = self.reverseNodeIDs[nodeType][db[coord]]
-		db[coord] = nil
+	if nodedb[coord] then
+		local t = self.reverseNodeIDs[nodeType][nodedb[coord]]
+		nodedb[coord] = nil
 		self:SendMessage("GatherMate2NodeDeleted", zone, nodeType, coord, t)
 	end
 end
@@ -553,10 +553,10 @@ function GatherMate:RemoveNodeByID(zone, nodeType, coord)
 	if GatherMate.db.profile.dbLocks[nodeType] then
 		return
 	end
-	local db = gmdbs[nodeType][zone]
-	if db[coord] then
-		local t = self.reverseNodeIDs[nodeType][db[coord]]
-		db[coord] = nil
+	local nodedb = gmdbs[nodeType][zone]
+	if nodedb[coord] then
+		local t = self.reverseNodeIDs[nodeType][nodedb[coord]]
+		nodedb[coord] = nil
 		self:SendMessage("GatherMate2NodeDeleted", zone, nodeType, coord, t)
 	end
 end
@@ -638,9 +638,9 @@ end
 ]]
 function GatherMate:DeleteNodeFromZone(nodeType, nodeID, zone)
 	if not gmdbs[nodeType] then return end
-	local db = gmdbs[nodeType][zone]
-	if db then
-		for coord, node in pairs(db) do
+	local nodedb = gmdbs[nodeType][zone]
+	if nodedb then
+		for coord, node in pairs(nodedb) do
 			if node == nodeID then
 				self:RemoveNodeByID(zone, nodeType, coord)
 			end

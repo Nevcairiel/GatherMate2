@@ -30,10 +30,10 @@ jobs:
         with:
           fetch-depth: 0
 
-#      - name: Luacheck
-#        run: |
-#          sudo apt-get install luarocks
-#          luarocks install --local luacheck
-#          /home/runner/.luarocks/bin/luacheck . --no-color -q
+      - name: Luacheck
+        run: |
+          sudo apt-get install luarocks
+          luarocks install --local luacheck
+          /home/runner/.luarocks/bin/luacheck . --no-color -q
 
       - uses: BigWigsMods/packager@v2

@@ -5,8 +5,6 @@ local L = LibStub("AceLocale-3.0"):GetLocale("GatherMate2", false)
 -- Databroker support
 local DataBroker = LibStub:GetLibrary("LibDataBroker-1.1",true)
 
-local SaveBindings = SaveBindings or AttemptToSaveBindings
-
 --[[
 	Code here for configuring the mod, and making the minimap button
 ]]
@@ -406,18 +404,18 @@ end})
 -- Setup some helper functions
 local ConfigFilterHelper = {}
 function ConfigFilterHelper:SelectAll(info)
-	local db = db.filter[info.arg]
+	local filterdb = db.filter[info.arg]
 	local nids = GatherMate.nodeIDs[info.arg]
 	for k, v in pairs(nids) do
-		db[v] = true
+		filterdb[v] = true
 	end
 	Config:UpdateConfig()
 end
 function ConfigFilterHelper:SelectNone(info)
-	local db = db.filter[info.arg]
+	local filterdb = db.filter[info.arg]
 	local nids = GatherMate.nodeIDs[info.arg]
 	for k, v in pairs(nids) do
-		db[v] = false
+		filterdb[v] = false
 	end
 	Config:UpdateConfig()
 end
@@ -1015,7 +1013,7 @@ importOptions.args.GatherMateData = {
 	name = "GatherMate2Data", -- addon name to import from, don't localize
 	handler = ImportHelper,
 	disabled = function()
-		local name, title, notes, loadable, reason, security, newVersion = C_AddOns.GetAddOnInfo("GatherMate2_Data")
+		local _name, _title, _notes, _loadable, reason, _security, _newVersion = C_AddOns.GetAddOnInfo("GatherMate2_Data")
 		local enabled = C_AddOns.GetAddOnEnableState("GatherMate2_Data", UnitName("player")) > 0
 		-- disable if the addon is not enabled, or
 		-- disable if there is a reason why it can't be loaded ("MISSING" or "DISABLED")
@@ -1176,7 +1174,7 @@ function Config:OnInitialize()
 
 	self:RegisterMessage("GatherMate2ConfigChanged")
 	if DataBroker then
-		local launcher = DataBroker:NewDataObject("GatherMate2", {
+		DataBroker:NewDataObject("GatherMate2", {
 			type = "launcher",
 			icon = "Interface\\AddOns\\GatherMate2\\Artwork\\Icon.tga",
 			OnClick = function(obj, btn)
@@ -1222,7 +1220,7 @@ function Config:CheckAutoImport()
 		if verline and v["autoImport"] then
 			local dataVersion = tonumber(verline:match("%d+"))
 			if dataVersion and dataVersion > v["lastImport"] then
-				local loaded, reason = C_AddOns.LoadAddOn(k)
+				local loaded = C_AddOns.LoadAddOn(k)
 				if loaded then
 					local addon = LibStub("AceAddon-3.0"):GetAddon(k)
 					local filter = nil

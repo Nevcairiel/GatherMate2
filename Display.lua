@@ -20,7 +20,7 @@ local zone = -1
 -- cache of table insert functions
 local next, pairs = next, pairs
 -- minimap rotation
-local rotateMinimap = GetCVar("rotateMinimap") == "1"
+local rotateMinimap = C_CVar.GetCVar("rotateMinimap") == "1"
 -- shape of the minimap
 local minimapShape
 -- diameter of the minimap
@@ -99,8 +99,8 @@ local mouseoveredPins = {}
 local checkMoused = false
 local function showPin(self)
 	if (self.title) then
-		local x, y = self:GetCenter()
-		local parentX, parentY = UIParent:GetCenter()
+		local x, _y = self:GetCenter()
+		local parentX, _parentY = UIParent:GetCenter()
 		if ( x > parentX ) then
 			GameTooltip:SetOwner(self, "ANCHOR_LEFT")
 		else
@@ -154,7 +154,7 @@ local function pinClick(self, button)
 	elseif self.worldmap == false then
 		-- This "simulates" clickthru on the minimap to ping the minimap, by roughknight
 		if Minimap:GetObjectType() == "Minimap" then -- This is for SexyMap's HudMap, which reparents to a hud frame that isn't a minimap
-			local point, parent, relPoint, x, y = self:GetPoint()
+			local _point, _parent, _relPoint, x, y = self:GetPoint()
 			Minimap:PingLocation(x, y)
 		end
 	end
@@ -224,7 +224,6 @@ local GatherMate2_GenericDropDownMenu = CreateFrame("Frame", "GatherMate2_Generi
 GatherMate2_GenericDropDownMenu.displayMode = "MENU"
 GatherMate2_GenericDropDownMenu.initialize = generatePinMenu
 local last_update = 0
-local listening = false
 --[[
 	Enable the mod and add our event listeners and timers
 ]]
@@ -235,7 +234,7 @@ function Display:OnEnable()
 	trackingCircle = self.trackingCircle
 	nodeTextures = GatherMate.nodeTextures
 	-- Recheck cvars after all addons are loaded.
-	rotateMinimap = GetCVar("rotateMinimap") == "1"
+	rotateMinimap = C_CVar.GetCVar("rotateMinimap") == "1"
 	if not self.updateFrame then
 		GatherMate.Visible = {}
 		self.updateFrame = CreateFrame("Frame")
@@ -275,7 +274,6 @@ function Display:RegisterMapEvents()
 	self:RegisterMessage("GatherMate2Cleanup", "DataUpdate")
 	--self:RegisterEvent("ARTIFACT_DIG_SITE_UPDATED","DigsitesChanged")
 	self.updateFrame:Show()
-	listening = true
 end
 
 function Display:UnregisterMapEvents()
@@ -289,7 +287,6 @@ function Display:UnregisterMapEvents()
 	clearpins(worldmapPins)
 	clearpins(minimapPins)
 	self.updateFrame:Hide()
-	listening = false
 end
 
 -- Disable the mod
@@ -317,7 +314,7 @@ function Display:SKILL_LINES_CHANGED()
 	end
 
 	for index, key in pairs({GetProfessions()}) do
-		local name, icon, rank, maxrank, numspells, spelloffset, skillline = GetProfessionInfo(key)
+		local name = GetProfessionInfo(key)
 		if profession_to_skill[name] then
 			have_prof_skill[profession_to_skill[name]] = true
 		end
@@ -328,12 +325,12 @@ end
 function Display:MINIMAP_UPDATE_TRACKING()
 	local count = C_Minimap.GetNumTrackingTypes()
 	for id=1, count do
-		local info = C_Minimap.GetTrackingInfo(id)
-		if info.active and tracking_spells[info.name] then
-			active_tracking[tracking_spells[info.name]] = true
+		local trackingInfo = C_Minimap.GetTrackingInfo(id)
+		if trackingInfo.active and tracking_spells[trackingInfo.name] then
+			active_tracking[tracking_spells[trackingInfo.name]] = true
 		else
-			if tracking_spells[info.name] and not info.active then
-				active_tracking[tracking_spells[info.name]] = false
+			if tracking_spells[trackingInfo.name] and not trackingInfo.active then
+				active_tracking[tracking_spells[trackingInfo.name]] = false
 			end
 		end
 	end
@@ -357,7 +354,7 @@ function Display:DigsitesChanged()
 end
 
 local function IsActiveDigSite()
-	local showDig = _G.GetCVarBool("digSites")
+	local showDig = C_CVar.GetCVarBool("digSites")
 	return digSites[zone] and showDig
 end
 
@@ -454,13 +451,13 @@ end
 --[[
 	Add a new pin to the minimap
 ]]
-function Display:getMiniPin(coord, nodeID, nodeType, zone, index)
+function Display:getMiniPin(coord, nodeID, nodeType, pinZone, index)
 	local pin = minimapPins[index]
 	if not pin then
 		pin = self:getMapPin()
 		pin.coords = coord
 		pin.title = GatherMate:GetNameForNode(nodeType, nodeID)
-		pin.zone = zone
+		pin.zone = pinZone
 		pin.nodeID = nodeID
 		pin.nodeType = nodeType
 		pin.worldmap = false
@@ -476,7 +473,7 @@ function Display:getMiniPin(coord, nodeID, nodeType, zone, index)
 		pin.texture:SetTexCoord(0, 1, 0, 1)
 		pin.texture:SetVertexColor(1, 1, 1, 1)
 		pin.x, pin.y = GatherMate:DecodeLoc(coord)
-		pin.x1, pin.y1 = GatherMate.HBD:GetWorldCoordinatesFromZone(pin.x,pin.y,zone)
+		pin.x1, pin.y1 = GatherMate.HBD:GetWorldCoordinatesFromZone(pin.x,pin.y,pinZone)
 		minimapPins[index] = pin
 	end
 	return pin
@@ -518,10 +515,10 @@ function Display:addMiniPin(pin, refresh)
 	end
 
 	-- place pin on the map
-	local diffX, diffY, alpha = 0, 0, 1
+	local alpha = 1
 	-- adapt delta position to the map radius
-	diffX = xDist / mapRadius
-	diffY = yDist / mapRadius
+	local diffX = xDist / mapRadius
+	local diffY = yDist / mapRadius
 
 	-- different minimap shapes
 	local isRound = true
@@ -781,13 +778,13 @@ function GatherMate2WorldMapPinMixin:OnLoad()
 	self:SetScalingLimits(1, 1.0, 1.2);
 end
 
-function GatherMate2WorldMapPinMixin:OnAcquired(coord, nodeID, nodeType, zone)
+function GatherMate2WorldMapPinMixin:OnAcquired(coord, nodeID, nodeType, pinZone)
 	local x,y = GatherMate:DecodeLoc(coord)
 	self:SetPosition(x, y)
 
 	self.coords = coord
 	self.title = GatherMate:GetNameForNode(nodeType, nodeID)
-	self.zone = zone
+	self.zone = pinZone
 	self.nodeID = nodeID
 	self.nodeType = nodeType
 	self.worldmap = true
