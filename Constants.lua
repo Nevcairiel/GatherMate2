@@ -630,10 +630,6 @@ GatherMate.nodeIDs, GatherMate.reverseNodeIDs, GatherMate.nodeIDReplacementMap =
 if GetLocale() == "deDE" then GatherMate.reverseNodeIDs["Treasure"][502] = "Ramponierte Truhe" end
 
 --[[
-	Collector data for rare spawn determination
-]]
-local Collector = GatherMate:GetModule("Collector")
---[[
 	Rare spawns are formatted as such the rareid = [nodes it replaces]
 ]]
 local rare_spawns = {
@@ -699,12 +695,6 @@ local rare_spawns = {
 }
 GatherMate.rareNodes = rare_spawns
 
--- Format zone = { "Database", "new node id"}
-local nodeRemap = {
-	[78] = { ["Herb Gathering"] = 452},
-	[73] = { ["Herb Gathering"] = 452},
-}
-Collector.specials = nodeRemap
 --[[
 	Below are Display Module Constants
 ]]
