@@ -13,12 +13,14 @@
 ## X-Credits: OttoDeFe for the launher icon.
 ## SavedVariables: GatherMate2DB, GatherMate2HerbDB, GatherMate2MineDB, GatherMate2FishDB, GatherMate2GasDB, GatherMate2TreasureDB, GatherMate2ArchaeologyDB
 ## X-Category: Map
+## Group: GatherMate2
 ## Version: @project-version@
 ## X-License: ARR
 ## OptionalDeps: Ace3, LibDataBroker-1.1, HereBeDragons
 ## LoadManagers: AddonLoader
 ## X-LoadOn-Always: delayed
 ## X-Curse-Project-ID: 405809
+## IconTexture: Interface\AddOns\GatherMate2\Artwork\Icon.tga
 
 #@no-lib-strip@
 Libs\LibStub\LibStub.lua
