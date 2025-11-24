@@ -64,6 +64,7 @@ Locales\GatherMate2-itIT.lua
 GatherMate2.lua
 Collector.lua
 Display.lua
+WorldMapToggle.lua
 Constants.lua
 Config.lua
 
