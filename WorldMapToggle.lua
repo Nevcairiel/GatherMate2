@@ -73,12 +73,30 @@ function UpdateButtonState()
 	end
 end
 
--- Hook WorldMapFrame OnShow to create/show button
-WorldMapFrame:HookScript("OnShow", function()
-	CreateToggleButton()
-	if toggleButton then
+-- Update button visibility based on config setting
+function Display:UpdateToggleButtonVisibility()
+	local db = GatherMate.db.profile
+	if not toggleButton then return end
+
+	if db.showWorldMapToggleButton and WorldMapFrame:IsShown() then
 		toggleButton:Show()
 		UpdateButtonState()
+	else
+		toggleButton:Hide()
+	end
+end
+
+-- Hook WorldMapFrame OnShow to create/show button
+WorldMapFrame:HookScript("OnShow", function()
+	local db = GatherMate.db.profile
+	CreateToggleButton()
+
+	-- Only show button if config option is enabled
+	if toggleButton and db.showWorldMapToggleButton then
+		toggleButton:Show()
+		UpdateButtonState()
+	elseif toggleButton then
+		toggleButton:Hide()
 	end
 end)
 
@@ -93,5 +111,8 @@ end)
 hooksecurefunc(GatherMate, "SendMessage", function(self, message)
 	if message == "GatherMate2ConfigChanged" then
 		UpdateButtonState()
+		if Display.UpdateToggleButtonVisibility then
+			Display:UpdateToggleButtonVisibility()
+		end
 	end
 end)
