@@ -7,18 +7,39 @@ local toggleButton = nil
 local function CreateToggleButton()
 	if toggleButton then return end
 
-	-- Create button on WorldMapFrame.BorderFrame (correct parent!)
-	toggleButton = CreateFrame("Button", "GatherMate2WorldMapToggle", WorldMapFrame.BorderFrame, "UIPanelButtonTemplate")
-	toggleButton:SetSize(32, 32)
+	-- Create button WITHOUT template for custom styling (like right-side map buttons)
+	toggleButton = CreateFrame("Button", "GatherMate2WorldMapToggle", WorldMapFrame.BorderFrame)
+	toggleButton:SetSize(28, 28)
 
-	-- Position: Top-left of map, below the quest log icon
-	toggleButton:SetPoint("TOPLEFT", WorldMapFrame.BorderFrame, "TOPLEFT", 10, -80)
+	-- Position: Top-right, next to other map buttons
+	if WorldMapFrame.overlayFrames and WorldMapFrame.overlayFrames[2] then
+		toggleButton:SetPoint("RIGHT", WorldMapFrame.overlayFrames[2], "LEFT", -18, 0)
+	else
+		toggleButton:SetPoint("TOPRIGHT", WorldMapFrame.BorderFrame, "TOPRIGHT", -10, -10)
+	end
 
-	-- Create icon texture
+	-- Create circular background (like other map buttons)
+	local bgTexture = toggleButton:CreateTexture(nil, "BACKGROUND")
+	bgTexture:SetAllPoints(toggleButton)
+	bgTexture:SetAtlas("transmog-icon-hidden")
+	toggleButton.bg = bgTexture
+
+	-- Create icon texture (circular)
 	local icon = toggleButton:CreateTexture(nil, "ARTWORK")
-	icon:SetAllPoints(toggleButton)
-	icon:SetTexture("Interface\\AddOns\\GatherMate2\\Artwork\\Icon")
+	icon:SetPoint("CENTER", 0, 0)
+	icon:SetSize(20, 20)
+	icon:SetTexture("Interface\AddOns\GatherMate2\Artwork\Icon")
+	icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 	toggleButton.icon = icon
+
+	-- Add highlight texture
+	local highlight = toggleButton:CreateTexture(nil, "HIGHLIGHT")
+	highlight:SetAllPoints(toggleButton)
+	highlight:SetAtlas("charactercreate-ring-select")
+	highlight:SetBlendMode("ADD")
+
+	-- Add pushed effect
+	toggleButton:SetPushedTextOffset(1, -1)
 
 	-- Button click handler
 	toggleButton:SetScript("OnClick", function(self)
@@ -27,7 +48,6 @@ local function CreateToggleButton()
 		Display:UpdateWorldMap()
 		UpdateButtonState()
 
-		-- Play sound
 		if db.showWorldMap then
 			PlaySound(SOUNDKIT.MAP_PING)
 		else
@@ -37,7 +57,7 @@ local function CreateToggleButton()
 
 	-- Tooltip
 	toggleButton:SetScript("OnEnter", function(self)
-		GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+		GameTooltip:SetOwner(self, "ANCHOR_LEFT")
 		GameTooltip:SetText("GatherMate2", 1, 1, 1)
 		local db = GatherMate.db.profile
 		if db.showWorldMap then
@@ -63,13 +83,13 @@ function UpdateButtonState()
 
 	local db = GatherMate.db.profile
 	if db.showWorldMap then
-		-- Nodes visible - button looks enabled
 		toggleButton.icon:SetDesaturated(false)
 		toggleButton.icon:SetAlpha(1.0)
+		toggleButton.bg:SetAlpha(0.8)
 	else
-		-- Nodes hidden - button looks disabled
 		toggleButton.icon:SetDesaturated(true)
-		toggleButton.icon:SetAlpha(0.5)
+		toggleButton.icon:SetAlpha(0.4)
+		toggleButton.bg:SetAlpha(0.5)
 	end
 end
 
@@ -91,7 +111,6 @@ WorldMapFrame:HookScript("OnShow", function()
 	local db = GatherMate.db.profile
 	CreateToggleButton()
 
-	-- Only show button if config option is enabled
 	if toggleButton and db.showWorldMapToggleButton then
 		toggleButton:Show()
 		UpdateButtonState()
