@@ -132,19 +132,19 @@ local generalOptions = {
 			order = 90,
 			type = "group",
 			inline = true,
-			name = "WorldMap Button",
+			name = L["WorldMap Button"],
 			args = {
 				showWorldMapToggleButton = {
 					order = 1,
-					name = "Show Toggle Button",
-					desc = "Shows a toggle button on the world map to quickly show/hide nodes.",
+					name = L["Show Toggle Button"],
+					desc = L["Shows a toggle button on the world map to quickly show/hide nodes."],
 					type = "toggle",
 					width = "full",
 					get = function() return db.showWorldMapToggleButton end,
 					set = function(_, v)
 						db.showWorldMapToggleButton = v
-						local status = v and "enabled" or "disabled"
-						print("|cff00ff00GatherMate2:|r WorldMap Toggle Button " .. status)
+						local status = v and L["enabled"] or L["disabled"]
+						print("|cff00ff00GatherMate2:|r " .. L["WorldMap Toggle Button"] .. " " .. status)
 						-- Update button visibility
 						if GatherMate:GetModule("Display").UpdateToggleButtonVisibility then
 							GatherMate:GetModule("Display"):UpdateToggleButtonVisibility()
