@@ -25,6 +25,7 @@ local pickSpell = (GetSpellName(1804))
 local archSpell = (GetSpellName(73979)) -- Searching for Artifacts spell
 local sandStormSpell = (GetSpellName(93473)) -- Sandstorm spell cast by the camel
 local loggingSpell = (GetSpellName(167895))
+local loggingSpell2 = (GetSpellName(1239682)) -- tww/midnight housing decor wood logging
 
 local spells =
 { -- spellname to "database name"
@@ -40,6 +41,7 @@ local spells =
 	[archSpell] = "Archaeology",
 	[sandStormSpell] = "Treasure",
 	[loggingSpell] = "Logging",
+	[loggingSpell2] = "Logging",
 	[205243] = "Treasure", -- skinning ground warts
 }
 local tooltipLeftText1 = _G["GameTooltipTextLeft1"]

@@ -622,6 +622,20 @@ local node_ids = {
 		[NL["Small Timber"]]					= 701,
 		[NL["Timber"]]							= 702,
 		[NL["Large Timber"]]					= 703,
+		-- TWW 11.2.7
+		[NL["Ironwood Lumber"]]					= 704, -- itemId 245586; Classic Areas
+		[NL["Olemba Lumber"]]					= 705, -- itemId 242691; BC Areas
+		[NL["Coldwind Lumber"]]					= 706, -- itemId 251762; Wotlk Areas
+		[NL["Ashwood Lumber"]]					= 707, -- itemId 251764; Cata Areas
+		[NL["Bamboo Lumber"]]					= 708, -- itemId 251763; MoP Areas
+		[NL["Shadowmoon Lumber"]]				= 709, -- itemId 251766; Draenor (By vendor for Olemba Lumber 1:1)
+		[NL["Fel-Touched Lumber"]]				= 710, -- itemId 251767; Legion Areas
+		[NL["Darkpine Lumber"]]					= 711, -- itemId 251768; BfA Areas
+		[NL["Arden Lumber"]]					= 712, -- itemId 251772; Shadowlands Areas
+		[NL["Dragonpine Lumber"]]				= 713, -- itemId 251773; Dragon Isles Areas
+		[NL["Dornic Fir Lumber"]]				= 714, -- itemId 248012; Kaz Algar Areas
+		-- coming soon with Midnight
+		[NL["Thalassian Lumber"]]				= 715, -- itemId 256963; Midnight Areas?
 	},
 }
 GatherMate.nodeIDs, GatherMate.reverseNodeIDs, GatherMate.nodeIDReplacementMap = GatherMate:CreateNodeLookupTables(node_ids)
@@ -1170,6 +1184,18 @@ local node_textures = {
 		[701] = icon_path.."Logging\\timber.tga",
 		[702] = icon_path.."Logging\\timber.tga",
 		[703] = icon_path.."Logging\\timber.tga",
+		[704] = icon_path.."Logging\\timber.tga",
+		[705] = icon_path.."Logging\\timber.tga",
+		[706] = icon_path.."Logging\\timber.tga",
+		[707] = icon_path.."Logging\\timber.tga",
+		[708] = icon_path.."Logging\\timber.tga",
+		[709] = icon_path.."Logging\\timber.tga",
+		[700] = icon_path.."Logging\\timber.tga",
+		[711] = icon_path.."Logging\\timber.tga",
+		[712] = icon_path.."Logging\\timber.tga",
+		[713] = icon_path.."Logging\\timber.tga",
+		[714] = icon_path.."Logging\\timber.tga",
+		[715] = icon_path.."Logging\\timber.tga",
 	},
 }
 GatherMate.nodeTextures = node_textures
