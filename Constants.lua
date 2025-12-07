@@ -313,7 +313,7 @@ local node_ids = {
 		[NL["Desolate Deposit"]]				= {
 			id = 1243,
 			variants = { NL["Rich Desolate Deposit"] },
-			old_ods = { 1244 },
+			old_ids = { 1244 },
 		},
 	},
 	["Extract Gas"] = {
