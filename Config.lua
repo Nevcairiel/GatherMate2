@@ -1189,7 +1189,7 @@ function Config:OnInitialize()
 	self.importHelper = ImportHelper
 
 	acr:RegisterOptionsTable("GatherMate 2", generalOptions)
-	acd:AddToBlizOptions("GatherMate 2", "GatherMate 2")
+	local _frame, panelID = acd:AddToBlizOptions("GatherMate 2")
 
 	acr:RegisterOptionsTable("GM2/Minimap", minimapOptions)
 	acd:AddToBlizOptions("GM2/Minimap", "Minimap", "GatherMate 2")
@@ -1211,7 +1211,7 @@ function Config:OnInitialize()
 
 	local function openOptions()
 		if Settings and Settings.OpenToCategory then
-			Settings.OpenToCategory("GatherMate 2")
+			Settings.OpenToCategory(panelID)
 		else
 			InterfaceOptionsFrame_OpenToCategory("GatherMate 2")
 		end
