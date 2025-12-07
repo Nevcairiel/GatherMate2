@@ -43,6 +43,7 @@ local spells =
 	[loggingSpell] = "Logging",
 	[loggingSpell2] = "Logging",
 	[205243] = "Treasure", -- skinning ground warts
+	[469894] = "Treasure", -- level earth (disturbed earth)
 }
 local tooltipLeftText1 = _G["GameTooltipTextLeft1"]
 local strfind = string.find

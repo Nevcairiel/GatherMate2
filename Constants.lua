@@ -589,6 +589,8 @@ local node_ids = {
 		[NL["Large Jelly Deposit"]]				= 564,
 		-- Shadowlands
 		[NL["Ground Wart"]]						= 565,
+		-- The War Within
+		[NL["Disturbed Earth"]]					= 566,
 	},
 	["Archaeology"] = {
 		-- cata archeolgy objects
@@ -1156,6 +1158,7 @@ local node_textures = {
 		[563] = icon_path.."Treasure\\honey.tga",
 		[564] = icon_path.."Treasure\\honey.tga",
 		[565] = icon_path.."Treasure\\hide.tga",
+		[566] = icon_path.."Treasure\\soil.tga",
 	},
 	["Archaeology"] = {
 		[601] = icon_path.."Archaeology\\shovel.tga",
