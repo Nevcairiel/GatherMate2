@@ -55,7 +55,6 @@ local prof_options4 = { -- For Archaeology, which doesn't have tracking as a ski
 }
 
 local db
-local imported = {}
 -- setup the options, we need to reference GatherMate for this
 
 local function get(k) return db[k.arg] end
@@ -1073,7 +1072,7 @@ ImportHelper.expac_data = {
 	["DF"] = L["Dragonflight"],
 	["TWW"] = L["The War Within"],
 }
-imported["GatherMate2_Data"] = false
+
 importOptions.args.GatherMateData = {
 	type = "group",
 	name = "GatherMate2Data", -- addon name to import from, don't localize
@@ -1165,22 +1164,10 @@ importOptions.args.GatherMateData = {
 					print(L["GatherMate2Data has been imported."])
 					Config:SendMessage("GatherMate2ConfigChanged")
 					db["importers"]["GatherMate2_Data"]["lastImport"] = dataVersion
-					imported["GatherMate2_Data"] = true
 					GatherMate:RemoveDepracatedNodes()
 				else
 					print(L["Failed to load GatherMateData due to "]..reason)
 				end
-			end,
-			disabled = function()
-				local cm = 0
-				if db["importers"]["GatherMate2_Data"].Databases["Mines"] then cm = 1 end
-				if db["importers"]["GatherMate2_Data"].Databases["Herbs"] then cm = 1 end
-				if db["importers"]["GatherMate2_Data"].Databases["Fish"] then cm = 1 end
-				if db["importers"]["GatherMate2_Data"].Databases["Gases"] then cm = 1 end
-				if db["importers"]["GatherMate2_Data"].Databases["Treasure"] then cm = 1 end
-				if db["importers"]["GatherMate2_Data"].Databases["Archaeology"] then cm = 1 end
-				if db["importers"]["GatherMate2_Data"].Databases["Logging"] then cm = 1 end
-				return imported["GatherMate2_Data"] or (cm == 0 and not imported["GatherMate2_Data"])
 			end,
 		}
 	},
@@ -1296,7 +1283,6 @@ function Config:CheckAutoImport()
 					end
 					addon:PerformMerge(v.Databases,v.Style,filter)
 					addon:CleanupImportData()
-					imported[k] = true
 					Config:SendMessage("GatherMate2ConfigChanged")
 					v["lastImport"] = dataVersion
 					print(L["Auto import complete for addon "]..k)
