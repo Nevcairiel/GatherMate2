@@ -315,6 +315,28 @@ local node_ids = {
 			variants = { NL["Rich Desolate Deposit"] },
 			old_ids = { 1244 },
 		},
+-- midnight nodes
+		[NL["Brilliant Silver"]] = {
+			id = 1245,
+			variants = {
+				NL["Rich Brilliant Silver"], NL["Lightfused Brilliant Silver"], NL["Primal Brilliant Silver"], NL["Voidbound Brilliant Silver"], NL["Wild Brilliant Silver"]
+			}
+		},
+		[NL["Brilliant Silver Seam"]] = 1246,
+		[NL["Refulgent Copper"]] = {
+			id = 1247,
+			variants = {
+				NL["Rich Refulgent Copper"], NL["Lightfused Refulgent Copper"], NL["Primal Refulgent Copper"], NL["Voidbound Refulgent Copper"], NL["Wild Refulgent Copper"]
+			}
+		},
+		[NL["Refulgent Copper Seam"]] = 1248,
+		[NL["Umbral Tin"]] = {
+			id = 1249,
+			variants = {
+				NL["Rich Umbral Tin"], NL["Lightfused Umbral Tin"], NL["Primal Umbral Tin"], NL["Voidbound Umbral Tin"], NL["Wild Umbral Tin"]
+			}
+		},
+		[NL["Umbral Tin Seam"]] = 1250,
 	},
 	["Extract Gas"] = {
 		[NL["Windy Cloud"]] 					= 301,
@@ -1002,6 +1024,12 @@ local node_textures = {
 		[1241] = icon_path.."Mine\\ironclaw.tga",
 		[1242] = icon_path.."Mine\\tin.tga", -- webbed deposit
 		[1243] = icon_path.."Mine\\karesh.tga",
+		[1245] = icon_path.."Mine\\brilliantsilver.tga",
+		[1246] = icon_path.."Mine\\brilliantsilver.tga",
+		[1247] = icon_path.."Mine\\refulgentcopper.tga",
+		[1248] = icon_path.."Mine\\refulgentcopper.tga",
+		[1249] = icon_path.."Mine\\umbraltin.tga",
+		[1250] = icon_path.."Mine\\umbraltin.tga",
 	},
 	["Extract Gas"] = {
 		[301] = icon_path.."Gas\\windy_cloud.tga",
@@ -1357,6 +1385,12 @@ local node_expansion = {
 		[1241] = TWW,
 		[1242] = TWW,
 		[1243] = TWW,
+		[1245] = MN,
+		[1246] = MN,
+		[1247] = MN,
+		[1248] = MN,
+		[1249] = MN,
+		[1250] = MN,
 	},
 	["Herb Gathering"] = {
 		[401] = CLASSIC,
