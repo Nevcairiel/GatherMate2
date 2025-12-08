@@ -334,6 +334,14 @@ local minimapOptions = {
 					hasAlpha = true,
 					arg = "Archaeology",
 				},
+				trackingColorTimber = {
+					order = 7,
+					name = L["Timber"],
+					desc = L["Color of the tracking circle."],
+					type = "color",
+					hasAlpha = true,
+					arg = "Logging",
+				},
 				space = {
 					order = 10,
 					name = "",
@@ -679,6 +687,38 @@ filterOptions.args.archaeology = {
 		},
 	},
 }
+filterOptions.args.timber = {
+	type = "group",
+	name = L["Timber"],
+	args = {
+		select_all = {
+			order = 1,
+			name = L["Select All"],
+			desc = L["Select all nodes"],
+			type = "execute",
+			func = "SelectAll",
+			arg = "Logging",
+		},
+		select_none = {
+			order = 2,
+			name = L["Select None"],
+			desc = L["Clear node selections"],
+			type = "execute",
+			func = "SelectNone",
+			arg = "Logging",
+		},
+		timberlist = {
+			order = 3,
+			name = L["Timber"],
+			desc = L["Select the timber nodes you wish to display."],
+			type = "multiselect",
+			values = sortedFilter["Logging"],
+			set = "SetState",
+			get = "GetState",
+			arg = "Logging",
+		},
+	},
+}
 
 local selectedDatabase, selectedNode, selectedZone = "Herb Gathering", 0, nil
 
@@ -767,6 +807,14 @@ local maintenanceOptions = {
 					type = "range",
 					min = 0, max = 30, step = 1,
 					arg = "Archaeology",
+				},
+				Timber = {
+					order = 5,
+					name = L["Timber"],
+					desc = L["Cleanup radius"],
+					type = "range",
+					min = 0, max = 30, step = 1,
+					arg = "Logging",
 				}
 			},
 		},
@@ -792,6 +840,7 @@ local maintenanceOptions = {
 						["Mining"] = L["Mineral Veins"],
 						["Extract Gas"] = L["Gas Clouds"],
 						["Archaeology"] = L["Archaeology"],
+						["Logging"] = L["Timber"],
 					},
 					get = function() return selectedDatabase end,
 					set = function(k, v)
@@ -906,6 +955,15 @@ local maintenanceOptions = {
 					confirm = true,
 					confirmText = L["Are you sure you want to delete all nodes from this database?"],
 				},
+				Timber = {
+					order = 5,
+					name = L["Timber"],
+					desc = L["Delete Entire Database"],
+					type = "execute",
+					arg = "Logging",
+					confirm = true,
+					confirmText = L["Are you sure you want to delete all nodes from this database?"],
+				},
 			},
 		},
 		dblocking = {
@@ -965,6 +1023,13 @@ local maintenanceOptions = {
 					desc = L["Database locking"],
 					type = "toggle",
 					arg = "Archaeology",
+				},
+				Timber = {
+					order = 5,
+					name = L["Timber"],
+					desc = L["Database locking"],
+					type = "toggle",
+					arg = "Logging",
 				}
 			}
 		},
@@ -994,6 +1059,7 @@ ImportHelper.db_tables =
 	["Fish"] = L["Fishing"],
 	["Treasure"] = L["Treasure"],
 	["Archaeology"] = L["Archaeology"],
+	["Logging"] = L["Timber"],
 }
 ImportHelper.expac_data = {
 	["TBC"] = L["The Burning Crusades"],
@@ -1113,6 +1179,7 @@ importOptions.args.GatherMateData = {
 				if db["importers"]["GatherMate2_Data"].Databases["Gases"] then cm = 1 end
 				if db["importers"]["GatherMate2_Data"].Databases["Treasure"] then cm = 1 end
 				if db["importers"]["GatherMate2_Data"].Databases["Archaeology"] then cm = 1 end
+				if db["importers"]["GatherMate2_Data"].Databases["Logging"] then cm = 1 end
 				return imported["GatherMate2_Data"] or (cm == 0 and not imported["GatherMate2_Data"])
 			end,
 		}
