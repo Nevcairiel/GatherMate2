@@ -761,12 +761,6 @@ local rare_spawns = {
 	[283] = {[282]=true}, -- rich solenium deposit
 	[285] = {[284]=true}, -- rich sinvyr deposit
 	[494] = {[493]=true,[495]=true,[496]=true,[497]=true,[498]=true}, -- nightshade
-	[1401] = {[494]=true,[493]=true,[495]=true,[496]=true,[497]=true,[498]=true}, -- lush nightshade
-	[1402] = {[494]=true,[493]=true,[495]=true,[496]=true,[497]=true,[498]=true}, -- elusive nightshade
-	[1403] = {[499]=true}, -- lush first flower
-	[1404] = {[499]=true}, -- elusive first flower
-	[1405] = {[499]=true, [1404]=true}, -- lush elusive first flower
-	[1406] = {[494]=true,[1402]=true,[493]=true,[495]=true,[496]=true,[497]=true,[498]=true}, -- lush elusive nightshade
 	[493] = {[495]=true,[496]=true,[497]=true,[498]=true}, -- death blossom shares spawn with zone-specific herbs
 	[288] = {[287]=true}, -- rich progenium
 	[289] = {[287]=true}, -- elusive progenium
