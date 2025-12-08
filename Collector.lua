@@ -68,11 +68,15 @@ end
 --[[
 	Register the events we are interesting
 ]]
+local eventFrame = CreateFrame("Frame")
 function Collector:RegisterGatherEvents()
-	self:RegisterEvent("UNIT_SPELLCAST_SENT","SpellStarted")
-	self:RegisterEvent("UNIT_SPELLCAST_STOP","SpellStopped")
-	self:RegisterEvent("UNIT_SPELLCAST_FAILED","SpellFailed")
-	self:RegisterEvent("UNIT_SPELLCAST_INTERRUPTED","SpellFailed")
+	-- unit events
+	eventFrame:RegisterUnitEvent("UNIT_SPELLCAST_STOP", "player") -- SpellStopped
+	eventFrame:RegisterUnitEvent("UNIT_SPELLCAST_FAILED", "player") -- SpellFailed
+	eventFrame:RegisterUnitEvent("UNIT_SPELLCAST_INTERRUPTED", "player") -- SpellFailed
+	eventFrame:SetScript("OnEvent", function(_frame, event, ...) if event == "UNIT_SPELLCAST_STOP" then self:SpellStopped(event, ...) elseif event == "UNIT_SPELLCAST_FAILED" or event == "UNIT_SPELLCAST_INTERRUPTED" then self:SpellFailed(event, ...) end end)
+
+	self:RegisterEvent("UNIT_SPELLCAST_SENT", "SpellStarted")
 	self:RegisterEvent("CURSOR_CHANGED","CursorChange")
 	self:RegisterEvent("UI_ERROR_MESSAGE","UIError")
 	--self:RegisterEvent("LOOT_CLOSED","GatherCompleted")
@@ -84,11 +88,11 @@ end
 	Unregister the events
 ]]
 function Collector:UnregisterGatherEvents()
+	eventFrame:UnregisterEvent("UNIT_SPELLCAST_STOP")
+	eventFrame:UnregisterEvent("UNIT_SPELLCAST_FAILED")
+	eventFrame:UnregisterEvent("UNIT_SPELLCAST_INTERRUPTED")
+
 	self:UnregisterEvent("UNIT_SPELLCAST_SENT")
-	self:UnregisterEvent("UNIT_SPELLCAST_SENT")
-	self:UnregisterEvent("UNIT_SPELLCAST_STOP")
-	self:UnregisterEvent("UNIT_SPELLCAST_FAILED")
-	self:UnregisterEvent("UNIT_SPELLCAST_INTERRUPTED")
 	self:UnregisterEvent("CURSOR_CHANGED")
 	self:UnregisterEvent("UI_ERROR_MESSAGE")
 	--self:UnregisterEvent("LOOT_CLOSED")
