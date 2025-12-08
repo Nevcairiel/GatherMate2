@@ -457,9 +457,9 @@ function Display:getMiniPin(coord, nodeID, nodeType, pinZone, index)
 	if not pin then
 		pin = self:getMapPin()
 		pin.coords = coord
-		pin.title = GatherMate:GetNameForNode(nodeType, nodeID)
+		pin.nodeID = GatherMate.nodeIDReplacementMap[nodeID] or nodeID
+		pin.title = GatherMate:GetNameForNode(nodeType, pin.nodeID)
 		pin.zone = pinZone
-		pin.nodeID = nodeID
 		pin.nodeType = nodeType
 		pin.worldmap = false
 		pin:SetParent(Minimap)
@@ -470,7 +470,7 @@ function Display:getMiniPin(coord, nodeID, nodeType, pinZone, index)
 		--pin:SetAlpha(db.alpha)
 		pin:EnableMouse(db.minimapTooltips)
 		pin.isCircle = false
-		pin.texture:SetTexture(nodeTextures[nodeType][nodeID])
+		pin.texture:SetTexture(nodeTextures[nodeType][pin.nodeID])
 		pin.texture:SetTexCoord(0, 1, 0, 1)
 		pin.texture:SetVertexColor(1, 1, 1, 1)
 		pin.x, pin.y = GatherMate:DecodeLoc(coord)
@@ -784,16 +784,16 @@ function GatherMate2WorldMapPinMixin:OnAcquired(coord, nodeID, nodeType, pinZone
 	self:SetPosition(x, y)
 
 	self.coords = coord
-	self.title = GatherMate:GetNameForNode(nodeType, nodeID)
+	self.nodeID = GatherMate.nodeIDReplacementMap[nodeID] or nodeID
+	self.title = GatherMate:GetNameForNode(nodeType, self.nodeID)
 	self.zone = pinZone
-	self.nodeID = nodeID
 	self.nodeType = nodeType
 	self.worldmap = true
 
 	self:SetHeight(12 * db.scale)
 	self:SetWidth(12 * db.scale)
 	self:SetAlpha(db.alpha)
-	self.texture:SetTexture(nodeTextures[nodeType][nodeID])
+	self.texture:SetTexture(nodeTextures[nodeType][self.nodeID])
 	self.texture:SetTexCoord(0, 1, 0, 1)
 	self.texture:SetVertexColor(1, 1, 1, 1)
 	self:EnableMouse(db.worldMapIconsInteractive)
