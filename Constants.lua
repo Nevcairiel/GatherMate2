@@ -262,19 +262,25 @@ local node_ids = {
 		[NL["Oxxein Deposit"]]					= 277,
 		[NL["Rich Oxxein Deposit"]]				= 278,
 		--[NL["Monolithic Oxxein Deposit"]]		= 279,
-		[NL["Elethium Deposit"]]				= 280,
-		[NL["Rich Elethium Deposit"]]			= 281,
+		[NL["Elethium Deposit"]]				= {
+			id = 280,
+			variants = {
+				NL["Rich Elethium Deposit"], NL["Elusive Elethium Deposit"], NL["Elusive Rich Elethium Deposit"]
+			},
+			old_ids = { 281, 291, 292 },
+		},
 		[NL["Solenium Deposit"]]				= 282,
 		[NL["Rich Solenium Deposit"]]			= 283,
 		[NL["Sinvyr Deposit"]]					= 284,
 		[NL["Rich Sinvyr Deposit"]]				= 285,
 		--[NL["Menacing Sinvyr Deposit"]]			= 286,
-		[NL["Progenium Deposit"]]				= 287,
-		[NL["Rich Progenium Deposit"]]			= 288,
-		[NL["Elusive Progenium Deposit"]]		= 289,
-		[NL["Elusive Rich Progenium Deposit"]]	= 290,
-		[NL["Elusive Elethium Deposit"]]		= 291,
-		[NL["Elusive Rich Elethium Deposit"]]	= 292,
+		[NL["Progenium Deposit"]]				= {
+			id = 287,
+			variants = {
+				NL["Rich Progenium Deposit"], NL["Elusive Progenium Deposit"], NL["Elusive Rich Progenium Deposit"]
+			},
+			old_ids = { 288, 289, 290 },
+		},
 -- dragonflight nodes
 		[NL["Serevite Seam"]]					= 1200,
 		[NL["Serevite Deposit"]]				= {
@@ -757,16 +763,10 @@ local rare_spawns = {
 	[276] = {[275]=true}, -- rich phaedrum deposit
 	[278] = {[277]=true}, -- rich oxxein deposit
 	[280] = {[273]=true,[274]=true,[275]=true,[276]=true,[277]=true,[278]=true,[282]=true,[283]=true,[284]=true,[285]=true}, -- elethium deposit
-	[281] = {[280]=true,[273]=true,[274]=true,[275]=true,[276]=true,[277]=true,[278]=true,[282]=true,[283]=true,[284]=true,[285]=true}, -- rich elethium deposit
 	[283] = {[282]=true}, -- rich solenium deposit
 	[285] = {[284]=true}, -- rich sinvyr deposit
 	[494] = {[493]=true,[495]=true,[496]=true,[497]=true,[498]=true}, -- nightshade
 	[493] = {[495]=true,[496]=true,[497]=true,[498]=true}, -- death blossom shares spawn with zone-specific herbs
-	[288] = {[287]=true}, -- rich progenium
-	[289] = {[287]=true}, -- elusive progenium
-	[290] = {[287]=true,[288]=true,[289]=true}, -- elusive rich progenium
-	[291] = {[280]=true}, -- elusive elethium
-	[292] = {[280]=true,[281]=true,[291]=true}, -- elusive rich elethium
 
 	[1407] = {[1414]=true,[1421]=true,[1428]=true}, -- Hochenblume is a common spawn of the other herbs
 	[1439] = {[1447]=true,[1455]=true,[1463]=true,[1471]=true}, -- Mycobloom is a common shared spawn with other TWW herbs

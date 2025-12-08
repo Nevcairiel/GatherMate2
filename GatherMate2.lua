@@ -122,9 +122,9 @@ end
 
 function GatherMate:OnEnable()
 	-- moved to OnEnable so it can upgrade additional storage addons
-	if (self.db.global.data_version or 0) < 7 then
+	if (self.db.global.data_version or 0) < 8 then
 		self:UpgradeNodeIDs()
-		self.db.global.data_version = 7
+		self.db.global.data_version = 8
 	end
 end
 
