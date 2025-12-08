@@ -518,6 +518,37 @@ local node_ids = {
 			variants = { NL["Lush Phantom Bloom"] },
 			old_ids = { 1480 },
 		},
+-- midnight nodes
+		[NL["Argentleaf"]] = {
+			id = 1481,
+			variants = {
+				NL["Lush Argentleaf"], NL["Lightfused Argentleaf"], NL["Primal Argentleaf"], NL["Transplanted Argentleaf"], NL["Transplanted Lush Argentleaf"], NL["Voidbound Argentleaf"], NL["Wild Argentleaf"]
+			}
+		},
+		[NL["Azeroot"]] = {
+			id = 1482,
+			variants = {
+				NL["Lush Azeroot"], NL["Lightfused Azeroot"], NL["Primal Azeroot"], NL["Transplanted Azeroot"], NL["Transplanted Lush Azeroot"], NL["Voidbound Azeroot"], NL["Wild Azeroot"]
+			}
+		},
+		[NL["Mana Lily"]] = {
+			id = 1483,
+			variants = {
+				NL["Lush Mana Lily"], NL["Lightfused Mana Lily"], NL["Primal Mana Lily"], NL["Transplanted Mana Lily"], NL["Transplanted Lush Mana Lily"], NL["Voidbound Mana Lily"], NL["Wild Mana Lily"]
+			}
+		},
+		[NL["Sanguithorn"]] = {
+			id = 1484,
+			variants = {
+				NL["Lush Sanguithorn"], NL["Lightfused Sanguithorn"], NL["Primal Sanguithorn"], NL["Transplanted Sanguithorn"], NL["Transplanted Lush Sanguithorn"], NL["Voidbound Sanguithorn"], NL["Wild Sanguithorn"]
+			}
+		},
+		[NL["Tranquility Bloom"]] = {
+			id = 1485,
+			variants = {
+				NL["Lush Tranquility Bloom"], NL["Lightfused Tranquility Bloom"], NL["Primal Tranquility Bloom"], NL["Transplanted Tranquility Bloom"], NL["Transplanted Lush Tranquility Bloom"], NL["Voidbound Tranquility Bloom"], NL["Wild Tranquility Bloom"]
+			}
+		},
 	},
 	["Treasure"] = {
 		[NL["Giant Clam"]] 						= 501,
@@ -1091,6 +1122,11 @@ local node_textures = {
 		[1463] = icon_path.."Herb\\orbinid.tga",
 		[1471] = icon_path.."Herb\\arathorsspear.tga",
 		[1479] = icon_path.."Herb\\phantombloom.tga",
+		[1481] = icon_path.."Herb\\argentleaf.tga",
+		[1482] = icon_path.."Herb\\azeroot.tga",
+		[1483] = icon_path.."Herb\\manalily.tga",
+		[1484] = icon_path.."Herb\\sanguithorn.tga",
+		[1485] = icon_path.."Herb\\tranquilitybloom.tga",
 	},
 	["Treasure"] = {
 		[501] = icon_path.."Treasure\\clam.tga",
@@ -1214,6 +1250,7 @@ local BFA     = 8
 local SL      = 9
 local DF      = 10
 local TWW     = 11
+local MN      = 12
 local node_expansion = {
 	["Mining"] = {
 		[201] = CLASSIC,
@@ -1431,6 +1468,11 @@ local node_expansion = {
 		[1463] = TWW,
 		[1471] = TWW,
 		[1479] = TWW,
+		[1481] = MN,
+		[1482] = MN,
+		[1483] = MN,
+		[1484] = MN,
+		[1485] = MN,
 	},
 }
 GatherMate.nodeExpansion = node_expansion
