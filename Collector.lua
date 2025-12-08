@@ -76,8 +76,8 @@ function Collector:RegisterGatherEvents()
 	self:RegisterEvent("CURSOR_CHANGED","CursorChange")
 	self:RegisterEvent("UI_ERROR_MESSAGE","UIError")
 	--self:RegisterEvent("LOOT_CLOSED","GatherCompleted")
-	self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", "GasBuffDetector")
-	self:RegisterEvent("CHAT_MSG_LOOT","SecondaryGasCheck") -- for Storm Clouds
+	--self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", "GasBuffDetector")
+	--self:RegisterEvent("CHAT_MSG_LOOT","SecondaryGasCheck") -- for Storm Clouds
 end
 
 --[[
@@ -92,7 +92,8 @@ function Collector:UnregisterGatherEvents()
 	self:UnregisterEvent("CURSOR_CHANGED")
 	self:UnregisterEvent("UI_ERROR_MESSAGE")
 	--self:UnregisterEvent("LOOT_CLOSED")
-	self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+	--self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+	--self:UnregisterEvent("CHAT_MSG_LOOT")
 end
 
 local CrystalizedWater = (C_Item.GetItemNameByID(37705)) or ""
