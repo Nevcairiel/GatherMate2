@@ -1,0 +1,13 @@
+## Interface: 120000
+## Title: GatherMate2: Storage for Midnight
+## Author: nevcairiel
+## Group: GatherMate2
+## IconTexture: Interface\AddOns\GatherMate2\Artwork\Icon.tga
+## Dependencies: GatherMate2
+## Version: @project-version@
+## X-Category: Map
+## LoadSavedVariablesFirst: 1
+## SavedVariables: GatherMate2HerbDBMN, GatherMate2MineDBMN, GatherMate2FishDBMN, GatherMate2GasDBMN, GatherMate2TreasureDBMN, GatherMate2ArchaeologyDBMN, GatherMate2LoggingDBMN
+## X-GM2-Storage-Tag: MN
+## X-GM2-Storage-Zones: 2393, 2395, 2405, 2413, 2437
+..\GatherMate2\LoadAddOnStorage.lua
