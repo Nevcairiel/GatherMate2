@@ -1279,6 +1279,7 @@ function Config:CheckAutoImport()
 					addon:CleanupImportData()
 					Config:SendMessage("GatherMate2ConfigChanged")
 					v["lastImport"] = dataVersion
+					GatherMate:RemoveDepracatedNodes()
 					print(L["Auto import complete for addon "]..k)
 				end
 			end
