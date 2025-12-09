@@ -71,7 +71,7 @@ local defaults = {
 				["Databases"] = {},
 				["lastImport"] = 0,
 				["autoImport"] = false,
-				["bcOnly"] = false,
+				["expacOnly"] = false,
 			},
 		}
 	},
