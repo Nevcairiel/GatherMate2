@@ -489,8 +489,8 @@ function Display:addMiniPin(pin, refresh)
 		pin.texture:SetTexture(trackingCircle)
 		local t = db.trackColors[pin.nodeType]
 		pin.texture:SetVertexColor(t.Red, t.Green, t.Blue, t.Alpha)
-		pin:SetHeight(12 / minimapScale)
-		pin:SetWidth(12 / minimapScale)
+		pin:SetHeight(12 * db.miniscale / minimapScale)
+		pin:SetWidth(12 * db.miniscale / minimapScale)
 		pin.isCircle = true
 		pin.texture:SetTexCoord(0, 1, 0, 1)
 		pin.texture:ClearAllPoints()
