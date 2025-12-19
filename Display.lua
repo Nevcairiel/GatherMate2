@@ -252,6 +252,21 @@ function Display:OnEnable()
 
 	WorldMapFrame:AddDataProvider(Display.WorldMapDataProvider)
 
+	-- Also add DataProvider to BattlefieldMapFrame (Gebietskarte/Zone Map)
+	if BattlefieldMapFrame then
+		BattlefieldMapFrame:AddDataProvider(Display.WorldMapDataProvider)
+		Display.battlefieldMapEnabled = true
+	end
+
+	-- Force refresh when WorldMap is shown
+	WorldMapFrame:HookScript("OnShow", function()
+		C_Timer.After(0.1, function()
+			if Display.WorldMapDataProvider then
+				Display.WorldMapDataProvider:RefreshAllData(true)
+			end
+		end)
+	end)
+
 	self:RegisterMapEvents()
 	self:RegisterEvent("SKILL_LINES_CHANGED")
 	self:RegisterEvent("MINIMAP_UPDATE_TRACKING")
@@ -416,6 +431,7 @@ end
 function Display:ConfigChanged()
 	db = GatherMate.db.profile
 	self:UpdateMaps()
+	self:UpdateZoneMap()
 	-- TODO filter prefs
 end
 --[[
@@ -749,12 +765,19 @@ end
 function Display.WorldMapDataProvider:RefreshAllData(fromOnShow)
 	self:RemoveAllData()
 
-	if not db.showWorldMap then return end
+	local map = self:GetMap()
+
+	-- Check if this is BattlefieldMapFrame (Zone Map)
+	if map == BattlefieldMapFrame then
+		if not db.showZoneMap then return end
+	else
+		-- This is WorldMapFrame
+		if not db.showWorldMap then return end
+	end
 
 	-- update visibility for archaeology blobs
 	Display:UpdateVisibility()
 
-	local map = self:GetMap()
 	local uiMapID = map:GetMapID()
 	if not uiMapID then return end
 
@@ -821,6 +844,14 @@ GatherMate2WorldMapPinMixin.SetPassThroughButtons = function() end
 
 function Display:UpdateWorldMap()
 	self.WorldMapDataProvider:RefreshAllData()
+end
+
+function Display:UpdateZoneMap()
+	if not self.battlefieldMapEnabled then return end
+
+	if BattlefieldMapFrame and BattlefieldMapFrame:IsShown() then
+		self.WorldMapDataProvider:RefreshAllData(true)
+	end
 end
 
 --[[
