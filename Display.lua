@@ -6,6 +6,8 @@ local L = LibStub("AceLocale-3.0"):GetLocale("GatherMate2")
 local minimapPins, minimapPinCount = {}, 0
 -- Current worldmap pin set
 local worldmapPins = {}
+-- Current zonemap pin set
+local zonemapPins = {}
 -- table for UIDropdownMenu info
 local info = {}
 -- cache of pins
@@ -254,18 +256,9 @@ function Display:OnEnable()
 
 	-- Also add DataProvider to BattlefieldMapFrame (Gebietskarte/Zone Map)
 	if BattlefieldMapFrame then
-		BattlefieldMapFrame:AddDataProvider(Display.WorldMapDataProvider)
+		BattlefieldMapFrame:AddDataProvider(Display.ZoneMapDataProvider)
 		Display.battlefieldMapEnabled = true
 	end
-
-	-- Force refresh when WorldMap is shown
-	WorldMapFrame:HookScript("OnShow", function()
-		C_Timer.After(0.1, function()
-			if Display.WorldMapDataProvider then
-				Display.WorldMapDataProvider:RefreshAllData(true)
-			end
-		end)
-	end)
 
 	self:RegisterMapEvents()
 	self:RegisterEvent("SKILL_LINES_CHANGED")
@@ -300,6 +293,7 @@ function Display:UnregisterMapEvents()
 	self:UnregisterMessage("GatherMate2DataImport")
 	self:UnregisterMessage("GatherMate2Cleanup")
 	clearpins(worldmapPins)
+	clearpins(zonemapPins)
 	clearpins(minimapPins)
 	self.updateFrame:Hide()
 end
@@ -312,6 +306,9 @@ function Display:OnDisable()
 	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 	GatherMate.HBD.UnregisterCallback(self, "PlayerZoneChanged")
 	WorldMapFrame:RemoveDataProvider(Display.WorldMapDataProvider)
+	if BattlefieldMapFrame and Display.battlefieldMapEnabled then
+		BattlefieldMapFrame:RemoveDataProvider(Display.ZoneMapDataProvider)
+	end
 end
 
 function Display:PlayerZoneChanged()
@@ -765,19 +762,12 @@ end
 function Display.WorldMapDataProvider:RefreshAllData(fromOnShow)
 	self:RemoveAllData()
 
-	local map = self:GetMap()
-
-	-- Check if this is BattlefieldMapFrame (Zone Map)
-	if map == BattlefieldMapFrame then
-		if not db.showZoneMap then return end
-	else
-		-- This is WorldMapFrame
-		if not db.showWorldMap then return end
-	end
+	if not db.showWorldMap then return end
 
 	-- update visibility for archaeology blobs
 	Display:UpdateVisibility()
 
+	local map = self:GetMap()
 	local uiMapID = map:GetMapID()
 	if not uiMapID then return end
 
@@ -789,6 +779,41 @@ function Display.WorldMapDataProvider:RefreshAllData(fromOnShow)
 			for coord, nodeID in GatherMate:GetNodesForZone(uiMapID, db_type) do
 				local pin = map:AcquirePin("GatherMate2WorldMapPinTemplate", coord,  nodeID, db_type, uiMapID)
 				table.insert(worldmapPins, pin)
+			end
+		end
+	end
+end
+
+---------------------------------------------------------
+-- Zone Map Data Provider
+
+Display.ZoneMapDataProvider = CreateFromMixins(MapCanvasDataProviderMixin)
+
+function Display.ZoneMapDataProvider:RemoveAllData()
+	self:GetMap():RemoveAllPinsByTemplate("GatherMate2WorldMapPinTemplate")
+	wipe(zonemapPins)
+end
+
+function Display.ZoneMapDataProvider:RefreshAllData(fromOnShow)
+	self:RemoveAllData()
+
+	if not db.showZoneMap then return end
+
+	-- update visibility for archaeology blobs
+	Display:UpdateVisibility()
+
+	local map = self:GetMap()
+	local uiMapID = map:GetMapID()
+	if not uiMapID then return end
+
+	if GatherMate.phasing[uiMapID] then uiMapID = GatherMate.phasing[uiMapID] end
+
+	-- iterate databases and add nodes
+	for i,db_type in pairs(GatherMate.db_types) do
+		if GatherMate.Visible[db_type] then
+			for coord, nodeID in GatherMate:GetNodesForZone(uiMapID, db_type) do
+				local pin = map:AcquirePin("GatherMate2WorldMapPinTemplate", coord,  nodeID, db_type, uiMapID)
+				table.insert(zonemapPins, pin)
 			end
 		end
 	end
@@ -849,9 +874,7 @@ end
 function Display:UpdateZoneMap()
 	if not self.battlefieldMapEnabled then return end
 
-	if BattlefieldMapFrame and BattlefieldMapFrame:IsShown() then
-		self.WorldMapDataProvider:RefreshAllData(true)
-	end
+	self.ZoneMapDataProvider:RefreshAllData()
 end
 
 --[[
