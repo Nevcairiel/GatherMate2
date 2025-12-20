@@ -1,4 +1,4 @@
-## Interface: 120000
+## Interface: 120000, 120001
 ## Title: GatherMate2: Storage for Midnight
 ## Author: nevcairiel
 ## Group: GatherMate2
@@ -9,5 +9,7 @@
 ## LoadSavedVariablesFirst: 1
 ## SavedVariables: GatherMate2HerbDBMN, GatherMate2MineDBMN, GatherMate2FishDBMN, GatherMate2GasDBMN, GatherMate2TreasureDBMN, GatherMate2ArchaeologyDBMN, GatherMate2LoggingDBMN
 ## X-GM2-Storage-Tag: MN
-## X-GM2-Storage-Zones: 2393, 2395, 2405, 2413, 2437
+## X-GM2-Storage-Zones: 2393, 2395, 2405, 2413, 2437, 2444, 2536
+## Notes: Midnight zones: Silbermond (2393), Eversong Woods (2395), Voidstorm (2405), Harandar (2413), Zul'Aman (2437), Slayer's Rise (2444), Atal'Aman (2536)
+
 ..\GatherMate2\LoadAddOnStorage.lua
