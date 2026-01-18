@@ -657,7 +657,7 @@ function Display:UpdateMiniMap(force)
 	end
 
 	-- get current player position
-	local x, y = GatherMate.HBD:GetPlayerWorldPosition()
+	local x, y, instance = GatherMate.HBD:GetPlayerWorldPosition()
 
 	-- get data from the API for calculations
 	local zoom = Minimap:GetZoom()
@@ -697,11 +697,8 @@ function Display:UpdateMiniMap(force)
 		minimapFrameLevel = Minimap:GetFrameLevel() + 5
 		mapRadius = C_Minimap.GetViewRadius()
 
-		local x1, y1 = GatherMate.HBD:GetZoneCoordinatesFromWorld(x,y,zone)
-		if not x1 then
-			x1, y1 = GatherMate.HBD:GetZoneCoordinatesFromWorld(x,y,zone)
-			if not x1 then return end
-		end
+		local x1, y1 = GatherMate.HBD:GetZoneCoordinatesFromWorldInstance(x,y,instance,zone)
+		if not x1 then return end
 
 		-- update upvalues for icon placement
 		lastZoom = zoom
