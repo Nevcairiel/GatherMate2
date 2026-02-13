@@ -164,6 +164,14 @@ local minimapOptions = {
 			arg = "showMinimap",
 			width = "full",
 		},
+		showZoneMapIcons = {
+			order = 2.5,
+			name = L["Show Zone Map Icons"],
+			desc = L["Toggle showing Zone Map icons (Shift+M)."],
+			type = "toggle",
+			arg = "showZoneMap",
+			width = "full",
+		},
 		minimapTooltips = {
 			order = 3,
 			name = L["Minimap Icon Tooltips"],
