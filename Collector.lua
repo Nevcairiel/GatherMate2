@@ -14,6 +14,7 @@ Convert for 2.4 spell IDs
 local miningSpell = (GetSpellName(2575))
 local miningSpell2 = (GetSpellName(195122))
 local miningSpell3 = (GetSpellName(423341)) -- Khaz Algar
+local miningSpellMidnight = (GetSpellName(471013)) -- Khaz Algar
 local herbSpell = (GetSpellName(2366))
 local herbSkill = ((GetSpellName(170691)) or (string.gsub((GetSpellName(9134)),"%A","")))
 local fishSpell = (GetSpellName(7620)) or (GetSpellName(131476))
@@ -32,6 +33,7 @@ local spells =
 	[miningSpell] = "Mining",
 	[miningSpell2] = "Mining",
 	[miningSpell3] = "Mining",
+	[miningSpellMidnight] = "Mining",
 	[herbSpell] = "Herb Gathering",
 	[fishSpell] = "Fishing",
 	[gasSpell] = "Extract Gas",
