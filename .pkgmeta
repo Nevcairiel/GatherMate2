@@ -16,3 +16,4 @@ externals:
 move-folders:
   GatherMate2/Storage/Dragonflight: GatherMate2Storage_Dragonflight
   GatherMate2/Storage/TheWarWithin: GatherMate2Storage_TheWarWithin
+  GatherMate2/Storage/Midnight: GatherMate2Storage_Midnight

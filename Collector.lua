@@ -12,8 +12,9 @@ local GetSpellName = C_Spell.GetSpellName
 Convert for 2.4 spell IDs
 ]]
 local miningSpell = (GetSpellName(2575))
-local miningSpell2 = (GetSpellName(195122))
-local miningSpell3 = (GetSpellName(423341)) -- Khaz Algar
+local LegionMining = (GetSpellName(195122))
+local TWWMining = (GetSpellName(423341)) -- Khaz Algar
+local MNMining = (GetSpellName(471013)) -- Midnight
 local herbSpell = (GetSpellName(2366))
 local herbSkill = ((GetSpellName(170691)) or (string.gsub((GetSpellName(9134)),"%A","")))
 local fishSpell = (GetSpellName(7620)) or (GetSpellName(131476))
@@ -30,8 +31,9 @@ local loggingSpell2 = (GetSpellName(1239682)) -- tww/midnight housing decor wood
 local spells =
 { -- spellname to "database name"
 	[miningSpell] = "Mining",
-	[miningSpell2] = "Mining",
-	[miningSpell3] = "Mining",
+	[LegionMining] = "Mining",
+	[TWWMining] = "Mining",
+	[MNMining] = "Mining",
 	[herbSpell] = "Herb Gathering",
 	[fishSpell] = "Fishing",
 	[gasSpell] = "Extract Gas",
@@ -190,7 +192,7 @@ end
 function Collector:UIError(event,token,msg)
 	local what = tooltipLeftText1:GetText();
 	if not what then return end
-	if strfind(msg, miningSpell) or (miningSpell2 and strfind(msg, miningSpell2) or (miningSpell3 and strfind(msg, miningSpell3))) then
+	if strfind(msg, miningSpell) or (LegionMining and strfind(msg, LegionMining) or (TWWMining and strfind(msg, TWWMining)) or (MNMining and strfind(msg, MNMining))) then
 		self:addItem(miningSpell,what)
 	elseif strfind(msg, herbSkill) then
 		self:addItem(herbSpell,what)
