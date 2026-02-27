@@ -290,6 +290,7 @@ function Collector:GetWorldTarget()
 	if foundTarget or not spells[curSpell] then return end
 	if (MinimapCluster:IsMouseOver()) then return end
 	local what = tooltipLeftText1:GetText()
+	if issecretvalue(what) then return end
 	local nodeID = GatherMate:GetIDForNode(spells[prevSpell], what)
 	if what and prevSpell and what ~= prevSpell and nodeID then
 		self:addItem(prevSpell,what)

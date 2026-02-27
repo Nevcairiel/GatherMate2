@@ -28,6 +28,7 @@ globals = {
 read_globals = {
 	"max", "min", "floor", "ceil",
 	"table", "tinsert", "wipe",
+	"issecretvalue",
 
 	-- misc custom, third party libraries
 	"LibStub", "TomTom",
