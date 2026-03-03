@@ -538,7 +538,7 @@ function Display:addMiniPin(pin, refresh)
 		pin:Show()
 		pin:ClearAllPoints()
 		pin:SetPoint("CENTER", Minimap, "CENTER", diffX * minimapWidth, -diffY * minimapHeight)
-		pin:SetAlpha(min(alpha,db.alpha))
+		pin:SetAlpha(max(0, min(alpha, db.alpha)))
 	else
 		pin:Hide()
 	end
