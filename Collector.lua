@@ -17,7 +17,6 @@ local miningSpell3 = (GetSpellName(423341)) -- Khaz Algar
 local miningSpellMidnight = (GetSpellName(471013)) -- Midnight
 local herbSpell = (GetSpellName(2366))
 local herbSpellKhaz = (GetSpellName(471009)) -- Khaz Algar
-local herbSpellMidnight = (GetSpellName(471014)) -- Midnight
 local herbSkill = ((GetSpellName(170691)) or (string.gsub((GetSpellName(9134)),"%A","")))
 local fishSpell = (GetSpellName(7620)) or (GetSpellName(131476))
 local gasSpell = (GetSpellName(30427))
@@ -38,7 +37,6 @@ local spells =
 	[miningSpellMidnight] = "Mining",
 	[herbSpell] = "Herb Gathering",
 	[herbSpellKhaz] = "Herb Gathering",
-	[herbSpellMidnight] = "Herb Gathering",
 	[fishSpell] = "Fishing",
 	[gasSpell] = "Extract Gas",
 	[openSpell] = "Treasure",
@@ -199,7 +197,7 @@ function Collector:UIError(event,token,msg)
 	if strfind(msg, miningSpell) or (miningSpell2 and strfind(msg, miningSpell2) or (miningSpell3 and strfind(msg, miningSpell3))) then
 		self:addItem(miningSpell,what)
 	elseif strfind(msg, herbSkill) then
-		self:addItem(herbSpellMidnight or herbSpellKhaz or herbSpell,what)
+		self:addItem(herbSpellKhaz or herbSpell,what)
 	elseif strfind(msg, pickSpell) or strfind(msg, openSpell) then -- locked box or failed pick
 		self:addItem(openSpell, what)
 	elseif strfind(msg, NL["Lumber Mill"]) then -- timber requires lumber mill
