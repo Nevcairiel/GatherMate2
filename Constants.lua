@@ -784,7 +784,7 @@ Display:SetTrackingSpell("Mining", 2580)
 Display:SetTrackingSpell("Herb Gathering", 2383)
 Display:SetTrackingSpell("Fishing", 43308)
 Display:SetTrackingSpell("Treasure", 2481) -- Left this in, however it appears that the spell no longer exists. Maybe added as a potion TreasureFindingPotion
-Display:SetTrackingSpell("Logging", 167924)
+Display:SetTrackingSpell("Logging", 1256697)
 -- Profession markers
 Display:SetSkillProfession("Herb Gathering", L["Herbalism"])
 Display:SetSkillProfession("Mining", L["Mining"])

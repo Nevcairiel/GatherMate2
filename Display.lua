@@ -334,7 +334,6 @@ function Display:MINIMAP_UPDATE_TRACKING()
 			end
 		end
 	end
-	active_tracking["Logging"] = true -- TODO: we can't seem to detect this currently
 	self:UpdateMaps()
 end
 
