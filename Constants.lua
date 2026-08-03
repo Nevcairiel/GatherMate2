@@ -1157,11 +1157,15 @@ GatherMate.INCURSION_BUFF_SPELL_IDS = {
 }
 GatherMate.INCURSION_ZONE_OFFSET = 900000
 
+-- NOTE: these were originally pulled from HereBeDragons' old vanilla-era WorldMapAreaID
+-- migration table, which turned out to be stale - Hinterlands' real uiMapID is 1425 on
+-- live, not 26 (confirmed via /gm2zone). Duskwood/Ashenvale/Feralas below are still the
+-- old, unverified values and need the same /gm2zone check.
 local incursion_zones = {
-	[47] = true, -- Duskwood
-	[63] = true, -- Ashenvale
-	[69] = true, -- Feralas
-	[26] = true, -- Hinterlands
+	[47] = true, -- Duskwood (UNVERIFIED - confirm with /gm2zone)
+	[63] = true, -- Ashenvale (UNVERIFIED - confirm with /gm2zone)
+	[69] = true, -- Feralas (UNVERIFIED - confirm with /gm2zone)
+	[1425] = true, -- Hinterlands, confirmed via /gm2zone
 }
 
 GatherMate.incursionZones = incursion_zones
