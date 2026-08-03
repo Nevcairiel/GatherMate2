@@ -1145,14 +1145,14 @@ GatherMate.mapBlacklist = map_blacklist
 
 	The buff has a distinct spell ID per zone (444758-444760, 444762 - Wowhead confirms
 	exactly 4 mechanically-identical "Emerald Nightmare" spells in that ID range, and
-	444760 was confirmed live via /gm2buffs while standing in the Ashenvale incursion).
+	444760 was confirmed live via /gm2buffs while standing in the Hinterlands incursion).
 	Detection here doesn't need to know which ID maps to which zone, since the target
 	zone comes from the player's real position, not from which of these IDs is active.
 ]]
 GatherMate.INCURSION_BUFF_SPELL_IDS = {
 	[444758] = true,
 	[444759] = true,
-	[444760] = true, -- Ashenvale, confirmed in-game via /gm2buffs
+	[444760] = true, -- Hinterlands, confirmed in-game via /gm2buffs
 	[444762] = true,
 }
 GatherMate.INCURSION_ZONE_OFFSET = 900000
