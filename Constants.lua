@@ -203,7 +203,7 @@ local node_ids = {
 		[NL["Cold Iron Ore"]]					= 273, -- Duskwood incursion
 		[NL["Fool's Gold Dust"]]				= 274, -- Ashenvale incursion
 		[NL["Greater Moonstone"]]				= 275, -- Feralas incursion
-		[NL["Starsilver Ore"]]					= 276, -- Hinterlands incursion
+		[NL["Starsilver Vein"]]					= 276, -- Hinterlands incursion
 	},
 	["Extract Gas"] = {
 		[NL["Windy Cloud"]] 					= 301,
@@ -975,7 +975,7 @@ local node_expansion = {
 		[273] = CLASSIC, -- Cold Iron Ore (SoD Nightmare Incursion)
 		[274] = CLASSIC, -- Fool's Gold Dust (SoD Nightmare Incursion)
 		[275] = CLASSIC, -- Greater Moonstone (SoD Nightmare Incursion)
-		[276] = CLASSIC, -- Starsilver Ore (SoD Nightmare Incursion)
+		[276] = CLASSIC, -- Starsilver Vein (SoD Nightmare Incursion)
 	},
 	["Herb Gathering"] = {
 		[401] = CLASSIC,
@@ -1140,7 +1140,7 @@ GatherMate.mapBlacklist = map_blacklist
 	"Emerald Nightmare" buff (spell ID 444758). While that buff is active, nodes are
 	recorded/displayed under a separate virtual zone (real uiMapID + INCURSION_ZONE_OFFSET)
 	instead of the outdoor zone's normal node set, since the incursion-only nodes
-	(Cold Iron Ore, Fool's Gold Dust, Greater Moonstone, Starsilver Ore, Nightmare Moss,
+	(Cold Iron Ore, Fool's Gold Dust, Greater Moonstone, Starsilver Vein, Nightmare Moss,
 	Dreamroot, Moonroot, Star Lotus) aren't part of the normal outdoor gathering pool.
 ]]
 GatherMate.INCURSION_BUFF_SPELL_ID = 444758
