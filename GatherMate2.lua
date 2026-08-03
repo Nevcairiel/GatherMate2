@@ -33,6 +33,7 @@ local defaults = {
 		showWorldMap = true,
 		worldMapIconsInteractive = true,
 		minimapTooltips = true,
+		debugUnknownNodes = false,
 		filter = {
 			["*"] = {
 				["*"] = true,
@@ -129,6 +130,19 @@ function GatherMate:OnInitialize()
 		self:MigrateData80()
 		self.db.global.data_version = 5
 	end
+
+	self:RegisterChatCommand("gm2debug", "ToggleDebugUnknownNodes")
+end
+
+--[[
+	Toggle printing of gathering attempts GatherMate couldn't identify (unknown node
+	name for the current zone/spell), so new/reskinned nodes -- e.g. Nightmare
+	Incursion nodes in the Emerald Dream phased zones -- can be reported for adding
+	to the node database.
+]]
+function GatherMate:ToggleDebugUnknownNodes()
+	self.db.profile.debugUnknownNodes = not self.db.profile.debugUnknownNodes
+	self:Print(self.db.profile.debugUnknownNodes and L["Unknown node debugging enabled."] or L["Unknown node debugging disabled."])
 end
 
 function GatherMate:RemoveGarrisonNodes()
@@ -339,7 +353,9 @@ do
 		local tbl = next(tablestack) or {}
 		tablestack[tbl] = nil
 		tbl.data = gmdbs[nodeType][zone] or emptyTbl
-		tbl.yw, tbl.yh = self.HBD:GetZoneSize(zone)
+		-- zone may be an incursion-phase virtual zone (not a real uiMapID); HBD only
+		-- knows the real zone's size, so un-offset before asking it
+		tbl.yw, tbl.yh = self.HBD:GetZoneSize(self:GetRealZone(zone))
 		tbl.radiusSquared = radius * radius
 		tbl.xLocal, tbl.yLocal = x, y
 		tbl.filterTable = filter[nodeType]
@@ -527,4 +543,43 @@ end
 
 function GatherMate:MapLocalize(map)
 	return self.HBD:GetLocalizedMap(map)
+end
+
+--[[
+	True while the player has the SoD "Emerald Nightmare" incursion buff (spell 444758).
+]]
+function GatherMate:IsPlayerInIncursionPhase()
+	local spellID = self.INCURSION_BUFF_SPELL_ID
+	for i = 1, 40 do
+		local name, _, _, _, _, _, _, _, _, auraSpellID = UnitAura("player", i, "HELPFUL")
+		if not name then break end
+		if auraSpellID == spellID then return true end
+	end
+	return false
+end
+
+--[[
+	Remap a real uiMapID to its incursion-phase virtual zone ID for GatherMate's own node
+	database (never pass the result to a HereBeDragons coordinate function - it isn't a
+	real uiMapID). Only applies when that zone is the player's current physical zone and
+	the player currently has the incursion buff, so nodes are stored/displayed separately
+	from the zone's normal node set without affecting other zones or DB-wide operations
+	(e.g. cleanup sweeps) that pass in zone IDs the player isn't currently standing in.
+]]
+function GatherMate:GetEffectiveZone(zone)
+	if zone and self.incursionZones[zone] and self:IsPlayerInIncursionPhase() and self.HBD:GetPlayerZone() == zone then
+		return zone + self.INCURSION_ZONE_OFFSET
+	end
+	return zone
+end
+
+--[[
+	Inverse of GetEffectiveZone: strips the incursion-phase offset (if present) so the
+	result is safe to pass to HereBeDragons.
+]]
+function GatherMate:GetRealZone(zone)
+	if zone and zone >= self.INCURSION_ZONE_OFFSET then
+		return zone - self.INCURSION_ZONE_OFFSET
+	end
+	return zone
 end

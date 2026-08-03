@@ -199,6 +199,11 @@ local node_ids = {
 		[NL["Osmenite Deposit"]]				= 270,
 		[NL["Rich Osmenite Deposit"]]			= 271,
 		[NL["Osmenite Seam"]]					= 272,
+-- SoD Nightmare Incursion nodes (Emerald Nightmare phase)
+		[NL["Cold Iron Ore"]]					= 273, -- Duskwood incursion
+		[NL["Fool's Gold Dust"]]				= 274, -- Ashenvale incursion
+		[NL["Greater Moonstone"]]				= 275, -- Feralas incursion
+		[NL["Starsilver Ore"]]					= 276, -- Hinterlands incursion
 	},
 	["Extract Gas"] = {
 		[NL["Windy Cloud"]] 					= 301,
@@ -307,6 +312,11 @@ local node_ids = {
 		[NL["Star Moss"]]						= 490,
 		[NL["Winter's Kiss"]]					= 491,
 		[NL["Zin'anthid"]]						= 492,
+-- SoD Nightmare Incursion nodes (Emerald Nightmare phase)
+		[NL["Nightmare Moss"]]					= 493, -- Duskwood incursion
+		[NL["Dreamroot"]]						= 494, -- Ashenvale incursion
+		[NL["Moonroot"]]						= 495, -- Feralas incursion
+		[NL["Star Lotus"]]						= 496, -- Hinterlands incursion
 	},
 	["Treasure"] = {
 		[NL["Giant Clam"]] 						= 501,
@@ -671,6 +681,10 @@ local node_textures = {
 		[270] = icon_path.."Mine\\osmenite.tga",
 		[271] = icon_path.."Mine\\osmenite.tga",
 		[272] = icon_path.."Mine\\osmenite.tga",
+		[273] = icon_path.."Mine\\iron.tga",
+		[274] = icon_path.."Mine\\gold.tga",
+		[275] = icon_path.."Mine\\silver.tga",
+		[276] = icon_path.."Mine\\truesilver.tga",
 	},
 	["Extract Gas"] = {
 		[301] = icon_path.."Gas\\windy_cloud.tga",
@@ -774,6 +788,10 @@ local node_textures = {
 		[490] = icon_path.."Herb\\star_moss.tga",
 		[491] = icon_path.."Herb\\winters_kiss.tga",
 		[492] = icon_path.."Herb\\zinanthid.tga",
+		[493] = icon_path.."Herb\\grave_moss.tga",
+		[494] = icon_path.."Herb\\dreamfoil.tga",
+		[495] = icon_path.."Herb\\liferoot.tga",
+		[496] = icon_path.."Herb\\black_lotus.tga",
 	},
 	["Treasure"] = {
 		[501] = icon_path.."Treasure\\clam.tga",
@@ -1107,3 +1125,24 @@ local map_blacklist = {
 }
 
 GatherMate.mapBlacklist = map_blacklist
+
+--[[
+	SoD Nightmare Incursions: touching an Emerald Dream portal phases the player into a
+	corrupted overlay of the SAME outdoor zone (uiMapID does not change) and grants the
+	"Emerald Nightmare" buff (spell ID 444758). While that buff is active, nodes are
+	recorded/displayed under a separate virtual zone (real uiMapID + INCURSION_ZONE_OFFSET)
+	instead of the outdoor zone's normal node set, since the incursion-only nodes
+	(Cold Iron Ore, Fool's Gold Dust, Greater Moonstone, Starsilver Ore, Nightmare Moss,
+	Dreamroot, Moonroot, Star Lotus) aren't part of the normal outdoor gathering pool.
+]]
+GatherMate.INCURSION_BUFF_SPELL_ID = 444758
+GatherMate.INCURSION_ZONE_OFFSET = 900000
+
+local incursion_zones = {
+	[47] = true, -- Duskwood
+	[63] = true, -- Ashenvale
+	[69] = true, -- Feralas
+	[26] = true, -- Hinterlands
+}
+
+GatherMate.incursionZones = incursion_zones
