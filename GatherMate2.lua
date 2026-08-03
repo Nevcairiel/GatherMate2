@@ -132,6 +132,25 @@ function GatherMate:OnInitialize()
 	end
 
 	self:RegisterChatCommand("gm2debug", "ToggleDebugUnknownNodes")
+	self:RegisterChatCommand("gm2buffs", "DumpPlayerBuffs")
+end
+
+--[[
+	One-shot dump of the player's current buffs (name + spellID) to chat, to verify the
+	real spell ID for the SoD "Emerald Nightmare" incursion buff instead of guessing.
+]]
+function GatherMate:DumpPlayerBuffs()
+	self:Print("Current player buffs:")
+	local found = false
+	for i = 1, 40 do
+		local name, _, _, _, _, _, _, _, _, spellID = UnitAura("player", i, "HELPFUL")
+		if not name then break end
+		found = true
+		self:Print(("  [%d] %s (spellID %s)"):format(i, name, tostring(spellID)))
+	end
+	if not found then
+		self:Print("  (none found - UnitAura returned nothing)")
+	end
 end
 
 --[[
