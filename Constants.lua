@@ -201,7 +201,7 @@ local node_ids = {
 		[NL["Osmenite Seam"]]					= 272,
 -- SoD Nightmare Incursion nodes (Emerald Nightmare phase)
 		[NL["Cold Iron Ore"]]					= 273, -- Duskwood incursion
-		[NL["Fool's Gold Dust"]]				= 274, -- Ashenvale incursion
+		[NL["Fool's Gold Vein"]]				= 274, -- Ashenvale incursion
 		[NL["Greater Moonstone"]]				= 275, -- Feralas incursion
 		[NL["Starsilver Vein"]]					= 276, -- Hinterlands incursion
 	},
@@ -973,7 +973,7 @@ local node_expansion = {
 		[271] = BFA,
 		[272] = BFA,
 		[273] = CLASSIC, -- Cold Iron Ore (SoD Nightmare Incursion)
-		[274] = CLASSIC, -- Fool's Gold Dust (SoD Nightmare Incursion)
+		[274] = CLASSIC, -- Fool's Gold Vein (SoD Nightmare Incursion)
 		[275] = CLASSIC, -- Greater Moonstone (SoD Nightmare Incursion)
 		[276] = CLASSIC, -- Starsilver Vein (SoD Nightmare Incursion)
 	},
