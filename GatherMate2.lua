@@ -133,6 +133,23 @@ function GatherMate:OnInitialize()
 
 	self:RegisterChatCommand("gm2debug", "ToggleDebugUnknownNodes")
 	self:RegisterChatCommand("gm2buffs", "DumpPlayerBuffs")
+	self:RegisterChatCommand("gm2zone", "DumpZoneState")
+end
+
+--[[
+	One-shot dump of every piece the incursion-phase check depends on, to see exactly
+	which condition is failing instead of guessing blind.
+]]
+function GatherMate:DumpZoneState()
+	local realZone = self.HBD:GetPlayerZone()
+	local isIncursionZone = self.incursionZones[realZone] and true or false
+	local hasBuff = self:IsPlayerInIncursionPhase()
+	local effective = self:GetEffectiveZone(realZone)
+	self:Print("Zone state:")
+	self:Print(("  HBD:GetPlayerZone() = %s"):format(tostring(realZone)))
+	self:Print(("  incursionZones[zone] known = %s"):format(tostring(isIncursionZone)))
+	self:Print(("  IsPlayerInIncursionPhase() = %s"):format(tostring(hasBuff)))
+	self:Print(("  GetEffectiveZone(zone) = %s%s"):format(tostring(effective), effective ~= realZone and " (SWAPPED)" or " (not swapped)"))
 end
 
 --[[
