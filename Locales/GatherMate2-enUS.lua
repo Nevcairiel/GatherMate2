@@ -14,3 +14,14 @@ local L = LibStub("AceLocale-3.0"):NewLocale("GatherMate2", "enUS", true, debug)
 local NL = LibStub("AceLocale-3.0"):NewLocale("GatherMate2Nodes", "enUS", true, debug)
 
 --@localization(locale="enUS", format="lua_additive_table", same-key-is-true=true, namespace="Nodes", table-name="NL")@
+
+-- SoD Nightmare Incursion nodes (Emerald Nightmare phase) - not yet in the WoWAce
+-- localization app, registered here directly so AceLocale doesn't warn on first use
+NL["Cold Iron Ore"] = true
+NL["Fool's Gold Dust"] = true
+NL["Greater Moonstone"] = true
+NL["Starsilver Ore"] = true
+NL["Nightmare Moss"] = true
+NL["Dreamroot"] = true
+NL["Moonroot"] = true
+NL["Star Lotus"] = true
