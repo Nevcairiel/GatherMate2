@@ -291,6 +291,6 @@ function Collector:GetWorldTarget()
 		self:addItem(prevSpell,what)
 		foundTarget = true
 	elseif what and prevSpell and what ~= prevSpell and GatherMate.db.profile.debugUnknownNodes then
-		GatherMate:Print(("Unrecognized %s node: \"%s\" (not in the node database)"):format(spells[prevSpell], what))
+		GatherMate:LogDebug(("Unrecognized %s node: \"%s\" (not in the node database)"):format(spells[prevSpell], what))
 	end
 end

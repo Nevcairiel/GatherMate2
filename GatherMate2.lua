@@ -102,6 +102,7 @@ function GatherMate:OnInitialize()
 	GatherMate2TreasureDB = GatherMate2TreasureDB or {}
 	GatherMate2GasDB = GatherMate2GasDB or {}
 	GatherMate2ArchaeologyDB = GatherMate2ArchaeologyDB or {}
+	GatherMate2DebugLog = GatherMate2DebugLog or {}
 	self.gmdbs = {}
 	self.db_types = {}
 	gmdbs = self.gmdbs
@@ -137,6 +138,20 @@ function GatherMate:OnInitialize()
 end
 
 --[[
+	Print a debug line AND append it to the GatherMate2DebugLog SavedVariable, so it can
+	be read straight from the WTF SavedVariables file on disk after a /reload instead of
+	needing to be copy-pasted out of the chat window.
+]]
+function GatherMate:LogDebug(line)
+	self:Print(line)
+	tinsert(GatherMate2DebugLog, ("[%s] %s"):format(date("%H:%M:%S"), line))
+	-- keep the log from growing unbounded across a long play session
+	while #GatherMate2DebugLog > 200 do
+		tremove(GatherMate2DebugLog, 1)
+	end
+end
+
+--[[
 	One-shot dump of every piece the incursion-phase check depends on, to see exactly
 	which condition is failing instead of guessing blind.
 ]]
@@ -145,11 +160,11 @@ function GatherMate:DumpZoneState()
 	local isIncursionZone = self.incursionZones[realZone] and true or false
 	local hasBuff = self:IsPlayerInIncursionPhase()
 	local effective = self:GetEffectiveZone(realZone)
-	self:Print("Zone state:")
-	self:Print(("  HBD:GetPlayerZone() = %s"):format(tostring(realZone)))
-	self:Print(("  incursionZones[zone] known = %s"):format(tostring(isIncursionZone)))
-	self:Print(("  IsPlayerInIncursionPhase() = %s"):format(tostring(hasBuff)))
-	self:Print(("  GetEffectiveZone(zone) = %s%s"):format(tostring(effective), effective ~= realZone and " (SWAPPED)" or " (not swapped)"))
+	self:LogDebug("Zone state:")
+	self:LogDebug(("  HBD:GetPlayerZone() = %s"):format(tostring(realZone)))
+	self:LogDebug(("  incursionZones[zone] known = %s"):format(tostring(isIncursionZone)))
+	self:LogDebug(("  IsPlayerInIncursionPhase() = %s"):format(tostring(hasBuff)))
+	self:LogDebug(("  GetEffectiveZone(zone) = %s%s"):format(tostring(effective), effective ~= realZone and " (SWAPPED)" or " (not swapped)"))
 end
 
 --[[
@@ -157,16 +172,16 @@ end
 	real spell ID for the SoD "Emerald Nightmare" incursion buff instead of guessing.
 ]]
 function GatherMate:DumpPlayerBuffs()
-	self:Print("Current player buffs:")
+	self:LogDebug("Current player buffs:")
 	local found = false
 	for i = 1, 40 do
 		local name, _, _, _, _, _, _, _, _, spellID = UnitAura("player", i, "HELPFUL")
 		if not name then break end
 		found = true
-		self:Print(("  [%d] %s (spellID %s)"):format(i, name, tostring(spellID)))
+		self:LogDebug(("  [%d] %s (spellID %s)"):format(i, name, tostring(spellID)))
 	end
 	if not found then
-		self:Print("  (none found - UnitAura returned nothing)")
+		self:LogDebug("  (none found - UnitAura returned nothing)")
 	end
 end
 
