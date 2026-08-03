@@ -200,10 +200,9 @@ local node_ids = {
 		[NL["Rich Osmenite Deposit"]]			= 271,
 		[NL["Osmenite Seam"]]					= 272,
 -- SoD Nightmare Incursion nodes (Emerald Nightmare phase)
-		[NL["Cold Iron Ore"]]					= 273, -- Duskwood incursion (unconfirmed name)
-		[NL["Cold Iron Vein"]]					= 273, -- Duskwood incursion (unconfirmed name, "Vein" pattern match)
+		[NL["Cold Iron Deposit"]]				= 273, -- Duskwood incursion, confirmed via Wowhead object=439558
 		[NL["Fool's Gold Vein"]]				= 274, -- Ashenvale incursion
-		[NL["Greater Moonstone"]]				= 275, -- Feralas incursion
+		[NL["Greater Moonstone Formation"]]		= 275, -- Feralas incursion, confirmed via Wowhead object=439815
 		[NL["Starsilver Vein"]]					= 276, -- Hinterlands incursion
 	},
 	["Extract Gas"] = {
@@ -975,7 +974,7 @@ local node_expansion = {
 		[272] = BFA,
 		[273] = CLASSIC, -- Cold Iron Ore (SoD Nightmare Incursion)
 		[274] = CLASSIC, -- Fool's Gold Vein (SoD Nightmare Incursion)
-		[275] = CLASSIC, -- Greater Moonstone (SoD Nightmare Incursion)
+		[275] = CLASSIC, -- Greater Moonstone Formation (SoD Nightmare Incursion)
 		[276] = CLASSIC, -- Starsilver Vein (SoD Nightmare Incursion)
 	},
 	["Herb Gathering"] = {
@@ -1140,9 +1139,9 @@ GatherMate.mapBlacklist = map_blacklist
 	corrupted overlay of the SAME outdoor zone (uiMapID does not change) and grants an
 	"Emerald Nightmare" buff. While that buff is active, nodes are recorded/displayed
 	under a separate virtual zone (real uiMapID + INCURSION_ZONE_OFFSET) instead of the
-	outdoor zone's normal node set, since the incursion-only nodes (Cold Iron Ore, Fool's
-	Gold Dust, Greater Moonstone, Starsilver Vein, Nightmare Moss, Dreamroot, Moonroot,
-	Star Lotus) aren't part of the normal outdoor gathering pool.
+	outdoor zone's normal node set, since the incursion-only nodes (Cold Iron Deposit,
+	Fool's Gold Vein, Greater Moonstone Formation, Starsilver Vein, Nightmare Moss,
+	Dreamroot, Moonroot, Star Lotus) aren't part of the normal outdoor gathering pool.
 
 	The buff has a distinct spell ID per zone (444758-444760, 444762 - Wowhead confirms
 	exactly 4 mechanically-identical "Emerald Nightmare" spells in that ID range, and
