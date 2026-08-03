@@ -565,14 +565,16 @@ function GatherMate:MapLocalize(map)
 end
 
 --[[
-	True while the player has the SoD "Emerald Nightmare" incursion buff (spell 444760).
+	True while the player has any known SoD "Emerald Nightmare" incursion buff. The buff's
+	spell ID may differ per zone; GatherMate.INCURSION_BUFF_SPELL_IDS lists every ID
+	confirmed so far (see Constants.lua). Use /gm2buffs to find an unconfirmed zone's ID.
 ]]
 function GatherMate:IsPlayerInIncursionPhase()
-	local spellID = self.INCURSION_BUFF_SPELL_ID
+	local ids = self.INCURSION_BUFF_SPELL_IDS
 	for i = 1, 40 do
 		local name, _, _, _, _, _, _, _, _, auraSpellID = UnitAura("player", i, "HELPFUL")
 		if not name then break end
-		if auraSpellID == spellID then return true end
+		if ids[auraSpellID] then return true end
 	end
 	return false
 end

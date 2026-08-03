@@ -1136,14 +1136,19 @@ GatherMate.mapBlacklist = map_blacklist
 
 --[[
 	SoD Nightmare Incursions: touching an Emerald Dream portal phases the player into a
-	corrupted overlay of the SAME outdoor zone (uiMapID does not change) and grants the
-	"Emerald Nightmare" buff (spell ID 444760). While that buff is active, nodes are
-	recorded/displayed under a separate virtual zone (real uiMapID + INCURSION_ZONE_OFFSET)
-	instead of the outdoor zone's normal node set, since the incursion-only nodes
-	(Cold Iron Ore, Fool's Gold Dust, Greater Moonstone, Starsilver Vein, Nightmare Moss,
-	Dreamroot, Moonroot, Star Lotus) aren't part of the normal outdoor gathering pool.
+	corrupted overlay of the SAME outdoor zone (uiMapID does not change) and grants an
+	"Emerald Nightmare" buff. While that buff is active, nodes are recorded/displayed
+	under a separate virtual zone (real uiMapID + INCURSION_ZONE_OFFSET) instead of the
+	outdoor zone's normal node set, since the incursion-only nodes (Cold Iron Ore, Fool's
+	Gold Dust, Greater Moonstone, Starsilver Vein, Nightmare Moss, Dreamroot, Moonroot,
+	Star Lotus) aren't part of the normal outdoor gathering pool.
+
+	The buff's spell ID may differ per zone (confirmed 444760 in Ashenvale via
+	/gm2buffs); list every confirmed ID here as they're verified in the other zones.
 ]]
-GatherMate.INCURSION_BUFF_SPELL_ID = 444760
+GatherMate.INCURSION_BUFF_SPELL_IDS = {
+	[444760] = true, -- Ashenvale, confirmed in-game
+}
 GatherMate.INCURSION_ZONE_OFFSET = 900000
 
 local incursion_zones = {
