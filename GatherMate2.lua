@@ -565,7 +565,7 @@ function GatherMate:MapLocalize(map)
 end
 
 --[[
-	True while the player has the SoD "Emerald Nightmare" incursion buff (spell 444758).
+	True while the player has the SoD "Emerald Nightmare" incursion buff (spell 444760).
 ]]
 function GatherMate:IsPlayerInIncursionPhase()
 	local spellID = self.INCURSION_BUFF_SPELL_ID
