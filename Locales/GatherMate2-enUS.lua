@@ -18,6 +18,7 @@ local NL = LibStub("AceLocale-3.0"):NewLocale("GatherMate2Nodes", "enUS", true, 
 -- SoD Nightmare Incursion nodes (Emerald Nightmare phase) - not yet in the WoWAce
 -- localization app, registered here directly so AceLocale doesn't warn on first use
 NL["Cold Iron Ore"] = true
+NL["Cold Iron Vein"] = true
 NL["Fool's Gold Vein"] = true
 NL["Greater Moonstone"] = true
 NL["Starsilver Vein"] = true

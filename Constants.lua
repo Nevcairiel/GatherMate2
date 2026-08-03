@@ -200,7 +200,8 @@ local node_ids = {
 		[NL["Rich Osmenite Deposit"]]			= 271,
 		[NL["Osmenite Seam"]]					= 272,
 -- SoD Nightmare Incursion nodes (Emerald Nightmare phase)
-		[NL["Cold Iron Ore"]]					= 273, -- Duskwood incursion
+		[NL["Cold Iron Ore"]]					= 273, -- Duskwood incursion (unconfirmed name)
+		[NL["Cold Iron Vein"]]					= 273, -- Duskwood incursion (unconfirmed name, "Vein" pattern match)
 		[NL["Fool's Gold Vein"]]				= 274, -- Ashenvale incursion
 		[NL["Greater Moonstone"]]				= 275, -- Feralas incursion
 		[NL["Starsilver Vein"]]					= 276, -- Hinterlands incursion
