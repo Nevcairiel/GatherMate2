@@ -972,6 +972,10 @@ local node_expansion = {
 		[270] = BFA,
 		[271] = BFA,
 		[272] = BFA,
+		[273] = CLASSIC, -- Cold Iron Ore (SoD Nightmare Incursion)
+		[274] = CLASSIC, -- Fool's Gold Dust (SoD Nightmare Incursion)
+		[275] = CLASSIC, -- Greater Moonstone (SoD Nightmare Incursion)
+		[276] = CLASSIC, -- Starsilver Ore (SoD Nightmare Incursion)
 	},
 	["Herb Gathering"] = {
 		[401] = CLASSIC,
@@ -1066,6 +1070,10 @@ local node_expansion = {
 		[490] = BFA,
 		[491] = BFA,
 		[492] = BFA,
+		[493] = CLASSIC, -- Nightmare Moss (SoD Nightmare Incursion)
+		[494] = CLASSIC, -- Dreamroot (SoD Nightmare Incursion)
+		[495] = CLASSIC, -- Moonroot (SoD Nightmare Incursion)
+		[496] = CLASSIC, -- Star Lotus (SoD Nightmare Incursion)
 	},
 }
 GatherMate.nodeExpansion = node_expansion
