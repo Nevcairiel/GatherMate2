@@ -1162,7 +1162,7 @@ GatherMate.INCURSION_ZONE_OFFSET = 900000
 -- live, not 26 (confirmed via /gm2zone). Duskwood/Ashenvale/Feralas below are still the
 -- old, unverified values and need the same /gm2zone check.
 local incursion_zones = {
-	[47] = true, -- Duskwood (UNVERIFIED - confirm with /gm2zone)
+	[1431] = true, -- Duskwood, confirmed via C_Map.GetBestMapForUnit
 	[63] = true, -- Ashenvale (UNVERIFIED - confirm with /gm2zone)
 	[69] = true, -- Feralas (UNVERIFIED - confirm with /gm2zone)
 	[1425] = true, -- Hinterlands, confirmed via /gm2zone
