@@ -260,11 +260,19 @@ local minimapOptions = {
 		},
 		iconAlpha = {
 			order = 12,
-			name = L["Icon Alpha"],
+			name = L["World Map Icon Alpha"],
 			desc = L["Icon alpha value, this lets you change the transparency of the icons. Only applies on World Map."],
 			type = "range",
 			min = 0.1, max = 1, step = 0.05,
 			arg = "alpha",
+		},
+		miconAlpha = {
+			order = 13,
+			name = L["Minimap Icon Alpha"],
+			desc = L["Icon alpha value, this lets you change the transparency of the icons. Only applies on Minimap."],
+			type = "range",
+			min = 0.1, max = 1, step = 0.05,
+			arg = "minimapAlpha",
 		},
 		tracking = {
 			order = 20,
