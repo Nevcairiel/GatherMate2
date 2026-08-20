@@ -1145,14 +1145,14 @@ GatherMate.mapBlacklist = map_blacklist
 
 	The buff has a distinct spell ID per zone (444758-444760, 444762 - Wowhead confirms
 	exactly 4 mechanically-identical "Emerald Nightmare" spells in that ID range, and
-	444760 was confirmed live via /gm2buffs while standing in the Hinterlands incursion).
+	444760 was confirmed live while standing in the Hinterlands incursion).
 	Detection here doesn't need to know which ID maps to which zone, since the target
 	zone comes from the player's real position, not from which of these IDs is active.
 ]]
 GatherMate.INCURSION_BUFF_SPELL_IDS = {
 	[444758] = true,
 	[444759] = true,
-	[444760] = true, -- Hinterlands, confirmed in-game via /gm2buffs
+	[444760] = true, -- Hinterlands, confirmed in-game
 	[444762] = true,
 }
 GatherMate.INCURSION_ZONE_OFFSET = 900000
@@ -1160,12 +1160,12 @@ GatherMate.INCURSION_ZONE_OFFSET = 900000
 -- NOTE: these were originally pulled from HereBeDragons' old vanilla-era WorldMapAreaID
 -- migration table (Duskwood 47, Ashenvale 63, Feralas 69, Hinterlands 26), which turned
 -- out to be entirely stale on live - none of those old numbers matched. All 4 below are
--- now confirmed directly via C_Map.GetBestMapForUnit("player") / /gm2zone in-game.
+-- now confirmed directly via C_Map.GetBestMapForUnit("player") in-game.
 local incursion_zones = {
 	[1431] = true, -- Duskwood, confirmed via C_Map.GetBestMapForUnit
 	[1440] = true, -- Ashenvale, confirmed via C_Map.GetBestMapForUnit
 	[1444] = true, -- Feralas, confirmed via C_Map.GetBestMapForUnit
-	[1425] = true, -- Hinterlands, confirmed via /gm2zone
+	[1425] = true, -- Hinterlands, confirmed via C_Map.GetBestMapForUnit
 }
 
 GatherMate.incursionZones = incursion_zones

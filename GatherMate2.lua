@@ -33,7 +33,6 @@ local defaults = {
 		showWorldMap = true,
 		worldMapIconsInteractive = true,
 		minimapTooltips = true,
-		debugUnknownNodes = false,
 		filter = {
 			["*"] = {
 				["*"] = true,
@@ -102,7 +101,6 @@ function GatherMate:OnInitialize()
 	GatherMate2TreasureDB = GatherMate2TreasureDB or {}
 	GatherMate2GasDB = GatherMate2GasDB or {}
 	GatherMate2ArchaeologyDB = GatherMate2ArchaeologyDB or {}
-	GatherMate2DebugLog = GatherMate2DebugLog or {}
 	self.gmdbs = {}
 	self.db_types = {}
 	gmdbs = self.gmdbs
@@ -131,69 +129,6 @@ function GatherMate:OnInitialize()
 		self:MigrateData80()
 		self.db.global.data_version = 5
 	end
-
-	self:RegisterChatCommand("gm2debug", "ToggleDebugUnknownNodes")
-	self:RegisterChatCommand("gm2buffs", "DumpPlayerBuffs")
-	self:RegisterChatCommand("gm2zone", "DumpZoneState")
-end
-
---[[
-	Print a debug line AND append it to the GatherMate2DebugLog SavedVariable, so it can
-	be read straight from the WTF SavedVariables file on disk after a /reload instead of
-	needing to be copy-pasted out of the chat window.
-]]
-function GatherMate:LogDebug(line)
-	self:Print(line)
-	tinsert(GatherMate2DebugLog, ("[%s] %s"):format(date("%H:%M:%S"), line))
-	-- keep the log from growing unbounded across a long play session
-	while #GatherMate2DebugLog > 200 do
-		tremove(GatherMate2DebugLog, 1)
-	end
-end
-
---[[
-	One-shot dump of every piece the incursion-phase check depends on, to see exactly
-	which condition is failing instead of guessing blind.
-]]
-function GatherMate:DumpZoneState()
-	local realZone = self.HBD:GetPlayerZone()
-	local isIncursionZone = self.incursionZones[realZone] and true or false
-	local hasBuff = self:IsPlayerInIncursionPhase()
-	local effective = self:GetEffectiveZone(realZone)
-	self:LogDebug("Zone state:")
-	self:LogDebug(("  HBD:GetPlayerZone() = %s"):format(tostring(realZone)))
-	self:LogDebug(("  incursionZones[zone] known = %s"):format(tostring(isIncursionZone)))
-	self:LogDebug(("  IsPlayerInIncursionPhase() = %s"):format(tostring(hasBuff)))
-	self:LogDebug(("  GetEffectiveZone(zone) = %s%s"):format(tostring(effective), effective ~= realZone and " (SWAPPED)" or " (not swapped)"))
-end
-
---[[
-	One-shot dump of the player's current buffs (name + spellID) to chat, to verify the
-	real spell ID for the SoD "Emerald Nightmare" incursion buff instead of guessing.
-]]
-function GatherMate:DumpPlayerBuffs()
-	self:LogDebug("Current player buffs:")
-	local found = false
-	for i = 1, 40 do
-		local name, _, _, _, _, _, _, _, _, spellID = UnitAura("player", i, "HELPFUL")
-		if not name then break end
-		found = true
-		self:LogDebug(("  [%d] %s (spellID %s)"):format(i, name, tostring(spellID)))
-	end
-	if not found then
-		self:LogDebug("  (none found - UnitAura returned nothing)")
-	end
-end
-
---[[
-	Toggle printing of gathering attempts GatherMate couldn't identify (unknown node
-	name for the current zone/spell), so new/reskinned nodes -- e.g. Nightmare
-	Incursion nodes in the Emerald Dream phased zones -- can be reported for adding
-	to the node database.
-]]
-function GatherMate:ToggleDebugUnknownNodes()
-	self.db.profile.debugUnknownNodes = not self.db.profile.debugUnknownNodes
-	self:Print(self.db.profile.debugUnknownNodes and L["Unknown node debugging enabled."] or L["Unknown node debugging disabled."])
 end
 
 function GatherMate:RemoveGarrisonNodes()
@@ -599,7 +534,7 @@ end
 --[[
 	True while the player has any known SoD "Emerald Nightmare" incursion buff. The buff's
 	spell ID may differ per zone; GatherMate.INCURSION_BUFF_SPELL_IDS lists every ID
-	confirmed so far (see Constants.lua). Use /gm2buffs to find an unconfirmed zone's ID.
+	confirmed so far (see Constants.lua).
 ]]
 function GatherMate:IsPlayerInIncursionPhase()
 	local ids = self.INCURSION_BUFF_SPELL_IDS
