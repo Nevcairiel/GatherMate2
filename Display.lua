@@ -709,7 +709,7 @@ function Display:UpdateMiniMap(force)
 		-- iterate the node databases and add the nodes
 		for i,db_type in pairs(GatherMate.db_types) do
 			if GatherMate.Visible[db_type] then
-				for coord, nodeID in GatherMate:FindNearbyNode(zone, x1, y1, db_type, mapRadius*nodeRange) do
+				for coord, nodeID in GatherMate:FindNearbyNode(GatherMate:GetEffectiveZone(zone), x1, y1, db_type, mapRadius*nodeRange) do
 					local pin = self:getMiniPin(coord, nodeID, db_type, zone, (i * 1e14) + coord)
 					pin.keep = true
 					self:addMiniPin(pin, force)
@@ -754,10 +754,14 @@ function Display.WorldMapDataProvider:RefreshAllData(fromOnShow)
 
 	if GatherMate.phasing[uiMapID] then uiMapID = GatherMate.phasing[uiMapID] end
 
+	-- read from the incursion-phase virtual zone instead of uiMapID's normal node set
+	-- while the player is standing here with the incursion buff active
+	local dbZone = GatherMate:GetEffectiveZone(uiMapID)
+
 	-- iterate databases and add nodes
 	for i,db_type in pairs(GatherMate.db_types) do
 		if GatherMate.Visible[db_type] then
-			for coord, nodeID in GatherMate:GetNodesForZone(uiMapID, db_type) do
+			for coord, nodeID in GatherMate:GetNodesForZone(dbZone, db_type) do
 				local pin = map:AcquirePin("GatherMate2WorldMapPinTemplate", coord,  nodeID, db_type, uiMapID)
 				table.insert(worldmapPins, pin)
 			end

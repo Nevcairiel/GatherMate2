@@ -244,6 +244,7 @@ function Collector:addItem(skill,what)
 	if GatherMate.db.profile.dbLocks[node_type] then return	end
 
 	-- special case for fishing and gas extraction guage the pointing direction
+	-- (uses the real zone, not the incursion-phase zone below, since it's a HBD lookup)
 	if node_type == fishSpell or node_type == gasSpell then
 		local yw, yh = GatherMate.HBD:GetZoneSize(zone)
 		if yw == 0 or yh == 0 then return end -- No zone size data
@@ -253,8 +254,11 @@ function Collector:addItem(skill,what)
 	local foundCoord = GatherMate:EncodeLoc(x, y)
 	if foundCoord == lastNodeCoords and what == lastNode then return end
 
-	-- tell the core to add it
-	local added = GatherMate:AddNodeChecked(zone, x, y, node_type, what)
+	-- tell the core to add it; store under the incursion-phase virtual zone while the
+	-- "Emerald Nightmare" buff is active, so incursion-only nodes don't mix with the
+	-- zone's normal node set
+	local dbZone = GatherMate:GetEffectiveZone(zone)
+	local added = GatherMate:AddNodeChecked(dbZone, x, y, node_type, what)
 	if added then
 		lastNode = what
 		lastNodeCoords = foundCoord

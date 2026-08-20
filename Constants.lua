@@ -199,6 +199,11 @@ local node_ids = {
 		[NL["Osmenite Deposit"]]				= 270,
 		[NL["Rich Osmenite Deposit"]]			= 271,
 		[NL["Osmenite Seam"]]					= 272,
+-- SoD Nightmare Incursion nodes (Emerald Nightmare phase)
+		[NL["Cold Iron Deposit"]]				= 273, -- Duskwood incursion, confirmed via Wowhead object=439558
+		[NL["Fool's Gold Vein"]]				= 274, -- Ashenvale incursion
+		[NL["Greater Moonstone Formation"]]		= 275, -- Feralas incursion, confirmed via Wowhead object=439815
+		[NL["Starsilver Vein"]]					= 276, -- Hinterlands incursion
 	},
 	["Extract Gas"] = {
 		[NL["Windy Cloud"]] 					= 301,
@@ -307,6 +312,11 @@ local node_ids = {
 		[NL["Star Moss"]]						= 490,
 		[NL["Winter's Kiss"]]					= 491,
 		[NL["Zin'anthid"]]						= 492,
+-- SoD Nightmare Incursion nodes (Emerald Nightmare phase)
+		[NL["Nightmare Moss"]]					= 493, -- Duskwood incursion
+		[NL["Dreamroot"]]						= 494, -- Ashenvale incursion
+		[NL["Moonroot"]]						= 495, -- Feralas incursion
+		[NL["Star Lotus"]]						= 496, -- Hinterlands incursion
 	},
 	["Treasure"] = {
 		[NL["Giant Clam"]] 						= 501,
@@ -671,6 +681,10 @@ local node_textures = {
 		[270] = icon_path.."Mine\\osmenite.tga",
 		[271] = icon_path.."Mine\\osmenite.tga",
 		[272] = icon_path.."Mine\\osmenite.tga",
+		[273] = icon_path.."Mine\\iron.tga",
+		[274] = icon_path.."Mine\\gold.tga",
+		[275] = icon_path.."Mine\\silver.tga",
+		[276] = icon_path.."Mine\\truesilver.tga",
 	},
 	["Extract Gas"] = {
 		[301] = icon_path.."Gas\\windy_cloud.tga",
@@ -774,6 +788,10 @@ local node_textures = {
 		[490] = icon_path.."Herb\\star_moss.tga",
 		[491] = icon_path.."Herb\\winters_kiss.tga",
 		[492] = icon_path.."Herb\\zinanthid.tga",
+		[493] = icon_path.."Herb\\grave_moss.tga",
+		[494] = icon_path.."Herb\\dreamfoil.tga",
+		[495] = icon_path.."Herb\\liferoot.tga",
+		[496] = icon_path.."Herb\\black_lotus.tga",
 	},
 	["Treasure"] = {
 		[501] = icon_path.."Treasure\\clam.tga",
@@ -954,6 +972,10 @@ local node_expansion = {
 		[270] = BFA,
 		[271] = BFA,
 		[272] = BFA,
+		[273] = CLASSIC, -- Cold Iron Ore (SoD Nightmare Incursion)
+		[274] = CLASSIC, -- Fool's Gold Vein (SoD Nightmare Incursion)
+		[275] = CLASSIC, -- Greater Moonstone Formation (SoD Nightmare Incursion)
+		[276] = CLASSIC, -- Starsilver Vein (SoD Nightmare Incursion)
 	},
 	["Herb Gathering"] = {
 		[401] = CLASSIC,
@@ -1048,6 +1070,10 @@ local node_expansion = {
 		[490] = BFA,
 		[491] = BFA,
 		[492] = BFA,
+		[493] = CLASSIC, -- Nightmare Moss (SoD Nightmare Incursion)
+		[494] = CLASSIC, -- Dreamroot (SoD Nightmare Incursion)
+		[495] = CLASSIC, -- Moonroot (SoD Nightmare Incursion)
+		[496] = CLASSIC, -- Star Lotus (SoD Nightmare Incursion)
 	},
 }
 GatherMate.nodeExpansion = node_expansion
@@ -1107,3 +1133,39 @@ local map_blacklist = {
 }
 
 GatherMate.mapBlacklist = map_blacklist
+
+--[[
+	SoD Nightmare Incursions: touching an Emerald Dream portal phases the player into a
+	corrupted overlay of the SAME outdoor zone (uiMapID does not change) and grants an
+	"Emerald Nightmare" buff. While that buff is active, nodes are recorded/displayed
+	under a separate virtual zone (real uiMapID + INCURSION_ZONE_OFFSET) instead of the
+	outdoor zone's normal node set, since the incursion-only nodes (Cold Iron Deposit,
+	Fool's Gold Vein, Greater Moonstone Formation, Starsilver Vein, Nightmare Moss,
+	Dreamroot, Moonroot, Star Lotus) aren't part of the normal outdoor gathering pool.
+
+	The buff has a distinct spell ID per zone (444758-444760, 444762 - Wowhead confirms
+	exactly 4 mechanically-identical "Emerald Nightmare" spells in that ID range, and
+	444760 was confirmed live while standing in the Hinterlands incursion).
+	Detection here doesn't need to know which ID maps to which zone, since the target
+	zone comes from the player's real position, not from which of these IDs is active.
+]]
+GatherMate.INCURSION_BUFF_SPELL_IDS = {
+	[444758] = true,
+	[444759] = true,
+	[444760] = true, -- Hinterlands, confirmed in-game
+	[444762] = true,
+}
+GatherMate.INCURSION_ZONE_OFFSET = 900000
+
+-- NOTE: these were originally pulled from HereBeDragons' old vanilla-era WorldMapAreaID
+-- migration table (Duskwood 47, Ashenvale 63, Feralas 69, Hinterlands 26), which turned
+-- out to be entirely stale on live - none of those old numbers matched. All 4 below are
+-- now confirmed directly via C_Map.GetBestMapForUnit("player") in-game.
+local incursion_zones = {
+	[1431] = true, -- Duskwood, confirmed via C_Map.GetBestMapForUnit
+	[1440] = true, -- Ashenvale, confirmed via C_Map.GetBestMapForUnit
+	[1444] = true, -- Feralas, confirmed via C_Map.GetBestMapForUnit
+	[1425] = true, -- Hinterlands, confirmed via C_Map.GetBestMapForUnit
+}
+
+GatherMate.incursionZones = incursion_zones
