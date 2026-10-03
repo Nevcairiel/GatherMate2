@@ -28,25 +28,29 @@ local sandStormSpell = (GetSpellName(93473)) -- Sandstorm spell cast by the came
 local loggingSpell = (GetSpellName(167895))
 local loggingSpell2 = (GetSpellName(1239682)) -- tww/midnight housing decor wood logging
 
-local spells =
-{ -- spellname to "database name"
-	[miningSpell] = "Mining",
-	[miningSpell2] = "Mining",
-	[miningSpell3] = "Mining",
-	[miningSpellMidnight] = "Mining",
-	[herbSpell] = "Herb Gathering",
-	[fishSpell] = "Fishing",
-	[gasSpell] = "Extract Gas",
-	[openSpell] = "Treasure",
-	[openNoTextSpell] = "Treasure",
-	[pickSpell] = "Treasure",
-	[archSpell] = "Archaeology",
-	[sandStormSpell] = "Treasure",
-	[loggingSpell] = "Logging",
-	[loggingSpell2] = "Logging",
-	[205243] = "Treasure", -- skinning ground warts
-	[469894] = "Treasure", -- level earth (disturbed earth)
-}
+-- spellname to "database name"
+-- not every client knows every spell (eg. WoW Forever), so skip names that failed to resolve
+local spells = {}
+for _, entry in ipairs({
+	{ miningSpell, "Mining" },
+	{ miningSpell2, "Mining" },
+	{ miningSpell3, "Mining" },
+	{ miningSpellMidnight, "Mining" },
+	{ herbSpell, "Herb Gathering" },
+	{ fishSpell, "Fishing" },
+	{ gasSpell, "Extract Gas" },
+	{ openSpell, "Treasure" },
+	{ openNoTextSpell, "Treasure" },
+	{ pickSpell, "Treasure" },
+	{ archSpell, "Archaeology" },
+	{ sandStormSpell, "Treasure" },
+	{ loggingSpell, "Logging" },
+	{ loggingSpell2, "Logging" },
+	{ 205243, "Treasure" }, -- skinning ground warts
+	{ 469894, "Treasure" }, -- level earth (disturbed earth)
+}) do
+	if entry[1] then spells[entry[1]] = entry[2] end
+end
 local tooltipLeftText1 = _G["GameTooltipTextLeft1"]
 local strfind = string.find
 local pii = math.pi
