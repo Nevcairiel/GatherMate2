@@ -1,9 +1,10 @@
-## Interface: 120007,120100
+## Interface: 120100,120105
 ## Title: GatherMate2: Storage for Dragonflight
 ## Author: nevcairiel
 ## Group: GatherMate2
 ## IconTexture: Interface\AddOns\GatherMate2\Artwork\Icon.tga
 ## Dependencies: GatherMate2
+## AllowLoadGameType: standard
 ## Version: @project-version@
 ## X-Category: Map
 ## LoadSavedVariablesFirst: 1
