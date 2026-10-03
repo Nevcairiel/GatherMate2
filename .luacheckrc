@@ -81,4 +81,7 @@ read_globals = {
 	"KEY_BOUND",
 	"KEY_UNBOUND_ERROR",
 	"NORMAL_FONT_COLOR",
+	"WOW_PROJECT_ID",
+	"WOW_PROJECT_CAMELOT",
+
 }

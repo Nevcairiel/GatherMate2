@@ -5,6 +5,8 @@ local L = LibStub("AceLocale-3.0"):GetLocale("GatherMate2", false)
 -- Databroker support
 local DataBroker = LibStub:GetLibrary("LibDataBroker-1.1",true)
 
+local WoWForever = (WOW_PROJECT_ID == WOW_PROJECT_CAMELOT)
+
 --[[
 	Code here for configuring the mod, and making the minimap button
 ]]
@@ -101,6 +103,7 @@ local generalOptions = {
 			type = "select",
 			values = prof_options2,
 			arg = "Extract Gas",
+			hidden = WoWForever,
 		},
 		showTreasure = {
 			order = 5,
@@ -117,6 +120,7 @@ local generalOptions = {
 			type = "select",
 			values = prof_options4,
 			arg = "Archaeology",
+			hidden = WoWForever,
 		},
 		showTimber = {
 			order = 7,
@@ -125,6 +129,7 @@ local generalOptions = {
 			type = "select",
 			values = prof_options3,
 			arg = "Logging",
+			hidden = WoWForever,
 		},
 	},
 }
@@ -316,6 +321,7 @@ local minimapOptions = {
 					type = "color",
 					hasAlpha = true,
 					arg = "Extract Gas",
+					hidden = WoWForever,
 				},
 				trackingColorTreasure = {
 					order = 6,
@@ -332,6 +338,7 @@ local minimapOptions = {
 					type = "color",
 					hasAlpha = true,
 					arg = "Archaeology",
+					hidden = WoWForever,
 				},
 				trackingColorTimber = {
 					order = 7,
@@ -340,6 +347,7 @@ local minimapOptions = {
 					type = "color",
 					hasAlpha = true,
 					arg = "Logging",
+					hidden = WoWForever,
 				},
 				space = {
 					order = 10,
@@ -388,10 +396,12 @@ local sortedFilter = setmetatable({}, {__index = function(t, k)
 	else
 		local expansion = GatherMate.nodeExpansion[k]
 		local map = GatherMate.nodeIDs[k]
-		for name in pairs(map) do
-			local idx = #new+1
-			new[idx] = name
-			denormalizedNames[name] = name
+		for name, id in pairs(map) do
+			if not (WoWForever and expansion and expansion[id] and expansion[id] > 1) then -- on forever, skip all nodes from expansions
+				local idx = #new+1
+				new[idx] = name
+				denormalizedNames[name] = name
+			end
 		end
 		if expansion then
 			-- We only end up creating one function per tracked type anyway
@@ -587,6 +597,7 @@ filterOptions.args.fish = {
 filterOptions.args.gas = {
 	type = "group",
 	name = L["Gas Clouds"],
+	hidden = WoWForever,
 	args = {
 		select_all = {
 			order = 1,
@@ -651,6 +662,7 @@ filterOptions.args.treasure = {
 filterOptions.args.archaeology = {
 	type = "group",
 	name = L["Archaeology"],
+	hidden = WoWForever,
 	args = {
 		select_all = {
 			order = 1,
@@ -683,6 +695,7 @@ filterOptions.args.archaeology = {
 filterOptions.args.timber = {
 	type = "group",
 	name = L["Timber"],
+	hidden = WoWForever,
 	args = {
 		select_all = {
 			order = 1,
@@ -784,6 +797,7 @@ local maintenanceOptions = {
 					type = "range",
 					min = 0, max = 100, step = 1,
 					arg = "Extract Gas",
+					hidden = WoWForever,
 				},
 				Treasure = {
 					order = 5,
@@ -800,6 +814,7 @@ local maintenanceOptions = {
 					type = "range",
 					min = 0, max = 30, step = 1,
 					arg = "Archaeology",
+					hidden = WoWForever,
 				},
 				Timber = {
 					order = 5,
@@ -808,6 +823,7 @@ local maintenanceOptions = {
 					type = "range",
 					min = 0, max = 30, step = 1,
 					arg = "Logging",
+					hidden = WoWForever,
 				}
 			},
 		},
@@ -929,6 +945,7 @@ local maintenanceOptions = {
 					arg = "Extract Gas",
 					confirm = true,
 					confirmText = L["Are you sure you want to delete all nodes from this database?"],
+					hidden = WoWForever,
 				},
 				Treasure = {
 					order = 5,
@@ -947,6 +964,7 @@ local maintenanceOptions = {
 					arg = "Archaeology",
 					confirm = true,
 					confirmText = L["Are you sure you want to delete all nodes from this database?"],
+					hidden = WoWForever,
 				},
 				Timber = {
 					order = 5,
@@ -956,6 +974,7 @@ local maintenanceOptions = {
 					arg = "Logging",
 					confirm = true,
 					confirmText = L["Are you sure you want to delete all nodes from this database?"],
+					hidden = WoWForever,
 				},
 			},
 		},
@@ -1002,6 +1021,7 @@ local maintenanceOptions = {
 					desc = L["Database locking"],
 					type = "toggle",
 					arg = "Extract Gas",
+					hidden = WoWForever,
 				},
 				Treasure = {
 					order = 5,
@@ -1016,6 +1036,7 @@ local maintenanceOptions = {
 					desc = L["Database locking"],
 					type = "toggle",
 					arg = "Archaeology",
+					hidden = WoWForever,
 				},
 				Timber = {
 					order = 5,
@@ -1023,6 +1044,7 @@ local maintenanceOptions = {
 					desc = L["Database locking"],
 					type = "toggle",
 					arg = "Logging",
+					hidden = WoWForever,
 				}
 			}
 		},
@@ -1117,7 +1139,8 @@ importOptions.args.GatherMateData = {
 					type = "toggle",
 					get = "GetExpacOnly",
 					set = "SetExpacOnly",
-					arg = "GatherMate2_Data"
+					arg = "GatherMate2_Data",
+					hidden = WoWForever,
 				},
 				loadExpansion = {
 					order = 4,
@@ -1128,6 +1151,7 @@ importOptions.args.GatherMateData = {
 					set  = "SetExpac",
 					values = ImportHelper.expac_data,
 					arg  = "GatherMate2_Data",
+					hidden = WoWForever,
 				},
 				loadAuto = {
 					order = 5,
