@@ -50,16 +50,16 @@ Libs\HereBeDragons\HereBeDragons-Migrate.lua
 #@end-no-lib-strip@
 
 Locales\GatherMate2-enUS.lua
-Locales\GatherMate2-esES.lua
-Locales\GatherMate2-esMX.lua
-Locales\GatherMate2-frFR.lua
-Locales\GatherMate2-deDE.lua
-Locales\GatherMate2-koKR.lua
-Locales\GatherMate2-zhCN.lua
-Locales\GatherMate2-zhTW.lua
-Locales\GatherMate2-ruRU.lua
-Locales\GatherMate2-ptBR.lua
-Locales\GatherMate2-itIT.lua
+Locales\GatherMate2-esES.lua [AllowLoadTextLocale esES]
+Locales\GatherMate2-esMX.lua [AllowLoadTextLocale esMX]
+Locales\GatherMate2-frFR.lua [AllowLoadTextLocale frFR]
+Locales\GatherMate2-deDE.lua [AllowLoadTextLocale deDE]
+Locales\GatherMate2-koKR.lua [AllowLoadTextLocale koKR]
+Locales\GatherMate2-zhCN.lua [AllowLoadTextLocale zhCN]
+Locales\GatherMate2-zhTW.lua [AllowLoadTextLocale zhTW]
+Locales\GatherMate2-ruRU.lua [AllowLoadTextLocale ruRU]
+Locales\GatherMate2-ptBR.lua [AllowLoadTextLocale ptBR]
+Locales\GatherMate2-itIT.lua [AllowLoadTextLocale itIT]
 
 ## Order is important
 GatherMate2.lua
