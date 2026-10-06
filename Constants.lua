@@ -172,7 +172,16 @@ local node_ids = {
 		[NL["Surface Ripple"]]					= 1141,
 		[NL["Careless Cargo"]]					= 1142,
 		[NL["Lost Treasures"]]					= 1143,
-		[NL["Viscous Void"]]					= 1144,
+        [NL["Viscous Void"]]                    = 1144,
+        [NL["Abyssal Swirl"]]                   = 1145,
+        [NL["Blighted Venom Pool"]]             = 1146,
+        [NL["Bubbling Beryl"]]                  = 1147,
+        [NL["Cursed Oddity"]]                   = 1148,
+        [NL["Grisly Cod Pool"]]                 = 1149,
+        [NL["Torrential Gorgerswarm"]]          = 1150,
+        [NL["Vile Venom"]]                      = 1151,
+        [NL["Viscous Venom"]]                   = 1151,
+        [NL["Willow Sea"]]                      = 1152,
 	},
 	["Mining"] = {
 		[NL["Copper Vein"]] 					= 201,
@@ -340,21 +349,21 @@ local node_ids = {
 		[NL["Brilliant Silver"]] = {
 			id = 1245,
 			variants = {
-				NL["Rich Brilliant Silver"], NL["Lightfused Brilliant Silver"], NL["Primal Brilliant Silver"], NL["Voidbound Brilliant Silver"], NL["Wild Brilliant Silver"]
+				NL["Rich Brilliant Silver"], NL["Lightfused Brilliant Silver"], NL["Primal Brilliant Silver"], NL["Voidbound Brilliant Silver"], NL["Wild Brilliant Silver"], NL["Cursed Brilliant Silver"]
 			}
 		},
 		[NL["Brilliant Silver Seam"]] = 1246,
 		[NL["Refulgent Copper"]] = {
 			id = 1247,
 			variants = {
-				NL["Rich Refulgent Copper"], NL["Lightfused Refulgent Copper"], NL["Primal Refulgent Copper"], NL["Voidbound Refulgent Copper"], NL["Wild Refulgent Copper"]
+				NL["Rich Refulgent Copper"], NL["Lightfused Refulgent Copper"], NL["Primal Refulgent Copper"], NL["Voidbound Refulgent Copper"], NL["Wild Refulgent Copper"], NL["Cursed Refulgent Copper"], NL["Envenomated Copper"]
 			}
 		},
 		[NL["Refulgent Copper Seam"]] = 1248,
 		[NL["Umbral Tin"]] = {
 			id = 1249,
 			variants = {
-				NL["Rich Umbral Tin"], NL["Lightfused Umbral Tin"], NL["Primal Umbral Tin"], NL["Voidbound Umbral Tin"], NL["Wild Umbral Tin"]
+				NL["Rich Umbral Tin"], NL["Lightfused Umbral Tin"], NL["Primal Umbral Tin"], NL["Voidbound Umbral Tin"], NL["Wild Umbral Tin"], NL["Cursed Umbral Tin"]
 			}
 		},
 		[NL["Umbral Tin Seam"]] = 1250,
@@ -565,31 +574,31 @@ local node_ids = {
 		[NL["Argentleaf"]] = {
 			id = 1481,
 			variants = {
-				NL["Lush Argentleaf"], NL["Lightfused Argentleaf"], NL["Primal Argentleaf"], NL["Transplanted Argentleaf"], NL["Transplanted Lush Argentleaf"], NL["Voidbound Argentleaf"], NL["Wild Argentleaf"]
+				NL["Lush Argentleaf"], NL["Lightfused Argentleaf"], NL["Primal Argentleaf"], NL["Transplanted Argentleaf"], NL["Transplanted Lush Argentleaf"], NL["Voidbound Argentleaf"], NL["Wild Argentleaf"], NL["Cursed Argentleaf"]
 			}
 		},
 		[NL["Azeroot"]] = {
 			id = 1482,
 			variants = {
-				NL["Lush Azeroot"], NL["Lightfused Azeroot"], NL["Primal Azeroot"], NL["Transplanted Azeroot"], NL["Transplanted Lush Azeroot"], NL["Voidbound Azeroot"], NL["Wild Azeroot"]
+				NL["Lush Azeroot"], NL["Lightfused Azeroot"], NL["Primal Azeroot"], NL["Transplanted Azeroot"], NL["Transplanted Lush Azeroot"], NL["Voidbound Azeroot"], NL["Wild Azeroot"], NL["Cursed Azeroot"]
 			}
 		},
 		[NL["Mana Lily"]] = {
 			id = 1483,
 			variants = {
-				NL["Lush Mana Lily"], NL["Lightfused Mana Lily"], NL["Primal Mana Lily"], NL["Transplanted Mana Lily"], NL["Transplanted Lush Mana Lily"], NL["Voidbound Mana Lily"], NL["Wild Mana Lily"]
+				NL["Lush Mana Lily"], NL["Lightfused Mana Lily"], NL["Primal Mana Lily"], NL["Transplanted Mana Lily"], NL["Transplanted Lush Mana Lily"], NL["Voidbound Mana Lily"], NL["Wild Mana Lily"], NL["Cursed Mana Lily"]
 			}
 		},
 		[NL["Sanguithorn"]] = {
 			id = 1484,
 			variants = {
-				NL["Lush Sanguithorn"], NL["Lightfused Sanguithorn"], NL["Primal Sanguithorn"], NL["Transplanted Sanguithorn"], NL["Transplanted Lush Sanguithorn"], NL["Voidbound Sanguithorn"], NL["Wild Sanguithorn"]
+				NL["Lush Sanguithorn"], NL["Lightfused Sanguithorn"], NL["Primal Sanguithorn"], NL["Transplanted Sanguithorn"], NL["Transplanted Lush Sanguithorn"], NL["Voidbound Sanguithorn"], NL["Wild Sanguithorn"], NL["Cursed Sanguithorn"]
 			}
 		},
 		[NL["Tranquility Bloom"]] = {
 			id = 1485,
 			variants = {
-				NL["Lush Tranquility Bloom"], NL["Lightfused Tranquility Bloom"], NL["Primal Tranquility Bloom"], NL["Transplanted Tranquility Bloom"], NL["Transplanted Lush Tranquility Bloom"], NL["Voidbound Tranquility Bloom"], NL["Wild Tranquility Bloom"]
+				NL["Lush Tranquility Bloom"], NL["Lightfused Tranquility Bloom"], NL["Primal Tranquility Bloom"], NL["Transplanted Tranquility Bloom"], NL["Transplanted Lush Tranquility Bloom"], NL["Voidbound Tranquility Bloom"], NL["Wild Tranquility Bloom"], NL["Cursed Tranquility Bloom"], NL["Envenomated Tranquility Bloom"]
 			}
 		},
 	},
@@ -940,7 +949,15 @@ local node_textures = {
 		[1141] = icon_path.."Fish\\fish_hook.tga",
 		[1142] = icon_path.."Fish\\debris.tga",
 		[1143] = icon_path.."Fish\\debris.tga",
-		[1144] = icon_path.."Fish\\fish_hook.tga",
+        [1144] = icon_path.."Fish\\fish_hook.tga",
+        [1145] = icon_path.."Fish\\fish_hook.tga",
+        [1146] = icon_path.."Fish\\fish_hook.tga",
+        [1147] = icon_path.."Fish\\fish_hook.tga",
+        [1148] = icon_path.."Fish\\fish_hook.tga",
+        [1149] = icon_path.."Fish\\fish_hook.tga",
+        [1150] = icon_path.."Fish\\fish_hook.tga",
+        [1151] = icon_path.."Fish\\fish_hook.tga",
+        [1152] = icon_path.."Fish\\fish_hook.tga",
 	},
 	["Mining"] = {
 		[201] = icon_path.."Mine\\copper.tga",
