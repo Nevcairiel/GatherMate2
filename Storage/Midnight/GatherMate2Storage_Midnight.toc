@@ -10,5 +10,5 @@
 ## LoadSavedVariablesFirst: 1
 ## SavedVariables: GatherMate2HerbDBMN, GatherMate2MineDBMN, GatherMate2FishDBMN, GatherMate2GasDBMN, GatherMate2TreasureDBMN, GatherMate2ArchaeologyDBMN, GatherMate2LoggingDBMN
 ## X-GM2-Storage-Tag: MN
-## X-GM2-Storage-Zones: 2393, 2395, 2405, 2413, 2437
+## X-GM2-Storage-Zones: 2393, 2395, 2405, 2413, 2437, 2512
 ..\GatherMate2\LoadAddOnStorage.lua
