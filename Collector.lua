@@ -211,7 +211,7 @@ end
 	spell cast started
 ]]
 function Collector:SpellStarted(event,unit,target,guid,spellcast)
-	if unit ~= "player" or issecretvalue(spellcast) then return end
+	if unit ~= "player" or issecretvalue(spellcast) or issecretvalue(target) then return end
 	foundTarget = false
 	ga ="No"
 	local spellname = GetSpellName(spellcast)
