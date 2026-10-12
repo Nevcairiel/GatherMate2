@@ -61,6 +61,18 @@ Locales\GatherMate2-ruRU.lua [AllowLoadTextLocale ruRU]
 Locales\GatherMate2-ptBR.lua [AllowLoadTextLocale ptBR]
 Locales\GatherMate2-itIT.lua [AllowLoadTextLocale itIT]
 
+Locales\Vanilla\GatherMate2-Vanilla-enUS.lua [AllowLoadTextLocale enUS][AllowLoadGameType camelot, forever][ExcludeLoadGameType standard]
+Locales\Vanilla\GatherMate2-Vanilla-esES.lua [AllowLoadTextLocale esES][AllowLoadGameType camelot, forever][ExcludeLoadGameType standard]
+Locales\Vanilla\GatherMate2-Vanilla-esMX.lua [AllowLoadTextLocale esMX][AllowLoadGameType camelot, forever][ExcludeLoadGameType standard]
+Locales\Vanilla\GatherMate2-Vanilla-frFR.lua [AllowLoadTextLocale frFR][AllowLoadGameType camelot, forever][ExcludeLoadGameType standard]
+Locales\Vanilla\GatherMate2-Vanilla-deDE.lua [AllowLoadTextLocale deDE][AllowLoadGameType camelot, forever][ExcludeLoadGameType standard]
+Locales\Vanilla\GatherMate2-Vanilla-koKR.lua [AllowLoadTextLocale koKR][AllowLoadGameType camelot, forever][ExcludeLoadGameType standard]
+Locales\Vanilla\GatherMate2-Vanilla-zhCN.lua [AllowLoadTextLocale zhCN][AllowLoadGameType camelot, forever][ExcludeLoadGameType standard]
+Locales\Vanilla\GatherMate2-Vanilla-zhTW.lua [AllowLoadTextLocale zhTW][AllowLoadGameType camelot, forever][ExcludeLoadGameType standard]
+Locales\Vanilla\GatherMate2-Vanilla-ruRU.lua [AllowLoadTextLocale ruRU][AllowLoadGameType camelot, forever][ExcludeLoadGameType standard]
+Locales\Vanilla\GatherMate2-Vanilla-ptBR.lua [AllowLoadTextLocale ptBR][AllowLoadGameType camelot, forever][ExcludeLoadGameType standard]
+Locales\Vanilla\GatherMate2-Vanilla-itIT.lua [AllowLoadTextLocale itIT][AllowLoadGameType camelot, forever][ExcludeLoadGameType standard]
+
 ## Order is important
 GatherMate2.lua
 Collector.lua

@@ -303,6 +303,8 @@ function GatherMate:OnProfileChanged(_db,name)
 	GatherMate:SendMessage("GatherMate2ConfigChanged")
 end
 
+local NL = LibStub("AceLocale-3.0"):GetLocale("GatherMate2Nodes")
+local NLV = LibStub("AceLocale-3.0"):GetLocale("GatherMate2NodesVanilla", true)
 function GatherMate:CreateNodeLookupTables(node_data)
 	local nodeIdLookup, nodeReverseLookup = {}, {}
 	local nodeOldIdMap = {}
@@ -310,25 +312,38 @@ function GatherMate:CreateNodeLookupTables(node_data)
 	for db_type, db_data in pairs(node_data) do
 		nodeIdLookup[db_type], nodeReverseLookup[db_type] = {}, {}
 		for name, node in pairs(db_data) do
+			local localizedName, localizedNameVanilla = NL[name], NLV and NLV[name]
 			if type(node) == "table" then
-				nodeIdLookup[db_type][name] = node.id
-				nodeReverseLookup[db_type][node.id] = name
+				nodeIdLookup[db_type][localizedName] = node.id
+				nodeReverseLookup[db_type][node.id] = localizedNameVanilla or localizedName
+
+				if localizedNameVanilla then
+					nodeIdLookup[db_type][localizedNameVanilla] = node.id
+				end
 
 				if node.variants then
 					for _, variantName in pairs(node.variants) do
-						nodeIdLookup[db_type][variantName] = node.id
+						nodeIdLookup[db_type][NL[variantName]] = node.id
+
+						if NLV and NLV[variantName] then
+							nodeIdLookup[db_type][NLV[variantName]] = node.id
+						end
 					end
 				end
 
 				if node.old_ids then
 					for _, old_id in pairs(node.old_ids) do
 						nodeOldIdMap[old_id] = node.id
-						nodeReverseLookup[db_type][old_id] = name
+						nodeReverseLookup[db_type][old_id] = localizedNameVanilla or localizedName
 					end
 				end
 			else
-				nodeIdLookup[db_type][name] = node
-				nodeReverseLookup[db_type][node] = name
+				nodeIdLookup[db_type][localizedName] = node
+				nodeReverseLookup[db_type][node] = localizedNameVanilla or localizedName
+
+				if localizedNameVanilla then
+					nodeIdLookup[db_type][localizedNameVanilla] = node
+				end
 			end
 		end
 	end

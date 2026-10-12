@@ -5,7 +5,6 @@
 	Credit to Astrolabe (http://www.gathereraddon.com) for lookup tables used in GatherMate. Astrolabe is licensed LGPL
 ]]
 local GatherMate = LibStub("AceAddon-3.0"):GetAddon("GatherMate2")
-local NL = LibStub("AceLocale-3.0"):GetLocale("GatherMate2Nodes",true)
 local L = LibStub("AceLocale-3.0"):GetLocale("GatherMate2")
 
 --[[
@@ -13,705 +12,705 @@ local L = LibStub("AceLocale-3.0"):GetLocale("GatherMate2")
 ]]
 local node_ids = {
 	["Fishing"] = {
-		[NL["Floating Wreckage"]] 				= 101, -- treasure.tga
-		--[NL["Patch of Elemental Water"]] 		= 102, -- purewater.tga
-		[NL["Floating Debris"]]					= 103, -- debris.tga
-		--[NL["Oil Spill"]] 					= 104, -- oilspill.tga
-		[NL["Firefin Snapper School"]] 			= 105, -- firefin.tga
-		[NL["Greater Sagefish School"]] 		= 106, -- greatersagefish.tga
-		[NL["Oily Blackmouth School"]] 			= 107, -- oilyblackmouth.tga
-		[NL["Sagefish School"]] 				= 108, -- sagefish.tga
-		[NL["School of Deviate Fish"]] 			= 109, -- firefin.tga
-		[NL["Stonescale Eel Swarm"]] 			= 110, -- eel.tga
-		--[NL["Muddy Churning Water"]] 			= 111, -- ZG only fishing node
+		["Floating Wreckage"] 				= 101, -- treasure.tga
+		--["Patch of Elemental Water"] 		= 102, -- purewater.tga
+		["Floating Debris"]					= 103, -- debris.tga
+		--["Oil Spill"] 					= 104, -- oilspill.tga
+		["Firefin Snapper School"] 			= 105, -- firefin.tga
+		["Greater Sagefish School"] 		= 106, -- greatersagefish.tga
+		["Oily Blackmouth School"] 			= 107, -- oilyblackmouth.tga
+		["Sagefish School"] 				= 108, -- sagefish.tga
+		["School of Deviate Fish"] 			= 109, -- firefin.tga
+		["Stonescale Eel Swarm"] 			= 110, -- eel.tga
+		--["Muddy Churning Water"] 			= 111, -- ZG only fishing node
 		-- BC pools
-		[NL["Highland Mixed School"]] 			= 112, -- fishhook.tga
-		[NL["Pure Water"]] 						= 113, -- purewater.tga
-		[NL["Bluefish School"]] 				= 114, -- bluefish,tga
-		[NL["Feltail School"]] 					= 115, -- feltail.tga
-		[NL["Brackish Mixed School"]]         	= 115, -- feltail.tga
-		[NL["Mudfish School"]] 					= 116, -- mudfish.tga
-		[NL["School of Darter"]] 				= 117, -- darter.tga
-		[NL["Sporefish School"]] 				= 118, -- sporefish.tga
-		[NL["Steam Pump Flotsam"]] 				= 119, -- steampump.tga
-		[NL["School of Tastyfish"]] 			= 120, -- net.tga
+		["Highland Mixed School"] 			= 112, -- fishhook.tga
+		["Pure Water"] 						= 113, -- purewater.tga
+		["Bluefish School"] 				= 114, -- bluefish,tga
+		["Feltail School"] 					= 115, -- feltail.tga
+		["Brackish Mixed School"]         	= 115, -- feltail.tga
+		["Mudfish School"] 					= 116, -- mudfish.tga
+		["School of Darter"] 				= 117, -- darter.tga
+		["Sporefish School"] 				= 118, -- sporefish.tga
+		["Steam Pump Flotsam"] 				= 119, -- steampump.tga
+		["School of Tastyfish"] 			= 120, -- net.tga
 		-- WotLK Pools
-		[NL["Borean Man O' War School"]]        = 121,
-		[NL["Deep Sea Monsterbelly School"]]	= 122,
-		[NL["Dragonfin Angelfish School"]]		= 123,
-		[NL["Fangtooth Herring School"]]		= 124,
-		[NL["Floating Wreckage Pool"]]			= 125,
-		[NL["Glacial Salmon School"]]			= 126,
-		[NL["Glassfin Minnow School"]]			= 127,
-		[NL["Imperial Manta Ray School"]]		= 128,
-		[NL["Moonglow Cuttlefish School"]]		= 129,
-		[NL["Musselback Sculpin School"]]		= 130,
-		[NL["Nettlefish School"]]				= 131,
-		[NL["Strange Pool"]]					= 132,
-		[NL["Schooner Wreckage"]]			    = 133,
-		[NL["Waterlogged Wreckage Pool"]]		= 134,
-		[NL["Bloodsail Wreckage Pool"]]			= 135,
-		[NL["Mixed Ocean School"]]				= 136,
+		["Borean Man O' War School"]        = 121,
+		["Deep Sea Monsterbelly School"]	= 122,
+		["Dragonfin Angelfish School"]		= 123,
+		["Fangtooth Herring School"]		= 124,
+		["Floating Wreckage Pool"]			= 125,
+		["Glacial Salmon School"]			= 126,
+		["Glassfin Minnow School"]			= 127,
+		["Imperial Manta Ray School"]		= 128,
+		["Moonglow Cuttlefish School"]		= 129,
+		["Musselback Sculpin School"]		= 130,
+		["Nettlefish School"]				= 131,
+		["Strange Pool"]					= 132,
+		["Schooner Wreckage"]			    = 133,
+		["Waterlogged Wreckage Pool"]		= 134,
+		["Bloodsail Wreckage Pool"]			= 135,
+		["Mixed Ocean School"]				= 136,
 		-- Begin tediuous prefix mapping
-		--[NL["Lesser Sagefish School"]]		= 136, -- sagefish.tga
-		--[NL["Lesser Oily Blackmouth School"]] = 137, -- oilyblackmouth.tga
-		--[NL["Sparse Oily Blackmouth School"]] = 138, -- oilyblackmouth.tga
-		--[NL["Abundant Oily Blackmouth School"]]	= 139, -- oilyblackmouth.tga
-		--[NL["Teeming Oily Blackmouth School"]]= 140, -- oilyblackmouth.tga
-		--[NL["Lesser Firefin Snapper School"]] = 141, -- firefin.tga
-		--[NL["Sparse Firefin Snapper School"]] = 142, -- firefin.tga
-		--[NL["Abundant Firefin Snapper School"]]= 143, -- firefin.tga
-		--[NL["Teeming Firefin Snapper School"]]= 144, -- firefin.tga
-		--[NL["Lesser Floating Debris"]] 		= 145, -- debris.tga
-		--[NL["Sparse Schooner Wreckage"]]		= 146,
-		--[NL["Abundant Bloodsail Wreckage"]]	= 147,
-		--[NL["Teeming Floating Wreckage"]]		= 148,
-		[NL["Albino Cavefish School"]]			= 149,
-		--[NL["Algaefin Rockfish School"]]		= 150,
-		[NL["Blackbelly Mudfish School"]]		= 151,
-		[NL["Fathom Eel Swarm"]]				= 152,
-		[NL["Highland Guppy School"]]			= 153,
-		[NL["Mountain Trout School"]]			= 154,
-		[NL["Pool of Fire"]]					= 155,
-		[NL["Shipwreck Debris"]]				= 156,
-		[NL["Deepsea Sagefish School"]]			= 157,
+		--["Lesser Sagefish School"]		= 136, -- sagefish.tga
+		--["Lesser Oily Blackmouth School"] = 137, -- oilyblackmouth.tga
+		--["Sparse Oily Blackmouth School"] = 138, -- oilyblackmouth.tga
+		--["Abundant Oily Blackmouth School"]	= 139, -- oilyblackmouth.tga
+		--["Teeming Oily Blackmouth School"]= 140, -- oilyblackmouth.tga
+		--["Lesser Firefin Snapper School"] = 141, -- firefin.tga
+		--["Sparse Firefin Snapper School"] = 142, -- firefin.tga
+		--["Abundant Firefin Snapper School"]= 143, -- firefin.tga
+		--["Teeming Firefin Snapper School"]= 144, -- firefin.tga
+		--["Lesser Floating Debris"] 		= 145, -- debris.tga
+		--["Sparse Schooner Wreckage"]		= 146,
+		--["Abundant Bloodsail Wreckage"]	= 147,
+		--["Teeming Floating Wreckage"]		= 148,
+		["Albino Cavefish School"]			= 149,
+		--["Algaefin Rockfish School"]		= 150,
+		["Blackbelly Mudfish School"]		= 151,
+		["Fathom Eel Swarm"]				= 152,
+		["Highland Guppy School"]			= 153,
+		["Mountain Trout School"]			= 154,
+		["Pool of Fire"]					= 155,
+		["Shipwreck Debris"]				= 156,
+		["Deepsea Sagefish School"]			= 157,
 		-- Mists Pools
-		[NL["Emperor Salmon School"]]			= 158,
-		[NL["Giant Mantis Shrimp Swarm"]]		= 159,
-		[NL["Golden Carp School"]]				= 160,
-		[NL["Jade Lungfish School"]]			= 161,
-		[NL["Krasarang Paddlefish School"]]		= 162,
-		[NL["Redbelly Mandarin School"]]		= 163,
-		[NL["Reef Octopus Swarm"]]				= 164,
-		[NL["Floating Shipwreck Debris"]]		= 165,
-		[NL["Jewel Danio School"]]				= 166,
-		[NL["Spinefish School"]]				= 167,
-		[NL["Tiger Gourami School"]]			= 168,
+		["Emperor Salmon School"]			= 158,
+		["Giant Mantis Shrimp Swarm"]		= 159,
+		["Golden Carp School"]				= 160,
+		["Jade Lungfish School"]			= 161,
+		["Krasarang Paddlefish School"]		= 162,
+		["Redbelly Mandarin School"]		= 163,
+		["Reef Octopus Swarm"]				= 164,
+		["Floating Shipwreck Debris"]		= 165,
+		["Jewel Danio School"]				= 166,
+		["Spinefish School"]				= 167,
+		["Tiger Gourami School"]			= 168,
 		-- WoD Pools
-		[NL["Abyssal Gulper School"]]			= 169,
-		[NL["Oily Abyssal Gulper School"]]		= 170,
-		[NL["Blackwater Whiptail School"]]		= 171,
-		[NL["Blind Lake Sturgeon School"]]		= 172,
-		[NL["Fat Sleeper School"]]				= 173,
-		[NL["Fire Ammonite School"]]			= 174,
-		[NL["Jawless Skulker School"]]			= 175,
-		[NL["Sea Scorpion School"]]				= 176,
-		[NL["Oily Sea Scorpion School"]]		= 177,
-		[NL["Savage Piranha Pool"]]				= 178,
-		--[NL["Lagoon Pool"]]						= 179,
-		--[NL["Sparkling Pool"]]					= 180,
-		[NL["Felmouth Frenzy School"]]			= 181,
+		["Abyssal Gulper School"]			= 169,
+		["Oily Abyssal Gulper School"]		= 170,
+		["Blackwater Whiptail School"]		= 171,
+		["Blind Lake Sturgeon School"]		= 172,
+		["Fat Sleeper School"]				= 173,
+		["Fire Ammonite School"]			= 174,
+		["Jawless Skulker School"]			= 175,
+		["Sea Scorpion School"]				= 176,
+		["Oily Sea Scorpion School"]		= 177,
+		["Savage Piranha Pool"]				= 178,
+		--["Lagoon Pool"]						= 179,
+		--["Sparkling Pool"]					= 180,
+		["Felmouth Frenzy School"]			= 181,
 		-- Legion Pools
-		[NL["Black Barracuda School"]]			= 182,
-		[NL["Cursed Queenfish School"]]			= 183,
-		[NL["Runescale Koi School"]]			= 184,
-		[NL["Fever of Stormrays"]]				= 185,
-		[NL["Highmountain Salmon School"]]		= 186,
-		[NL["Mossgill Perch School"]]			= 187,
+		["Black Barracuda School"]			= 182,
+		["Cursed Queenfish School"]			= 183,
+		["Runescale Koi School"]			= 184,
+		["Fever of Stormrays"]				= 185,
+		["Highmountain Salmon School"]		= 186,
+		["Mossgill Perch School"]			= 187,
 		-- BfA Pools
-		[NL["Frenzied Fangtooth School"]]		= 188,
-		[NL["Great Sea Catfish School"]]		= 189,
-		[NL["Lane Snapper School"]]				= 190,
-		[NL["Rasboralus School"]]				= 191,
-		[NL["Redtail Loach School"]]			= 192,
-		[NL["Sand Shifter School"]]				= 193,
-		[NL["Slimy Mackerel School"]]			= 194,
-		[NL["Tiragarde Perch School"]]			= 195,
-		[NL["U'taka School"]]					= 196,
-		[NL["Mauve Stinger School"]]			= 197,
-		[NL["Viper Fish School"]]				= 198,
-		[NL["Ionized Minnows"]]					= 199,
-		[NL["Sentry Fish School"]]				= 1101,
+		["Frenzied Fangtooth School"]		= 188,
+		["Great Sea Catfish School"]		= 189,
+		["Lane Snapper School"]				= 190,
+		["Rasboralus School"]				= 191,
+		["Redtail Loach School"]			= 192,
+		["Sand Shifter School"]				= 193,
+		["Slimy Mackerel School"]			= 194,
+		["Tiragarde Perch School"]			= 195,
+		["U'taka School"]					= 196,
+		["Mauve Stinger School"]			= 197,
+		["Viper Fish School"]				= 198,
+		["Ionized Minnows"]					= 199,
+		["Sentry Fish School"]				= 1101,
 		-- Shadowlands pools
-		[NL["Iridescent Amberjack School"]]		= 1102,
-		[NL["Pocked Bonefish School"]]			= 1103,
-		[NL["Silvergill Pike School"]]			= 1104,
-		[NL["Elysian Thade School"]]			= 1105,
-		[NL["Lost Sole School"]]				= 1106,
-		[NL["Spinefin Piranha School"]]			= 1107,
-		[NL["Precursor Placoderm School"]]		= 1108,
+		["Iridescent Amberjack School"]		= 1102,
+		["Pocked Bonefish School"]			= 1103,
+		["Silvergill Pike School"]			= 1104,
+		["Elysian Thade School"]			= 1105,
+		["Lost Sole School"]				= 1106,
+		["Spinefin Piranha School"]			= 1107,
+		["Precursor Placoderm School"]		= 1108,
 		-- Dragonflight pools
 		-- general
-		[NL["Islefin Dorado Pool"]]				= 1109,
-		[NL["Shimmering Treasure Pool"]]		= 1110,
+		["Islefin Dorado Pool"]				= 1109,
+		["Shimmering Treasure Pool"]		= 1110,
 		-- freshwater
-		[NL["Temporal Dragonhead Pool"]]		= 1111,
-		[NL["Thousandbite Pirahna Swarm"]]		= 1112,
+		["Temporal Dragonhead Pool"]		= 1111,
+		["Thousandbite Pirahna Swarm"]		= 1112,
 		-- saltwater
-		[NL["Aileron Seamoth School"]]			= 1113,
-		[NL["Cerulean Spinefish School"]]		= 1114,
+		["Aileron Seamoth School"]			= 1113,
+		["Cerulean Spinefish School"]		= 1114,
 		-- special
-		[NL["Rimefin Tuna Pool"]]				= 1115,
-		[NL["Magma Thresher Pool"]]				= 1116,
-		[NL["Prismatic Leaper School"]]			= 1117,
+		["Rimefin Tuna Pool"]				= 1115,
+		["Magma Thresher Pool"]				= 1116,
+		["Prismatic Leaper School"]			= 1117,
 		-- TWW Pools
-		[NL["Calm Surfacing Ripple"]]			= 1118,
-		[NL["River Bass Pool"]]					= 1119,
-		[NL["Glimmerpool"]]						= 1120,
-		[NL["Bloody Perch Swarm"]]				= 1121,
-		[NL["Swarm of Slum Sharks"]]			= 1122,
-		[NL["Blood in the Water"]]				= 1123,
-		[NL["Festering Rotpool"]]				= 1124,
-		[NL["Infused Ichor Spill"]]				= 1125,
-		[NL["Stargazer Swarm"]]					= 1126,
-		[NL["Anglerseeker Torrent"]]			= 1127,
-		[NL["Royal Ripple"]]					= 1128,
-		[NL["Shore Treasure"]]					= 1129,
-		[NL["Floating Deep Treasure"]]			= 1130,
+		["Calm Surfacing Ripple"]			= 1118,
+		["River Bass Pool"]					= 1119,
+		["Glimmerpool"]						= 1120,
+		["Bloody Perch Swarm"]				= 1121,
+		["Swarm of Slum Sharks"]			= 1122,
+		["Blood in the Water"]				= 1123,
+		["Festering Rotpool"]				= 1124,
+		["Infused Ichor Spill"]				= 1125,
+		["Stargazer Swarm"]					= 1126,
+		["Anglerseeker Torrent"]			= 1127,
+		["Royal Ripple"]					= 1128,
+		["Shore Treasure"]					= 1129,
+		["Floating Deep Treasure"]			= 1130,
 		-- Midnight pools
-		[NL["Bloom Swarm"]]						= 1131,
-		[NL["Blossoming Torrent"]]				= 1132,
-		[NL["Bubbling Bloom"]]					= 1133,
-		[NL["Hunter Surge"]]					= 1134,
-		[NL["Lashing Waves"]]					= 1135,
-		[NL["Obscured School"]]					= 1136,
-		[NL["Salmon Pool"]]						= 1137,
-		[NL["Song Swarm"]]						= 1138,
-		[NL["Sunbath School"]]					= 1139,
-		[NL["Sunwell Swarm"]]					= 1140,
-		[NL["Surface Ripple"]]					= 1141,
-		[NL["Careless Cargo"]]					= 1142,
-		[NL["Lost Treasures"]]					= 1143,
-		[NL["Viscous Void"]]					= 1144,
+		["Bloom Swarm"]						= 1131,
+		["Blossoming Torrent"]				= 1132,
+		["Bubbling Bloom"]					= 1133,
+		["Hunter Surge"]					= 1134,
+		["Lashing Waves"]					= 1135,
+		["Obscured School"]					= 1136,
+		["Salmon Pool"]						= 1137,
+		["Song Swarm"]						= 1138,
+		["Sunbath School"]					= 1139,
+		["Sunwell Swarm"]					= 1140,
+		["Surface Ripple"]					= 1141,
+		["Careless Cargo"]					= 1142,
+		["Lost Treasures"]					= 1143,
+		["Viscous Void"]					= 1144,
 	},
 	["Mining"] = {
-		[NL["Copper Vein"]] 					= 201,
-		[NL["Tin Vein"]] 						= 202,
-		[NL["Iron Deposit"]] 					= 203,
-		[NL["Silver Vein"]] 					= 204,
-		[NL["Gold Vein"]] 						= 205,
-		[NL["Mithril Deposit"]] 				= 206,
-		[NL["Ooze Covered Mithril Deposit"]]	= 207,
-		[NL["Truesilver Deposit"]] 				= 208,
-		[NL["Ooze Covered Silver Vein"]] 		= 209,
-		[NL["Ooze Covered Gold Vein"]] 			= 210,
-		[NL["Ooze Covered Truesilver Deposit"]] = 211,
-		[NL["Ooze Covered Rich Thorium Vein"]] 	= 212,
-		[NL["Ooze Covered Thorium Vein"]] 		= 213,
-		[NL["Small Thorium Vein"]] 				= 214,
-		[NL["Rich Thorium Vein"]] 				= 215,
-		--[NL["Hakkari Thorium Vein"]] 			= 216, -- found on in ZG
-		[NL["Dark Iron Deposit"]] 				= 217,
-		[NL["Lesser Bloodstone Deposit"]] 		= 218,
-		[NL["Incendicite Mineral Vein"]] 		= 219,
-		[NL["Indurium Mineral Vein"]]			= 220,
+		["Copper Vein"] 					= 201,
+		["Tin Vein"] 						= 202,
+		["Iron Deposit"] 					= 203,
+		["Silver Vein"] 					= 204,
+		["Gold Vein"] 						= 205,
+		["Mithril Deposit"] 				= 206,
+		["Ooze Covered Mithril Deposit"]	= 207,
+		["Truesilver Deposit"] 				= 208,
+		["Ooze Covered Silver Vein"] 		= 209,
+		["Ooze Covered Gold Vein"] 			= 210,
+		["Ooze Covered Truesilver Deposit"] = 211,
+		["Ooze Covered Rich Thorium Vein"] 	= 212,
+		["Ooze Covered Thorium Vein"] 		= 213,
+		["Small Thorium Vein"] 				= 214,
+		["Rich Thorium Vein"] 				= 215,
+		--["Hakkari Thorium Vein"] 			= 216, -- found on in ZG
+		["Dark Iron Deposit"] 				= 217,
+		["Lesser Bloodstone Deposit"] 		= 218,
+		["Incendicite Mineral Vein"] 		= 219,
+		["Indurium Mineral Vein"]			= 220,
 -- bc nodes
-		[NL["Fel Iron Deposit"]] 				= 221,
-		[NL["Adamantite Deposit"]] 				= 222,
-		[NL["Rich Adamantite Deposit"]] 		= 223,
-		[NL["Khorium Vein"]] 					= 224,
-		[NL["Large Obsidian Chunk"]] 			= 225, -- found only in AQ20/40
-		[NL["Small Obsidian Chunk"]] 			= 226, -- found only in AQ20/40
-		[NL["Nethercite Deposit"]] 				= 227,
+		["Fel Iron Deposit"] 				= 221,
+		["Adamantite Deposit"] 				= 222,
+		["Rich Adamantite Deposit"] 		= 223,
+		["Khorium Vein"] 					= 224,
+		["Large Obsidian Chunk"] 			= 225, -- found only in AQ20/40
+		["Small Obsidian Chunk"] 			= 226, -- found only in AQ20/40
+		["Nethercite Deposit"] 				= 227,
 -- wrath nodes
-		[NL["Cobalt Deposit"]]					= 228,
-		[NL["Rich Cobalt Deposit"]]				= 229,
-		[NL["Titanium Vein"]]					= 230,
-		[NL["Saronite Deposit"]]				= 231,
-		[NL["Rich Saronite Deposit"]]			= 232,
+		["Cobalt Deposit"]					= 228,
+		["Rich Cobalt Deposit"]				= 229,
+		["Titanium Vein"]					= 230,
+		["Saronite Deposit"]				= 231,
+		["Rich Saronite Deposit"]			= 232,
 --- Cata nodes
-		[NL["Obsidium Deposit"]]				= 233,
-		--[NL["Huge Obsidian Slab"]]			= 234,
-		[NL["Pure Saronite Deposit"]] 			= 235,
-		[NL["Elementium Vein"]]					= 236,
-		[NL["Rich Elementium Vein"]]			= 237,
-		[NL["Pyrite Deposit"]]					= 238,
-		[NL["Rich Obsidium Deposit"]] 			= 239,
-		[NL["Rich Pyrite Deposit"]] 			= 240,
+		["Obsidium Deposit"]				= 233,
+		--["Huge Obsidian Slab"]			= 234,
+		["Pure Saronite Deposit"] 			= 235,
+		["Elementium Vein"]					= 236,
+		["Rich Elementium Vein"]			= 237,
+		["Pyrite Deposit"]					= 238,
+		["Rich Obsidium Deposit"] 			= 239,
+		["Rich Pyrite Deposit"] 			= 240,
 -- mists nodes
-		[NL["Ghost Iron Deposit"]] 				= 241,
-		[NL["Rich Ghost Iron Deposit"]] 		= 242,
-		--[NL["Black Trillium Deposit"]]			= 243,
-		--[NL["White Trillium Deposit"]]			= 244,
-		[NL["Kyparite Deposit"]]				= 245,
-		[NL["Rich Kyparite Deposit"]]			= 246,
-		[NL["Trillium Vein"]]					= 247,
-		[NL["Rich Trillium Vein"]]				= 248,
+		["Ghost Iron Deposit"] 				= 241,
+		["Rich Ghost Iron Deposit"] 		= 242,
+		--["Black Trillium Deposit"]			= 243,
+		--["White Trillium Deposit"]			= 244,
+		["Kyparite Deposit"]				= 245,
+		["Rich Kyparite Deposit"]			= 246,
+		["Trillium Vein"]					= 247,
+		["Rich Trillium Vein"]				= 248,
 -- wod nodes
-		[NL["True Iron Deposit"]]				= 249,
-		[NL["Rich True Iron Deposit"]]			= 250,
-		[NL["Blackrock Deposit"]]				= 251,
-		[NL["Rich Blackrock Deposit"]]			= 252,
+		["True Iron Deposit"]				= 249,
+		["Rich True Iron Deposit"]			= 250,
+		["Blackrock Deposit"]				= 251,
+		["Rich Blackrock Deposit"]			= 252,
 -- legion nodes
-		[NL["Leystone Deposit"]]				= 253,
-		[NL["Rich Leystone Deposit"]]			= 254,
-		[NL["Leystone Seam"]]					= 255,
-		[NL["Felslate Deposit"]]				= 256,
-		[NL["Rich Felslate Deposit"]]			= 257,
-		[NL["Felslate Seam"]]					= 258,
-		[NL["Empyrium Deposit"]]				= 259,
-		[NL["Rich Empyrium Deposit"]]			= 260,
-		[NL["Empyrium Seam"]]					= 261,
+		["Leystone Deposit"]				= 253,
+		["Rich Leystone Deposit"]			= 254,
+		["Leystone Seam"]					= 255,
+		["Felslate Deposit"]				= 256,
+		["Rich Felslate Deposit"]			= 257,
+		["Felslate Seam"]					= 258,
+		["Empyrium Deposit"]				= 259,
+		["Rich Empyrium Deposit"]			= 260,
+		["Empyrium Seam"]					= 261,
 -- bfa nodes
-		[NL["Monelite Deposit"]]				= 262,
-		[NL["Rich Monelite Deposit"]]			= 263,
-		[NL["Monelite Seam"]]					= 264,
-		[NL["Platinum Deposit"]]				= 265,
-		[NL["Rich Platinum Deposit"]]			= 266,
-		[NL["Storm Silver Deposit"]]			= 267,
-		[NL["Rich Storm Silver Deposit"]]		= 268,
-		[NL["Storm Silver Seam"]]				= 269,
-		[NL["Osmenite Deposit"]]				= 270,
-		[NL["Rich Osmenite Deposit"]]			= 271,
-		[NL["Osmenite Seam"]]					= 272,
+		["Monelite Deposit"]				= 262,
+		["Rich Monelite Deposit"]			= 263,
+		["Monelite Seam"]					= 264,
+		["Platinum Deposit"]				= 265,
+		["Rich Platinum Deposit"]			= 266,
+		["Storm Silver Deposit"]			= 267,
+		["Rich Storm Silver Deposit"]		= 268,
+		["Storm Silver Seam"]				= 269,
+		["Osmenite Deposit"]				= 270,
+		["Rich Osmenite Deposit"]			= 271,
+		["Osmenite Seam"]					= 272,
 -- shadowlands nodes
-		[NL["Laestrite Deposit"]]				= 273,
-		[NL["Rich Laestrite Deposit"]]			= 274,
-		[NL["Phaedrum Deposit"]]				= 275,
-		[NL["Rich Phaedrum Deposit"]]			= 276,
-		[NL["Oxxein Deposit"]]					= 277,
-		[NL["Rich Oxxein Deposit"]]				= 278,
-		--[NL["Monolithic Oxxein Deposit"]]		= 279,
-		[NL["Elethium Deposit"]]				= {
+		["Laestrite Deposit"]				= 273,
+		["Rich Laestrite Deposit"]			= 274,
+		["Phaedrum Deposit"]				= 275,
+		["Rich Phaedrum Deposit"]			= 276,
+		["Oxxein Deposit"]					= 277,
+		["Rich Oxxein Deposit"]				= 278,
+		--["Monolithic Oxxein Deposit"]		= 279,
+		["Elethium Deposit"]				= {
 			id = 280,
 			variants = {
-				NL["Rich Elethium Deposit"], NL["Elusive Elethium Deposit"], NL["Elusive Rich Elethium Deposit"]
+				"Rich Elethium Deposit", "Elusive Elethium Deposit", "Elusive Rich Elethium Deposit"
 			},
 			old_ids = { 281, 291, 292 },
 		},
-		[NL["Solenium Deposit"]]				= 282,
-		[NL["Rich Solenium Deposit"]]			= 283,
-		[NL["Sinvyr Deposit"]]					= 284,
-		[NL["Rich Sinvyr Deposit"]]				= 285,
-		--[NL["Menacing Sinvyr Deposit"]]			= 286,
-		[NL["Progenium Deposit"]]				= {
+		["Solenium Deposit"]				= 282,
+		["Rich Solenium Deposit"]			= 283,
+		["Sinvyr Deposit"]					= 284,
+		["Rich Sinvyr Deposit"]				= 285,
+		--["Menacing Sinvyr Deposit"]			= 286,
+		["Progenium Deposit"]				= {
 			id = 287,
 			variants = {
-				NL["Rich Progenium Deposit"], NL["Elusive Progenium Deposit"], NL["Elusive Rich Progenium Deposit"]
+				"Rich Progenium Deposit", "Elusive Progenium Deposit", "Elusive Rich Progenium Deposit"
 			},
 			old_ids = { 288, 289, 290 },
 		},
 -- dragonflight nodes
-		[NL["Serevite Seam"]]					= 1200,
-		[NL["Serevite Deposit"]]				= {
+		["Serevite Seam"]					= 1200,
+		["Serevite Deposit"]				= {
 			id = 1201,
 			variants = {
-				NL["Rich Serevite Deposit"], NL["Primal Serevite Deposit"], NL["Molten Serevite Deposit"], NL["Hardened Serevite Deposit"], NL["Infurious Serevite Deposit"], NL["Titan-Touched Serevite Deposit"], NL["Metamorphic Serevite Deposit"]
+				"Rich Serevite Deposit", "Primal Serevite Deposit", "Molten Serevite Deposit", "Hardened Serevite Deposit", "Infurious Serevite Deposit", "Titan-Touched Serevite Deposit", "Metamorphic Serevite Deposit"
 			},
 			old_ids = { 1202, 1203, 1204, 1205, 1206, 1207, 1216 },
 		},
 
-		[NL["Draconium Seam"]]					= 1208,
-		[NL["Draconium Deposit"]]				=
+		["Draconium Seam"]					= 1208,
+		["Draconium Deposit"]				=
 		{
 			id = 1209,
 			variants = {
-				NL["Rich Draconium Deposit"], NL["Primal Draconium Deposit"], NL["Molten Draconium Deposit"], NL["Hardened Draconium Deposit"], NL["Infurious Draconium Deposit"], NL["Titan-Touched Draconium Deposit"], NL["Metamorphic Draconium Deposit"]
+				"Rich Draconium Deposit", "Primal Draconium Deposit", "Molten Draconium Deposit", "Hardened Draconium Deposit", "Infurious Draconium Deposit", "Titan-Touched Draconium Deposit", "Metamorphic Draconium Deposit"
 			},
 			old_ids = { 1210, 1211, 1212, 1213, 1214, 1215, 1217 },
 		},
 
 -- tww nodes
-		[NL["Bismuth"]]							= {
+		["Bismuth"]							= {
 			id = 1218,
 			variants = {
-				NL["Rich Bismuth"], NL["Camouflaged Bismuth"], NL["Crystallized Bismuth"], NL["Weeping Bismuth"], NL["Webbed Bismuth"], NL["EZ-Mine Bismuth"]
+				"Rich Bismuth", "Camouflaged Bismuth", "Crystallized Bismuth", "Weeping Bismuth", "Webbed Bismuth", "EZ-Mine Bismuth"
 			},
 			old_ids = { 1219, 1220, 1221, 1222, 1223, 1224 },
 		},
-		[NL["Bismuth Seam"]]					= 1225,
+		["Bismuth Seam"]					= 1225,
 
-		[NL["Aqirite"]]							= {
+		["Aqirite"]							= {
 			id = 1226,
 			variants = {
-				NL["Rich Aqirite"], NL["Camouflaged Aqirite"], NL["Crystallized Aqirite"], NL["Weeping Aqirite"], NL["Webbed Aqirite"], NL["EZ-Mine Aqirite"]
+				"Rich Aqirite", "Camouflaged Aqirite", "Crystallized Aqirite", "Weeping Aqirite", "Webbed Aqirite", "EZ-Mine Aqirite"
 			},
 			old_ids = { 1227, 1228, 1229, 1230, 1231, 1232 },
 		},
-		[NL["Aqirite Seam"]]					= 1233,
+		["Aqirite Seam"]					= 1233,
 
-		[NL["Ironclaw"]]						= {
+		["Ironclaw"]						= {
 			id = 1234,
 			variants = {
-				NL["Rich Ironclaw"], NL["Camouflaged Ironclaw"], NL["Crystallized Ironclaw"], NL["Weeping Ironclaw"], NL["Webbed Ironclaw"], NL["EZ-Mine Ironclaw"]
+				"Rich Ironclaw", "Camouflaged Ironclaw", "Crystallized Ironclaw", "Weeping Ironclaw", "Webbed Ironclaw", "EZ-Mine Ironclaw"
 			},
 			old_ids = { 1235, 1236, 1237, 1238, 1239, 1240 },
 		},
-		[NL["Ironclaw Seam"]]					= 1241,
+		["Ironclaw Seam"]					= 1241,
 
-		[NL["Webbed Ore Deposit"]]				= 1242,
+		["Webbed Ore Deposit"]				= 1242,
 
-		[NL["Desolate Deposit"]]				= {
+		["Desolate Deposit"]				= {
 			id = 1243,
-			variants = { NL["Rich Desolate Deposit"] },
+			variants = { "Rich Desolate Deposit" },
 			old_ids = { 1244 },
 		},
 -- midnight nodes
-		[NL["Brilliant Silver"]] = {
+		["Brilliant Silver"] = {
 			id = 1245,
 			variants = {
-				NL["Rich Brilliant Silver"], NL["Lightfused Brilliant Silver"], NL["Primal Brilliant Silver"], NL["Voidbound Brilliant Silver"], NL["Wild Brilliant Silver"]
+				"Rich Brilliant Silver", "Lightfused Brilliant Silver", "Primal Brilliant Silver", "Voidbound Brilliant Silver", "Wild Brilliant Silver"
 			}
 		},
-		[NL["Brilliant Silver Seam"]] = 1246,
-		[NL["Refulgent Copper"]] = {
+		["Brilliant Silver Seam"] = 1246,
+		["Refulgent Copper"] = {
 			id = 1247,
 			variants = {
-				NL["Rich Refulgent Copper"], NL["Lightfused Refulgent Copper"], NL["Primal Refulgent Copper"], NL["Voidbound Refulgent Copper"], NL["Wild Refulgent Copper"]
+				"Rich Refulgent Copper", "Lightfused Refulgent Copper", "Primal Refulgent Copper", "Voidbound Refulgent Copper", "Wild Refulgent Copper"
 			}
 		},
-		[NL["Refulgent Copper Seam"]] = 1248,
-		[NL["Umbral Tin"]] = {
+		["Refulgent Copper Seam"] = 1248,
+		["Umbral Tin"] = {
 			id = 1249,
 			variants = {
-				NL["Rich Umbral Tin"], NL["Lightfused Umbral Tin"], NL["Primal Umbral Tin"], NL["Voidbound Umbral Tin"], NL["Wild Umbral Tin"]
+				"Rich Umbral Tin", "Lightfused Umbral Tin", "Primal Umbral Tin", "Voidbound Umbral Tin", "Wild Umbral Tin"
 			}
 		},
-		[NL["Umbral Tin Seam"]] = 1250,
+		["Umbral Tin Seam"] = 1250,
 	},
 	["Extract Gas"] = {
-		[NL["Windy Cloud"]] 					= 301,
-		[NL["Swamp Gas"]] 						= 302,
-		[NL["Arcane Vortex"]] 					= 303,
-		[NL["Felmist"]] 						= 304,
-		[NL["Steam Cloud"]]					    = 305,
-		[NL["Cinder Cloud"]]					= 306,
-		[NL["Arctic Cloud"]]					= 307,
+		["Windy Cloud"] 					= 301,
+		["Swamp Gas"] 						= 302,
+		["Arcane Vortex"] 					= 303,
+		["Felmist"] 						= 304,
+		["Steam Cloud"]					    = 305,
+		["Cinder Cloud"]					= 306,
+		["Arctic Cloud"]					= 307,
 	},
 	["Herb Gathering"] = {
-		[NL["Peacebloom"]] 						= 401,
-		[NL["Silverleaf"]] 						= 402,
-		[NL["Earthroot"]] 						= 403,
-		[NL["Mageroyal"]] 						= 404,
-		[NL["Briarthorn"]] 						= 405,
-		--[NL["Swiftthistle"]] 					= 406, -- found it briathorn nodes
-		[NL["Stranglekelp"]] 					= 407,
-		[NL["Bruiseweed"]] 						= 408,
-		[NL["Wild Steelbloom"]] 				= 409,
-		[NL["Grave Moss"]] 						= 410,
-		[NL["Kingsblood"]] 						= 411,
-		[NL["Liferoot"]] 						= 412,
-		[NL["Fadeleaf"]] 						= 413,
-		[NL["Goldthorn"]] 						= 414,
-		[NL["Khadgar's Whisker"]] 				= 415,
-		[NL["Wintersbite"]] 					= 416,
-		[NL["Firebloom"]] 						= 417,
-		[NL["Purple Lotus"]] 					= 418,
-		--[NL["Wildvine"]] 						= 419, -- found in purple lotus nodes
-		[NL["Arthas' Tears"]] 					= 420,
-		[NL["Sungrass"]] 						= 421,
-		[NL["Blindweed"]] 						= 422,
-		[NL["Ghost Mushroom"]] 					= 423,
-		[NL["Gromsblood"]] 						= 424,
-		[NL["Golden Sansam"]] 					= 425,
-		[NL["Dreamfoil"]] 						= 426,
-		[NL["Mountain Silversage"]] 			= 427,
-		[NL["Plaguebloom"]] 					= 428,
-		[NL["Icecap"]] 							= 429,
-		--[NL["Bloodvine"]] 					= 430, -- zg bush loot
-		[NL["Black Lotus"]] 					= 431,
+		["Peacebloom"] 						= 401,
+		["Silverleaf"] 						= 402,
+		["Earthroot"] 						= 403,
+		["Mageroyal"] 						= 404,
+		["Briarthorn"] 						= 405,
+		--["Swiftthistle"] 					= 406, -- found it briathorn nodes
+		["Stranglekelp"] 					= 407,
+		["Bruiseweed"] 						= 408,
+		["Wild Steelbloom"] 				= 409,
+		["Grave Moss"] 						= 410,
+		["Kingsblood"] 						= 411,
+		["Liferoot"] 						= 412,
+		["Fadeleaf"] 						= 413,
+		["Goldthorn"] 						= 414,
+		["Khadgar's Whisker"] 				= 415,
+		["Wintersbite"] 					= 416,
+		["Firebloom"] 						= 417,
+		["Purple Lotus"] 					= 418,
+		--["Wildvine"] 						= 419, -- found in purple lotus nodes
+		["Arthas' Tears"] 					= 420,
+		["Sungrass"] 						= 421,
+		["Blindweed"] 						= 422,
+		["Ghost Mushroom"] 					= 423,
+		["Gromsblood"] 						= 424,
+		["Golden Sansam"] 					= 425,
+		["Dreamfoil"] 						= 426,
+		["Mountain Silversage"] 			= 427,
+		["Plaguebloom"] 					= 428,
+		["Icecap"] 							= 429,
+		--["Bloodvine"] 					= 430, -- zg bush loot
+		["Black Lotus"] 					= 431,
 -- bc nodes
-		[NL["Felweed"]] 						= 432,
-		[NL["Dreaming Glory"]] 					= 433,
-		[NL["Terocone"]] 						= 434,
-		[NL["Ancient Lichen"]] 					= 435, -- instance only node
-		[NL["Bloodthistle"]] 					= 436,
-		[NL["Mana Thistle"]] 					= 437,
-		[NL["Netherbloom"]] 					= 438,
-		[NL["Nightmare Vine"]] 					= 439,
-		[NL["Ragveil"]] 						= 440,
-		[NL["Flame Cap"]] 						= 441,
-		[NL["Netherdust Bush"]] 				= 442,
+		["Felweed"] 						= 432,
+		["Dreaming Glory"] 					= 433,
+		["Terocone"] 						= 434,
+		["Ancient Lichen"] 					= 435, -- instance only node
+		["Bloodthistle"] 					= 436,
+		["Mana Thistle"] 					= 437,
+		["Netherbloom"] 					= 438,
+		["Nightmare Vine"] 					= 439,
+		["Ragveil"] 						= 440,
+		["Flame Cap"] 						= 441,
+		["Netherdust Bush"] 				= 442,
 -- wotlk nodes
-		[NL["Adder's Tongue"]]					= 443,
-		--[NL["Constrictor Grass"]]				= 444, -- drop form others
-		--[NL["Deadnettle"]]					= 445, --looted from other plants
-		[NL["Goldclover"]]						= 446,
-		[NL["Icethorn"]]						= 447,
-		[NL["Lichbloom"]]						= 448,
-		[NL["Talandra's Rose"]]					= 449,
-		[NL["Tiger Lily"]]						= 450,
-		[NL["Firethorn"]]						= 451,
-		[NL["Frozen Herb"]]						= 452,
-		[NL["Frost Lotus"]]						= 453, -- found in lake wintergrasp only
+		["Adder's Tongue"]					= 443,
+		--["Constrictor Grass"]				= 444, -- drop form others
+		--["Deadnettle"]					= 445, --looted from other plants
+		["Goldclover"]						= 446,
+		["Icethorn"]						= 447,
+		["Lichbloom"]						= 448,
+		["Talandra's Rose"]					= 449,
+		["Tiger Lily"]						= 450,
+		["Firethorn"]						= 451,
+		["Frozen Herb"]						= 452,
+		["Frost Lotus"]						= 453, -- found in lake wintergrasp only
 -- cata nodes
-		[NL["Dragon's Teeth"]]					= 454,
-		[NL["Sorrowmoss"]]						= 455,
-		[NL["Azshara's Veil"]]					= 456,
-		[NL["Cinderbloom"]]						= 457,
-		[NL["Stormvine"]]						= 458,
-		[NL["Heartblossom"]]					= 459,
-		[NL["Twilight Jasmine"]]				= 460,
-		[NL["Whiptail"]]						= 461,
+		["Dragon's Teeth"]					= 454,
+		["Sorrowmoss"]						= 455,
+		["Azshara's Veil"]					= 456,
+		["Cinderbloom"]						= 457,
+		["Stormvine"]						= 458,
+		["Heartblossom"]					= 459,
+		["Twilight Jasmine"]				= 460,
+		["Whiptail"]						= 461,
 -- mist nodes
-		[NL["Golden Lotus"]]					= 462,
-		[NL["Fool's Cap"]]						= 463,
-		[NL["Snow Lily"]]						= 464,
-		[NL["Silkweed"]]						= 465,
-		[NL["Green Tea Leaf"]]					= 466,
-		[NL["Rain Poppy"]]						= 467,
-		[NL["Sha-Touched Herb"]]				= 468,
+		["Golden Lotus"]					= 462,
+		["Fool's Cap"]						= 463,
+		["Snow Lily"]						= 464,
+		["Silkweed"]						= 465,
+		["Green Tea Leaf"]					= 466,
+		["Rain Poppy"]						= 467,
+		["Sha-Touched Herb"]				= 468,
 -- wod nodes
-		[NL["Talador Orchid"]]					= 469,
-		[NL["Nagrand Arrowbloom"]]				= 470,
-		[NL["Starflower"]]						= 471,
-		[NL["Gorgrond Flytrap"]]				= 472,
-		[NL["Fireweed"]]						= 473,
-		[NL["Frostweed"]]						= 474,
-		[NL["Withered Herb"]]					= 475,
+		["Talador Orchid"]					= 469,
+		["Nagrand Arrowbloom"]				= 470,
+		["Starflower"]						= 471,
+		["Gorgrond Flytrap"]				= 472,
+		["Fireweed"]						= 473,
+		["Frostweed"]						= 474,
+		["Withered Herb"]					= 475,
 -- legion nodes
-		[NL["Aethril"]]							= 476,
-		[NL["Dreamleaf"]]						= 477,
-		[NL["Felwort"]]							= 478,
-		[NL["Fjarnskaggl"]]						= 479,
-		[NL["Foxflower"]]						= 480,
-		[NL["Starlight Rose"]]					= 481,
-		[NL["Fel-Encrusted Herb"]]				= 482,
-		[NL["Fel-Encrusted Herb Cluster"]]		= 483,
-		[NL["Astral Glory"]]					= 484,
+		["Aethril"]							= 476,
+		["Dreamleaf"]						= 477,
+		["Felwort"]							= 478,
+		["Fjarnskaggl"]						= 479,
+		["Foxflower"]						= 480,
+		["Starlight Rose"]					= 481,
+		["Fel-Encrusted Herb"]				= 482,
+		["Fel-Encrusted Herb Cluster"]		= 483,
+		["Astral Glory"]					= 484,
 -- bfa nodes
-		[NL["Akunda's Bite"]]					= 485,
-		[NL["Anchor Weed"]]						= 486,
-		[NL["Riverbud"]]						= 487,
-		[NL["Sea Stalks"]]						= 488,
-		[NL["Siren's Sting"]]					= 489,
-		[NL["Star Moss"]]						= 490,
-		[NL["Winter's Kiss"]]					= 491,
-		[NL["Zin'anthid"]]						= 492,
+		["Akunda's Bite"]					= 485,
+		["Anchor Weed"]						= 486,
+		["Riverbud"]						= 487,
+		["Sea Stalks"]						= 488,
+		["Siren's Sting"]					= 489,
+		["Star Moss"]						= 490,
+		["Winter's Kiss"]					= 491,
+		["Zin'anthid"]						= 492,
 -- shadowlands nodes
-		[NL["Death Blossom"]]					= 493,
-		[NL["Nightshade"]] = {
+		["Death Blossom"]					= 493,
+		["Nightshade"] = {
 			id = 494,
 			variants = {
-				NL["Lush Nightshade"], NL["Elusive Nightshade"], NL["Lush Elusive Nightshade"]
+				"Lush Nightshade", "Elusive Nightshade", "Lush Elusive Nightshade"
 			},
 			old_ids = { 1401, 1402, 1406 },
 		},
-		[NL["Marrowroot"]]						= 495,
-		[NL["Vigil's Torch"]]					= 496,
-		[NL["Rising Glory"]]					= 497,
-		[NL["Widowbloom"]]						= 498,
-		[NL["First Flower"]] = {
+		["Marrowroot"]						= 495,
+		["Vigil's Torch"]					= 496,
+		["Rising Glory"]					= 497,
+		["Widowbloom"]						= 498,
+		["First Flower"] = {
 			id = 499,
 			variants = {
-				NL["Lush First Flower"], NL["Elusive First Flower"], NL["Lush Elusive First Flower"]
+				"Lush First Flower", "Elusive First Flower", "Lush Elusive First Flower"
 			},
 			old_ids = { 1403, 1404, 1405 },
 		},
 -- dragonflight nodes
-		[NL["Hochenblume"]] = {
+		["Hochenblume"] = {
 			id = 1407,
 			variants = {
-				NL["Lush Hochenblume"], NL["Frigid Hochenblume"], NL["Decayed Hochenblume"], NL["Windswept Hochenblume"], NL["Infurious Hochenblume"], NL["Titan-Touched Hochenblume"], NL["Lambent Hochenblume"]
+				"Lush Hochenblume", "Frigid Hochenblume", "Decayed Hochenblume", "Windswept Hochenblume", "Infurious Hochenblume", "Titan-Touched Hochenblume", "Lambent Hochenblume"
 			},
 			old_ids = {	1408, 1409, 1410, 1411, 1412, 1413, 1435 },
 		},
 
-		[NL["Bubble Poppy"]] = {
+		["Bubble Poppy"] = {
 			id = 1414,
 			variants = {
-				NL["Lush Bubble Poppy"], NL["Frigid Bubble Poppy"], NL["Decayed Bubble Poppy"], NL["Windswept Bubble Poppy"], NL["Infurious Bubble Poppy"], NL["Titan-Touched Bubble Poppy"], NL["Lambent Bubble Poppy"]
+				"Lush Bubble Poppy", "Frigid Bubble Poppy", "Decayed Bubble Poppy", "Windswept Bubble Poppy", "Infurious Bubble Poppy", "Titan-Touched Bubble Poppy", "Lambent Bubble Poppy"
 			},
 			old_ids = {	1415, 1416, 1417, 1418, 1419, 1420, 1436 },
 		},
 
-		[NL["Saxifrage"]] = {
+		["Saxifrage"] = {
 			id = 1421,
 			variants = {
-				NL["Lush Saxifrage"], NL["Frigid Saxifrage"], NL["Decayed Saxifrage"], NL["Windswept Saxifrage"], NL["Infurious Saxifrage"], NL["Titan-Touched Saxifrage"], NL["Lambent Saxifrage"]
+				"Lush Saxifrage", "Frigid Saxifrage", "Decayed Saxifrage", "Windswept Saxifrage", "Infurious Saxifrage", "Titan-Touched Saxifrage", "Lambent Saxifrage"
 			},
 			old_ids = { 1422, 1423, 1424, 1425, 1426, 1427, 1437 },
 		},
 
-		[NL["Writhebark"]] = {
+		["Writhebark"] = {
 			id = 1428,
 			variants = {
-				NL["Lush Writhebark"], NL["Frigid Writhebark"], NL["Decayed Writhebark"], NL["Windswept Writhebark"], NL["Infurious Writhebark"], NL["Titan-Touched Writhebark"], NL["Lambent Writhebark"]
+				"Lush Writhebark", "Frigid Writhebark", "Decayed Writhebark", "Windswept Writhebark", "Infurious Writhebark", "Titan-Touched Writhebark", "Lambent Writhebark"
 			},
 			old_ids = { 1429, 1430, 1431, 1432, 1433, 1434, 1438 },
 		},
 -- tww nodes
-		[NL["Mycobloom"]]= {
+		["Mycobloom"]= {
 			id = 1439,
 			variants = {
-				NL["Lush Mycobloom"], NL["Irradiated Mycobloom"], NL["Sporefused Mycobloom"], NL["Sporelusive Mycobloom"], NL["Crystallized Mycobloom"], NL["Altered Mycobloom"], NL["Camouflaged Mycobloom"]
+				"Lush Mycobloom", "Irradiated Mycobloom", "Sporefused Mycobloom", "Sporelusive Mycobloom", "Crystallized Mycobloom", "Altered Mycobloom", "Camouflaged Mycobloom"
 			},
 			old_ids = { 1440, 1441, 1442, 1443, 1444, 1445, 1446 },
 		},
-		[NL["Blessing Blossom"]] = {
+		["Blessing Blossom"] = {
 			id = 1447,
 			variants = {
-				NL["Lush Blessing Blossom"], NL["Irradiated Blessing Blossom"], NL["Sporefused Blessing Blossom"], NL["Sporelusive Blessing Blossom"], NL["Crystallized Blessing Blossom"], NL["Altered Blessing Blossom"], NL["Camouflaged Blessing Blossom"]
+				"Lush Blessing Blossom", "Irradiated Blessing Blossom", "Sporefused Blessing Blossom", "Sporelusive Blessing Blossom", "Crystallized Blessing Blossom", "Altered Blessing Blossom", "Camouflaged Blessing Blossom"
 			},
 			old_ids = { 1448, 1449, 1450, 1451, 1452, 1453, 1454 },
 		},
-		[NL["Luredrop"]] = {
+		["Luredrop"] = {
 			id = 1455,
 			variants = {
-				NL["Lush Luredrop"], NL["Irradiated Luredrop"], NL["Sporefused Luredrop"], NL["Sporelusive Luredrop"], NL["Crystallized Luredrop"], NL["Altered Luredrop"], NL["Camouflaged Luredrop"]
+				"Lush Luredrop", "Irradiated Luredrop", "Sporefused Luredrop", "Sporelusive Luredrop", "Crystallized Luredrop", "Altered Luredrop", "Camouflaged Luredrop"
 			},
 			old_ids = { 1456, 1457, 1458, 1459, 1460, 1461, 1462 },
 		},
-		[NL["Orbinid"]] = {
+		["Orbinid"] = {
 			id = 1463,
 			variants = {
-				NL["Lush Orbinid"], NL["Irradiated Orbinid"], NL["Sporefused Orbinid"], NL["Sporelusive Orbinid"], NL["Crystallized Orbinid"], NL["Altered Orbinid"], NL["Camouflaged Orbinid"]
+				"Lush Orbinid", "Irradiated Orbinid", "Sporefused Orbinid", "Sporelusive Orbinid", "Crystallized Orbinid", "Altered Orbinid", "Camouflaged Orbinid"
 			},
 			old_ids = { 1464, 1465, 1466, 1467, 1468, 1469, 1470 },
 		},
-		[NL["Arathor's Spear"]] = {
+		["Arathor's Spear"] = {
 			id = 1471,
 			variants = {
-				NL["Lush Arathor's Spear"], NL["Irradiated Arathor's Spear"], NL["Sporefused Arathor's Spear"], NL["Sporelusive Arathor's Spear"], NL["Crystallized Arathor's Spear"], NL["Altered Arathor's Spear"], NL["Camouflaged Arathor's Spear"]
+				"Lush Arathor's Spear", "Irradiated Arathor's Spear", "Sporefused Arathor's Spear", "Sporelusive Arathor's Spear", "Crystallized Arathor's Spear", "Altered Arathor's Spear", "Camouflaged Arathor's Spear"
 			},
 			old_ids = { 1472, 1473, 1474, 1475, 1476, 1477, 1478 },
 		},
-		[NL["Phantom Bloom"]] = {
+		["Phantom Bloom"] = {
 			id = 1479,
-			variants = { NL["Lush Phantom Bloom"] },
+			variants = { "Lush Phantom Bloom" },
 			old_ids = { 1480 },
 		},
 -- midnight nodes
-		[NL["Argentleaf"]] = {
+		["Argentleaf"] = {
 			id = 1481,
 			variants = {
-				NL["Lush Argentleaf"], NL["Lightfused Argentleaf"], NL["Primal Argentleaf"], NL["Transplanted Argentleaf"], NL["Transplanted Lush Argentleaf"], NL["Voidbound Argentleaf"], NL["Wild Argentleaf"]
+				"Lush Argentleaf", "Lightfused Argentleaf", "Primal Argentleaf", "Transplanted Argentleaf", "Transplanted Lush Argentleaf", "Voidbound Argentleaf", "Wild Argentleaf"
 			}
 		},
-		[NL["Azeroot"]] = {
+		["Azeroot"] = {
 			id = 1482,
 			variants = {
-				NL["Lush Azeroot"], NL["Lightfused Azeroot"], NL["Primal Azeroot"], NL["Transplanted Azeroot"], NL["Transplanted Lush Azeroot"], NL["Voidbound Azeroot"], NL["Wild Azeroot"]
+				"Lush Azeroot", "Lightfused Azeroot", "Primal Azeroot", "Transplanted Azeroot", "Transplanted Lush Azeroot", "Voidbound Azeroot", "Wild Azeroot"
 			}
 		},
-		[NL["Mana Lily"]] = {
+		["Mana Lily"] = {
 			id = 1483,
 			variants = {
-				NL["Lush Mana Lily"], NL["Lightfused Mana Lily"], NL["Primal Mana Lily"], NL["Transplanted Mana Lily"], NL["Transplanted Lush Mana Lily"], NL["Voidbound Mana Lily"], NL["Wild Mana Lily"]
+				"Lush Mana Lily", "Lightfused Mana Lily", "Primal Mana Lily", "Transplanted Mana Lily", "Transplanted Lush Mana Lily", "Voidbound Mana Lily", "Wild Mana Lily"
 			}
 		},
-		[NL["Sanguithorn"]] = {
+		["Sanguithorn"] = {
 			id = 1484,
 			variants = {
-				NL["Lush Sanguithorn"], NL["Lightfused Sanguithorn"], NL["Primal Sanguithorn"], NL["Transplanted Sanguithorn"], NL["Transplanted Lush Sanguithorn"], NL["Voidbound Sanguithorn"], NL["Wild Sanguithorn"]
+				"Lush Sanguithorn", "Lightfused Sanguithorn", "Primal Sanguithorn", "Transplanted Sanguithorn", "Transplanted Lush Sanguithorn", "Voidbound Sanguithorn", "Wild Sanguithorn"
 			}
 		},
-		[NL["Tranquility Bloom"]] = {
+		["Tranquility Bloom"] = {
 			id = 1485,
 			variants = {
-				NL["Lush Tranquility Bloom"], NL["Lightfused Tranquility Bloom"], NL["Primal Tranquility Bloom"], NL["Transplanted Tranquility Bloom"], NL["Transplanted Lush Tranquility Bloom"], NL["Voidbound Tranquility Bloom"], NL["Wild Tranquility Bloom"]
+				"Lush Tranquility Bloom", "Lightfused Tranquility Bloom", "Primal Tranquility Bloom", "Transplanted Tranquility Bloom", "Transplanted Lush Tranquility Bloom", "Voidbound Tranquility Bloom", "Wild Tranquility Bloom"
 			}
 		},
 	},
 	["Treasure"] = {
-		[NL["Giant Clam"]] 						= 501,
-		[NL["Battered Chest"]] 					= 502,
-		[NL["Tattered Chest"]] 					= 503,
-		[NL["Solid Chest"]] 					= 504,
-		[NL["Large Iron Bound Chest"]] 			= 505,
-		[NL["Large Solid Chest"]] 				= 506,
-		[NL["Large Battered Chest"]]			= 507,
-		[NL["Buccaneer's Strongbox"]] 			= 508,
-		[NL["Large Mithril Bound Chest"]] 		= 509,
-		[NL["Large Darkwood Chest"]] 			= 510,
-		--[NL["Un'Goro Dirt Pile"]] 			= 511,
-		[NL["Bloodpetal Sprout"]] 				= 512,
-		--[NL["Blood of Heroes"]] 				= 513,
-		[NL["Practice Lockbox"]] 				= 514,
-		[NL["Battered Footlocker"]] 			= 515,
-		[NL["Waterlogged Footlocker"]] 			= 516,
-		[NL["Dented Footlocker"]] 				= 517,
-		[NL["Mossy Footlocker"]] 				= 518,
-		[NL["Scarlet Footlocker"]] 				= 519,
-		[NL["Burial Chest"]] 					= 520,
-		[NL["Fel Iron Chest"]] 					= 521,
-		[NL["Heavy Fel Iron Chest"]] 			= 522,
-		[NL["Adamantite Bound Chest"]] 			= 523,
-		[NL["Felsteel Chest"]] 					= 524,
-		[NL["Glowcap"]] 						= 525,
-		[NL["Wicker Chest"]] 					= 526,
-		[NL["Primitive Chest"]] 				= 527,
-		[NL["Solid Fel Iron Chest"]] 			= 528,
-		[NL["Bound Fel Iron Chest"]] 			= 529,
-		[NL["Bound Adamantite Chest"]] 		    = 530, -- instance only node
-		[NL["Netherwing Egg"]] 					= 531,
-		[NL["Everfrost Chip"]]					= 532,
-		[NL["Brightly Colored Egg"]]			= 533,
-		[NL["Silken Treasure Chest"]]			= 534,
-		[NL["Sturdy Treasure Chest"]]			= 535,
-		[NL["Runestone Treasure Chest"]]		= 536,
-		[NL["Silverbound Treasure Chest"]]		= 537,
-		[NL["Mysterious Camel Figurine"]]       = 538,
-		[NL["Dark Iron Treasure Chest"]]        = 539,
-		[NL["Maplewood Treasure Chest"]]		= 540,
-		[NL["Takk's Nest"]]						= 541,
-		[NL["Dart's Nest"]]						= 542,
-		[NL["Razormaw Matriarch's Nest"]]		= 543,
-		[NL["Ravasaur Matriarch's Nest"]]		= 544,
-		[NL["Dark Soil"]]						= 545,
-		[NL["Onyx Egg"]]						= 546,
-		[NL["Trove of the Thunder King"]]		= 547,
-		[NL["Highmaul Reliquary"]]				= 548,
-		[NL["Suspiciously Glowing Chest"]]		= 549,
-		[NL["Radiating Apexis Shard"]]			= 550,
-		[NL["Gleaming Draenic Chest"]]			= 551,
+		["Giant Clam"] 						= 501,
+		["Battered Chest"] 					= 502,
+		["Tattered Chest"] 					= 503,
+		["Solid Chest"] 					= 504,
+		["Large Iron Bound Chest"] 			= 505,
+		["Large Solid Chest"] 				= 506,
+		["Large Battered Chest"]			= 507,
+		["Buccaneer's Strongbox"] 			= 508,
+		["Large Mithril Bound Chest"] 		= 509,
+		["Large Darkwood Chest"] 			= 510,
+		--["Un'Goro Dirt Pile"] 			= 511,
+		["Bloodpetal Sprout"] 				= 512,
+		--["Blood of Heroes"] 				= 513,
+		["Practice Lockbox"] 				= 514,
+		["Battered Footlocker"] 			= 515,
+		["Waterlogged Footlocker"] 			= 516,
+		["Dented Footlocker"] 				= 517,
+		["Mossy Footlocker"] 				= 518,
+		["Scarlet Footlocker"] 				= 519,
+		["Burial Chest"] 					= 520,
+		["Fel Iron Chest"] 					= 521,
+		["Heavy Fel Iron Chest"] 			= 522,
+		["Adamantite Bound Chest"] 			= 523,
+		["Felsteel Chest"] 					= 524,
+		["Glowcap"] 						= 525,
+		["Wicker Chest"] 					= 526,
+		["Primitive Chest"] 				= 527,
+		["Solid Fel Iron Chest"] 			= 528,
+		["Bound Fel Iron Chest"] 			= 529,
+		["Bound Adamantite Chest"] 		    = 530, -- instance only node
+		["Netherwing Egg"] 					= 531,
+		["Everfrost Chip"]					= 532,
+		["Brightly Colored Egg"]			= 533,
+		["Silken Treasure Chest"]			= 534,
+		["Sturdy Treasure Chest"]			= 535,
+		["Runestone Treasure Chest"]		= 536,
+		["Silverbound Treasure Chest"]		= 537,
+		["Mysterious Camel Figurine"]       = 538,
+		["Dark Iron Treasure Chest"]        = 539,
+		["Maplewood Treasure Chest"]		= 540,
+		["Takk's Nest"]						= 541,
+		["Dart's Nest"]						= 542,
+		["Razormaw Matriarch's Nest"]		= 543,
+		["Ravasaur Matriarch's Nest"]		= 544,
+		["Dark Soil"]						= 545,
+		["Onyx Egg"]						= 546,
+		["Trove of the Thunder King"]		= 547,
+		["Highmaul Reliquary"]				= 548,
+		["Suspiciously Glowing Chest"]		= 549,
+		["Radiating Apexis Shard"]			= 550,
+		["Gleaming Draenic Chest"]			= 551,
 		-- suramar mana
-		[NL["Ancient Mana Shard"]]				= 552,
-		[NL["Ancient Mana Chunk"]]				= 553,
-		[NL["Ancient Mana Crystal"]]			= 554,
-		[NL["Leypetal Blossom"]]				= 555,
-		[NL["Leypetal Powder"]]					= 556,
-		[NL["Glowing Tome"]]					= 557,
-		[NL["Mana-Infused Gem"]]				= 558,
-		[NL["Twice-Fortified Arcwine"]]			= 559,
+		["Ancient Mana Shard"]				= 552,
+		["Ancient Mana Chunk"]				= 553,
+		["Ancient Mana Crystal"]			= 554,
+		["Leypetal Blossom"]				= 555,
+		["Leypetal Powder"]					= 556,
+		["Glowing Tome"]					= 557,
+		["Mana-Infused Gem"]				= 558,
+		["Twice-Fortified Arcwine"]			= 559,
 		-- bfa 8.2 treasures
-		[NL["Mechanized Chest"]]				= 560,
-		[NL["Glimmering Chest"]]				= 561,
-		[NL["Prismatic Crystal"]]				= 562,
+		["Mechanized Chest"]				= 560,
+		["Glimmering Chest"]				= 561,
+		["Prismatic Crystal"]				= 562,
 		-- 8.2.5
-		[NL["Jelly Deposit"]]					= 563,
-		[NL["Large Jelly Deposit"]]				= 564,
+		["Jelly Deposit"]					= 563,
+		["Large Jelly Deposit"]				= 564,
 		-- Shadowlands
-		[NL["Ground Wart"]]						= 565,
+		["Ground Wart"]						= 565,
 		-- The War Within
-		[NL["Disturbed Earth"]]					= 566,
+		["Disturbed Earth"]					= 566,
 	},
 	["Archaeology"] = {
 		-- cata archeolgy objects
-		[NL["Night Elf Archaeology Find"]]      = 601,
-		[NL["Troll Archaeology Find"]]          = 602,
-		[NL["Dwarf Archaeology Find"]]          = 603,
-		[NL["Fossil Archaeology Find"]]         = 604,
-		[NL["Draenei Archaeology Find"]]        = 605,
-		[NL["Orc Archaeology Find"]]            = 606,
-		[NL["Nerubian Archaeology Find"]]       = 607,
-		[NL["Vrykul Archaeology Find"]]         = 608,
-		[NL["Tol'vir Archaeology Find"]]        = 609,
-		[NL["Other Archaeology Find"]]          = 610,
+		["Night Elf Archaeology Find"]      = 601,
+		["Troll Archaeology Find"]          = 602,
+		["Dwarf Archaeology Find"]          = 603,
+		["Fossil Archaeology Find"]         = 604,
+		["Draenei Archaeology Find"]        = 605,
+		["Orc Archaeology Find"]            = 606,
+		["Nerubian Archaeology Find"]       = 607,
+		["Vrykul Archaeology Find"]         = 608,
+		["Tol'vir Archaeology Find"]        = 609,
+		["Other Archaeology Find"]          = 610,
 		-- pandaria
-		[NL["Pandaren Archaeology Find"]]		= 611,
-		[NL["Mogu Archaeology Find"]]			= 612,
-		[NL["Mantid Archaeology Find"]]			= 613,
+		["Pandaren Archaeology Find"]		= 611,
+		["Mogu Archaeology Find"]			= 612,
+		["Mantid Archaeology Find"]			= 613,
 		-- draenor
-		[NL["Arakkoa Archaeology Find"]]		= 614,
-		[NL["Draenor Clans Archaeology Find"]]	= 615,
-		[NL["Ogre Archaeology Find"]]			= 616,
+		["Arakkoa Archaeology Find"]		= 614,
+		["Draenor Clans Archaeology Find"]	= 615,
+		["Ogre Archaeology Find"]			= 616,
 		-- legion
-		[NL["Demonic Archaeology Find"]]		= 617,
-		[NL["Highborne Archaeology Find"]]		= 618,
-		[NL["Highmountain Tauren Archaeology Find"]]	= 619,
+		["Demonic Archaeology Find"]		= 617,
+		["Highborne Archaeology Find"]		= 618,
+		["Highmountain Tauren Archaeology Find"]	= 619,
 		-- bfa
-		[NL["Drust Archaeology Find"]]			= 620,
-		[NL["Zandalari Archaeology Find"]]		= 621,
+		["Drust Archaeology Find"]			= 620,
+		["Zandalari Archaeology Find"]		= 621,
 	},
 	["Logging"] = {
-		[NL["Small Timber"]]					= 701,
-		[NL["Timber"]]							= 702,
-		[NL["Large Timber"]]					= 703,
+		["Small Timber"]					= 701,
+		["Timber"]							= 702,
+		["Large Timber"]					= 703,
 		-- TWW 11.2.7
-		[NL["Ironwood Lumber"]]					= 704, -- itemId 245586; Classic Areas
-		[NL["Olemba Lumber"]]					= 705, -- itemId 242691; BC Areas
-		[NL["Coldwind Lumber"]]					= 706, -- itemId 251762; Wotlk Areas
-		[NL["Ashwood Lumber"]]					= 707, -- itemId 251764; Cata Areas
-		[NL["Bamboo Lumber"]]					= 708, -- itemId 251763; MoP Areas
-		[NL["Shadowmoon Lumber"]]				= 709, -- itemId 251766; Draenor (By vendor for Olemba Lumber 1:1)
-		[NL["Fel-Touched Lumber"]]				= 710, -- itemId 251767; Legion Areas
-		[NL["Darkpine Lumber"]]					= 711, -- itemId 251768; BfA Areas
-		[NL["Arden Lumber"]]					= 712, -- itemId 251772; Shadowlands Areas
-		[NL["Dragonpine Lumber"]]				= 713, -- itemId 251773; Dragon Isles Areas
-		[NL["Dornic Fir Lumber"]]				= 714, -- itemId 248012; Kaz Algar Areas
+		["Ironwood Lumber"]					= 704, -- itemId 245586; Classic Areas
+		["Olemba Lumber"]					= 705, -- itemId 242691; BC Areas
+		["Coldwind Lumber"]					= 706, -- itemId 251762; Wotlk Areas
+		["Ashwood Lumber"]					= 707, -- itemId 251764; Cata Areas
+		["Bamboo Lumber"]					= 708, -- itemId 251763; MoP Areas
+		["Shadowmoon Lumber"]				= 709, -- itemId 251766; Draenor (By vendor for Olemba Lumber 1:1)
+		["Fel-Touched Lumber"]				= 710, -- itemId 251767; Legion Areas
+		["Darkpine Lumber"]					= 711, -- itemId 251768; BfA Areas
+		["Arden Lumber"]					= 712, -- itemId 251772; Shadowlands Areas
+		["Dragonpine Lumber"]				= 713, -- itemId 251773; Dragon Isles Areas
+		["Dornic Fir Lumber"]				= 714, -- itemId 248012; Kaz Algar Areas
 		-- coming soon with Midnight
-		[NL["Thalassian Lumber"]]				= 715, -- itemId 256963; Midnight Areas?
+		["Thalassian Lumber"]				= 715, -- itemId 256963; Midnight Areas?
 	},
 }
 GatherMate.nodeIDs, GatherMate.reverseNodeIDs, GatherMate.nodeIDReplacementMap = GatherMate:CreateNodeLookupTables(node_ids)
