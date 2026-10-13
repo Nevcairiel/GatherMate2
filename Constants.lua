@@ -172,6 +172,15 @@ local node_ids = {
 		["Careless Cargo"]					= 1142,
 		["Lost Treasures"]					= 1143,
 		["Viscous Void"]					= 1144,
+		["Abyssal Swirl"]					= 1145,
+		["Blighted Venom Pool"]				= 1146,
+		["Bubbling Beryl"]					= 1147,
+		["Cursed Oddity"]					= 1148,
+		["Grisly Cod Pool"]					= 1149,
+		["Torrential Gorgerswarm"]			= 1150,
+		["Vile Venom"]						= 1151,
+		["Viscous Venom"]					= 1151,
+		["Willow Sea"]						= 1152,
 	},
 	["Mining"] = {
 		["Copper Vein"] 					= 201,
@@ -339,21 +348,21 @@ local node_ids = {
 		["Brilliant Silver"] = {
 			id = 1245,
 			variants = {
-				"Rich Brilliant Silver", "Lightfused Brilliant Silver", "Primal Brilliant Silver", "Voidbound Brilliant Silver", "Wild Brilliant Silver"
+				"Rich Brilliant Silver", "Lightfused Brilliant Silver", "Primal Brilliant Silver", "Voidbound Brilliant Silver", "Wild Brilliant Silver", "Cursed Brilliant Silver"
 			}
 		},
 		["Brilliant Silver Seam"] = 1246,
 		["Refulgent Copper"] = {
 			id = 1247,
 			variants = {
-				"Rich Refulgent Copper", "Lightfused Refulgent Copper", "Primal Refulgent Copper", "Voidbound Refulgent Copper", "Wild Refulgent Copper"
+				"Rich Refulgent Copper", "Lightfused Refulgent Copper", "Primal Refulgent Copper", "Voidbound Refulgent Copper", "Wild Refulgent Copper", "Cursed Refulgent Copper", "Envenomated Copper"
 			}
 		},
 		["Refulgent Copper Seam"] = 1248,
 		["Umbral Tin"] = {
 			id = 1249,
 			variants = {
-				"Rich Umbral Tin", "Lightfused Umbral Tin", "Primal Umbral Tin", "Voidbound Umbral Tin", "Wild Umbral Tin"
+				"Rich Umbral Tin", "Lightfused Umbral Tin", "Primal Umbral Tin", "Voidbound Umbral Tin", "Wild Umbral Tin", "Cursed Umbral Tin"
 			}
 		},
 		["Umbral Tin Seam"] = 1250,
@@ -564,31 +573,31 @@ local node_ids = {
 		["Argentleaf"] = {
 			id = 1481,
 			variants = {
-				"Lush Argentleaf", "Lightfused Argentleaf", "Primal Argentleaf", "Transplanted Argentleaf", "Transplanted Lush Argentleaf", "Voidbound Argentleaf", "Wild Argentleaf"
+				"Lush Argentleaf", "Lightfused Argentleaf", "Primal Argentleaf", "Transplanted Argentleaf", "Transplanted Lush Argentleaf", "Voidbound Argentleaf", "Wild Argentleaf", "Cursed Argentleaf"
 			}
 		},
 		["Azeroot"] = {
 			id = 1482,
 			variants = {
-				"Lush Azeroot", "Lightfused Azeroot", "Primal Azeroot", "Transplanted Azeroot", "Transplanted Lush Azeroot", "Voidbound Azeroot", "Wild Azeroot"
+				"Lush Azeroot", "Lightfused Azeroot", "Primal Azeroot", "Transplanted Azeroot", "Transplanted Lush Azeroot", "Voidbound Azeroot", "Wild Azeroot", "Cursed Azeroot"
 			}
 		},
 		["Mana Lily"] = {
 			id = 1483,
 			variants = {
-				"Lush Mana Lily", "Lightfused Mana Lily", "Primal Mana Lily", "Transplanted Mana Lily", "Transplanted Lush Mana Lily", "Voidbound Mana Lily", "Wild Mana Lily"
+				"Lush Mana Lily", "Lightfused Mana Lily", "Primal Mana Lily", "Transplanted Mana Lily", "Transplanted Lush Mana Lily", "Voidbound Mana Lily", "Wild Mana Lily", "Cursed Mana Lily"
 			}
 		},
 		["Sanguithorn"] = {
 			id = 1484,
 			variants = {
-				"Lush Sanguithorn", "Lightfused Sanguithorn", "Primal Sanguithorn", "Transplanted Sanguithorn", "Transplanted Lush Sanguithorn", "Voidbound Sanguithorn", "Wild Sanguithorn"
+				"Lush Sanguithorn", "Lightfused Sanguithorn", "Primal Sanguithorn", "Transplanted Sanguithorn", "Transplanted Lush Sanguithorn", "Voidbound Sanguithorn", "Wild Sanguithorn", "Cursed Sanguithorn"
 			}
 		},
 		["Tranquility Bloom"] = {
 			id = 1485,
 			variants = {
-				"Lush Tranquility Bloom", "Lightfused Tranquility Bloom", "Primal Tranquility Bloom", "Transplanted Tranquility Bloom", "Transplanted Lush Tranquility Bloom", "Voidbound Tranquility Bloom", "Wild Tranquility Bloom"
+				"Lush Tranquility Bloom", "Lightfused Tranquility Bloom", "Primal Tranquility Bloom", "Transplanted Tranquility Bloom", "Transplanted Lush Tranquility Bloom", "Voidbound Tranquility Bloom", "Wild Tranquility Bloom", "Cursed Tranquility Bloom", "Envenomated Tranquility Bloom"
 			}
 		},
 	},
@@ -940,6 +949,14 @@ local node_textures = {
 		[1142] = icon_path.."Fish\\debris.tga",
 		[1143] = icon_path.."Fish\\debris.tga",
 		[1144] = icon_path.."Fish\\fish_hook.tga",
+		[1145] = icon_path.."Fish\\fish_hook.tga",
+		[1146] = icon_path.."Fish\\fish_hook.tga",
+		[1147] = icon_path.."Fish\\fish_hook.tga",
+		[1148] = icon_path.."Fish\\fish_hook.tga",
+		[1149] = icon_path.."Fish\\fish_hook.tga",
+		[1150] = icon_path.."Fish\\fish_hook.tga",
+		[1151] = icon_path.."Fish\\fish_hook.tga",
+		[1152] = icon_path.."Fish\\fish_hook.tga",
 	},
 	["Mining"] = {
 		[201] = icon_path.."Mine\\copper.tga",
