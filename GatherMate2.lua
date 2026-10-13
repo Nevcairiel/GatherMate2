@@ -28,6 +28,7 @@ local defaults = {
 		},
 		showMinimap = true,
 		showWorldMap = true,
+		showZoneMap = false,
 		worldMapIconsInteractive = true,
 		minimapTooltips = true,
 		filter = {
