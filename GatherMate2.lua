@@ -20,6 +20,7 @@ local defaults = {
 		scale       = 1.0,
 		miniscale	= 0.75,
 		alpha       = 1,
+		minimapAlpha = 1,
 		show = {
 			["Treasure"] = "always",
 			["Logging"]  = "active",
