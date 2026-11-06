@@ -183,7 +183,12 @@ local node_ids = {
 		["Willow Sea"]						= 1152,
 	},
 	["Mining"] = {
-		["Copper Vein"] 					= 201,
+		["Copper Vein"] = {
+			id = 201,
+			variants = {
+				"Poor Copper Vein"
+			}
+		},
 		["Tin Vein"] 						= 202,
 		["Iron Deposit"] 					= 203,
 		["Silver Vein"] 					= 204,
@@ -377,8 +382,18 @@ local node_ids = {
 		["Arctic Cloud"]					= 307,
 	},
 	["Herb Gathering"] = {
-		["Peacebloom"] 						= 401,
-		["Silverleaf"] 						= 402,
+		["Peacebloom"] = {
+			id = 401,
+			variants = {
+				"Wilted Peacebloom"
+			},
+		},
+		["Silverleaf"] = {
+			id = 402,
+			variants = {
+				"Stunted Silverleaf"
+			}
+		},
 		["Earthroot"] 						= 403,
 		["Mageroyal"] 						= 404,
 		["Briarthorn"] 						= 405,
