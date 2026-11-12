@@ -398,9 +398,10 @@ function GatherMate:AddNode(zone, x, y, nodeType, name)
 	if GatherMate.db.profile.dbLocks[nodeType] then
 		return
 	end
+	local nodeID = self:GetIDForNode(nodeType, name)
 	nodedb[zone] = nodedb[zone] or {}
-	nodedb[zone][id] = self.nodeIDs[nodeType][name]
-	self:SendMessage("GatherMate2NodeAdded", zone, nodeType, id, name)
+	nodedb[zone][id] = nodeID
+	self:SendMessage("GatherMate2NodeAdded", zone, nodeType, id, self:GetNameForNode(nodeType, nodeID))
 end
 
 --[[
