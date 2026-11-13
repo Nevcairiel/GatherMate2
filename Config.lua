@@ -1074,16 +1074,26 @@ ImportHelper.db_options = {
 	["Merge"] = L["Merge"],
 	["Overwrite"] = L["Overwrite"]
 }
-ImportHelper.db_tables =
-{
-	["Herbs"] = L["Herbalism"],
-	["Mines"] = L["Mining"],
-	["Gases"] = L["Gas Clouds"],
-	["Fish"] = L["Fishing"],
-	["Treasure"] = L["Treasure"],
-	["Archaeology"] = L["Archaeology"],
-	["Logging"] = L["Timber"],
-}
+if WoWForever then
+	ImportHelper.db_tables =
+	{
+		["Herbs"] = L["Herbalism"],
+		["Mines"] = L["Mining"],
+		["Fish"] = L["Fishing"],
+		["Treasure"] = L["Treasure"],
+	}
+else
+	ImportHelper.db_tables =
+	{
+		["Herbs"] = L["Herbalism"],
+		["Mines"] = L["Mining"],
+		["Gases"] = L["Gas Clouds"],
+		["Fish"] = L["Fishing"],
+		["Treasure"] = L["Treasure"],
+		["Archaeology"] = L["Archaeology"],
+		["Logging"] = L["Timber"],
+	}
+end
 ImportHelper.expac_data = {
 	["TBC"] = L["The Burning Crusades"],
 	["WRATH"] = L["Wrath of the Lich King"],
@@ -1176,6 +1186,7 @@ importOptions.args.GatherMateData = {
 			order = 8,
 			name = L["Import GatherMate2Data"],
 			desc = L["Load GatherMate2Data and import the data to your database."],
+			width = "double",
 			type = "execute",
 			func = function()
 				local loaded, reason = C_AddOns.LoadAddOn("GatherMate2_Data")
