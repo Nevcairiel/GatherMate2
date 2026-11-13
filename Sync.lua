@@ -16,6 +16,10 @@
 	* LOGIN:   After logging in we send a REQUEST to the guild and to every online friend.
 	           Only then do the others respond with all nodes we learned since the last sync
 	           they sent to our account. The receiver ACKs and the sender stores the new sync time.
+	* COUNTER: Players who are already online do not notice when a friend logs in. Instead, the
+	           login request is the signal: once per session and account we answer it with our own
+	           request (marked as "counter", which is never answered with another request), so we
+	           also get the nodes that friend gathered while we were offline.
 	* FORCED:  A forced request asks everybody to ignore the stored sync time and send everything
 	           that has a timestamp.
 
@@ -86,6 +90,7 @@ local liveTimer
 local outBatches = {}        -- [batchId] = { ts, live, keys, acct, created }
 local inBatches = {}         -- ["acct:batchId"] = { added, seen }
 local scheduledResponses = {}-- [acct] = timer handle
+local counterRequested = {}  -- [acct] = true, we already asked this account back in this session
 local batchCounter = 0
 local requestedThisSession = false
 
@@ -384,8 +389,16 @@ function Sync:ForceUpdate()
 end
 
 function Sync:OnRequest(msg, replyTarget)
-	if not profile.enableSend then return end
 	local acct = msg.a
+
+	-- the other player just came online: ask back once per session, so we also get its nodes.
+	-- Counter requests are never answered with another request (no ping-pong).
+	if profile.enableReceive and not msg.counter and not counterRequested[acct] then
+		counterRequested[acct] = true
+		self:SendTo(replyTarget, { k = "REQ", counter = true }, "ALERT")
+	end
+
+	if not profile.enableSend then return end
 	-- the same request can arrive via guild and friend list, only answer once
 	if scheduledResponses[acct] then return end
 	local delay = RESPONSE_DELAY_MIN + random() * (RESPONSE_DELAY_MAX - RESPONSE_DELAY_MIN)
