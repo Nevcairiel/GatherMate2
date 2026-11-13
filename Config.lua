@@ -178,6 +178,14 @@ local minimapOptions = {
 			width = "full",
 			disabled = function() return not db.showMinimap end,
 		},
+		showPossibleSpawns = {
+			order = 3.5,
+			name = L["Show Possible Spawns"],
+			desc = L["Show in the node tooltip which other nodes (e.g. rare spawns) may also spawn at this spot."],
+			type = "toggle",
+			arg = "showPossibleSpawnsInTooltip",
+			width = "full",
+		},
 		minimapNodeRange = {
 			order = 4,
 			type = "toggle",
@@ -1247,14 +1255,6 @@ local sharingOptions = {
 			desc = L["Show when a node was gathered in the node tooltip."],
 			get = function() return db.showTimestampInTooltip end,
 			set = function(info, v) db.showTimestampInTooltip = v; Config:UpdateConfig() end,
-		},
-		showPossibleSpawns = {
-			order = 4.5,
-			type = "toggle",
-			name = L["Show Possible Spawns"],
-			desc = L["Show in the node tooltip which other nodes (e.g. rare spawns) may also spawn at this spot."],
-			get = function() return db.showPossibleSpawnsInTooltip end,
-			set = function(info, v) db.showPossibleSpawnsInTooltip = v; Config:UpdateConfig() end,
 		},
 		relayOthers = {
 			order = 5,
