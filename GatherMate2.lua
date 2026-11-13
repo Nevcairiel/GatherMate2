@@ -74,7 +74,27 @@ local defaults = {
 				["autoImport"] = false,
 				["expacOnly"] = false,
 			},
-		}
+		},
+		-- node sharing (see Sync.lua)
+		sync = {
+			enableSend    = true,  -- share nodes with others
+			enableReceive = true,  -- accept nodes from others
+			guild         = true,  -- share with / receive from guild members
+			friends       = true,  -- share with / receive from character friends
+			bnetFriends   = true,  -- share with / receive from Battle.net friends
+			relayOthers   = true,  -- also pass on nodes farmed by others (not only our own)
+			notify        = true,  -- chat message when nodes were received
+			databases     = { ["*"] = true }, -- which node databases take part in sharing
+		},
+		showTimestampInTooltip = true,
+		showPossibleSpawnsInTooltip = true,
+	},
+	global = {
+		sync = {
+			accountKey = nil, -- random id that identifies this WoW account to others
+			peers = {},       -- [accountKey] = { name, lastSent, lastReceived, lastSeen }
+			blocked = {},     -- [accountKey] = true, nodes farmed or sent by these accounts are rejected
+		},
 	},
 }
 
@@ -101,6 +121,7 @@ function GatherMate:OnInitialize()
 	self:RegisterDBType("Logging", "Logging")
 	db = self.db.profile
 	filter = db.filter
+	self:InitTimestamps()
 	-- depractaion scan
 	if (self.db.global.data_version or 0) == 1 then
 		self:RemoveDepracatedNodes()
@@ -126,6 +147,189 @@ function GatherMate:OnEnable()
 	if (self.db.global.data_version or 0) < 8 then
 		self:UpgradeNodeIDs()
 		self.db.global.data_version = 8
+	end
+	self:PruneTimestamps()
+end
+
+--[[
+	Possible spawns (based on GatherMate.rareNodes in Constants.lua)
+
+	rareNodes is [rareID] = { [normalID] = true, ... }. For the tooltip we need the reverse:
+	which other nodes may spawn at the spot of a given node (e.g. Silver Vein at a Tin Vein).
+]]
+local possibleSpawns      -- [nodeID] = { rareID, ... }, built on first use
+local possibleSpawnsText = {} -- [nodeType .. nodeID] = "Silver Vein, Gold Vein" or false
+
+function GatherMate:GetPossibleSpawnsText(zone, nodeType, coord)
+	local nodedb = gmdbs[nodeType]
+	local nodeID = nodedb and nodedb[zone] and nodedb[zone][coord]
+	if not nodeID then return nil end
+
+	local key = nodeType .. nodeID
+	local cached = possibleSpawnsText[key]
+	if cached ~= nil then return cached or nil end
+
+	if not possibleSpawns then
+		possibleSpawns = {}
+		for rareID, normals in pairs(self.rareNodes) do
+			for normalID in pairs(normals) do
+				if normalID ~= rareID then
+					possibleSpawns[normalID] = possibleSpawns[normalID] or {}
+					table.insert(possibleSpawns[normalID], rareID)
+				end
+			end
+		end
+	end
+
+	local names = {}
+	for _, rareID in ipairs(possibleSpawns[nodeID] or {}) do
+		-- node IDs are only unique per node type, so only names of the same type are used
+		local name = self:GetNameForNode(nodeType, rareID)
+		if name then names[#names + 1] = name end
+	end
+	table.sort(names)
+	local text = #names > 0 and table.concat(names, ", ") or false
+	possibleSpawnsText[key] = text
+	return text or nil
+end
+
+--[[
+	Node timestamps
+
+	Stored in their own SavedVariable (GatherMate2TimestampDB) so the node databases keep
+	their original format (coord -> nodeID) and stay compatible with data/storage addons.
+
+	collected = server time the node was gathered (by us or by whoever shared it)
+	learned   = server time this client learned about the node (used for sync deltas)
+	source    = who actually gathered it: "self" or the account key of the farmer
+
+	A timestamp is the proof that a node was really farmed. It is only created by
+	GatherMate:AddNode (called by the Collector when we gather something) or by the sync
+	module for nodes farmed by others. Imported data (GatherMate2_Data, other importers)
+	never gets one, and an import that overwrites a node removes its timestamp.
+]]
+local tsdb
+
+function GatherMate:InitTimestamps()
+	GatherMate2TimestampDB = GatherMate2TimestampDB or {}
+	tsdb = GatherMate2TimestampDB
+	tsdb.collected = tsdb.collected or {}
+	tsdb.learned = tsdb.learned or {}
+	tsdb.source = tsdb.source or {}
+end
+
+local function getTsZone(root, nodeType, zone, create)
+	local t = root[nodeType]
+	if not t then
+		if not create then return nil end
+		t = {}
+		root[nodeType] = t
+	end
+	local z = t[zone]
+	if not z and create then
+		z = {}
+		t[zone] = z
+	end
+	return z
+end
+
+function GatherMate:SetNodeTimestamp(zone, nodeType, coord, collected, learned, source)
+	local now = GetServerTime()
+	collected = collected or now
+	learned = learned or now
+	getTsZone(tsdb.collected, nodeType, zone, true)[coord] = collected
+	getTsZone(tsdb.learned, nodeType, zone, true)[coord] = learned
+	-- "self" is the default and not stored to save memory
+	getTsZone(tsdb.source, nodeType, zone, true)[coord] = (source ~= "self") and source or nil
+end
+
+--[[
+	Returns "self" for nodes we gathered, otherwise the account key of the farmer (nil if not farmed)
+]]
+function GatherMate:GetNodeSource(zone, nodeType, coord)
+	local l = getTsZone(tsdb.learned, nodeType, zone)
+	if not (l and l[coord]) then return nil end
+	local s = getTsZone(tsdb.source, nodeType, zone)
+	return s and s[coord] or "self"
+end
+
+--[[
+	Returns collected, learned (both nil if the node has no timestamp, e.g. imported data)
+]]
+function GatherMate:GetNodeTimestamp(zone, nodeType, coord)
+	local c = getTsZone(tsdb.collected, nodeType, zone)
+	local l = getTsZone(tsdb.learned, nodeType, zone)
+	return c and c[coord], l and l[coord]
+end
+
+function GatherMate:ClearNodeTimestamp(zone, nodeType, coord)
+	local c = getTsZone(tsdb.collected, nodeType, zone)
+	local l = getTsZone(tsdb.learned, nodeType, zone)
+	local s = getTsZone(tsdb.source, nodeType, zone)
+	if c then c[coord] = nil end
+	if l then l[coord] = nil end
+	if s then s[coord] = nil end
+end
+
+function GatherMate:ClearTimestamps(nodeType)
+	tsdb.collected[nodeType] = nil
+	tsdb.learned[nodeType] = nil
+	tsdb.source[nodeType] = nil
+end
+
+--[[
+	Iterate all timestamped nodes of a node type which were learned at or after 'since'.
+	callback(zone, coord, nodeID, collected, learned, source)
+]]
+function GatherMate:ForEachNodeLearnedSince(nodeType, since, callback)
+	local learnedType = tsdb.learned[nodeType]
+	local collectedType = tsdb.collected[nodeType]
+	local sourceType = tsdb.source[nodeType]
+	local nodedb = gmdbs[nodeType]
+	if not (learnedType and nodedb) then return end
+	for zone, coords in pairs(learnedType) do
+		local zoneNodes = nodedb[zone]
+		if zoneNodes then
+			local collectedZone = collectedType and collectedType[zone]
+			local sourceZone = sourceType and sourceType[zone]
+			for coord, learned in pairs(coords) do
+				local nodeID = zoneNodes[coord]
+				if nodeID and learned >= since then
+					callback(zone, coord, nodeID, collectedZone and collectedZone[coord] or learned, learned,
+						sourceZone and sourceZone[coord] or "self")
+				end
+			end
+		end
+	end
+end
+
+--[[
+	Remove timestamps whose node no longer exists (deleted, overwritten by an import, ...)
+]]
+function GatherMate:PruneTimestamps()
+	for _, root in pairs({tsdb.collected, tsdb.learned, tsdb.source}) do
+		for nodeType, zones in pairs(root) do
+			local nodedb = gmdbs[nodeType]
+			if not nodedb then
+				root[nodeType] = nil
+			else
+				for zone, coords in pairs(zones) do
+					local zoneNodes = nodedb[zone]
+					if not zoneNodes then
+						zones[zone] = nil
+					else
+						for coord in pairs(coords) do
+							if not zoneNodes[coord] then
+								coords[coord] = nil
+							end
+						end
+						if not next(coords) then
+							zones[zone] = nil
+						end
+					end
+				end
+			end
+		end
 	end
 end
 
@@ -385,12 +589,13 @@ function GatherMate:ClearDB(dbx)
 	else
 		table.wipe(nodedb)
 	end
+	self:ClearTimestamps(dbx)
 end
 
 --[[
 	Add an item to the DB
 ]]
-function GatherMate:AddNode(zone, x, y, nodeType, name)
+function GatherMate:AddNode(zone, x, y, nodeType, name, shared)
 	local nodedb = gmdbs[nodeType]
 	if not nodedb then return end
 	local id = self:EncodeLoc(x,y)
@@ -401,13 +606,31 @@ function GatherMate:AddNode(zone, x, y, nodeType, name)
 	local nodeID = self:GetIDForNode(nodeType, name)
 	nodedb[zone] = nodedb[zone] or {}
 	nodedb[zone][id] = nodeID
-	self:SendMessage("GatherMate2NodeAdded", zone, nodeType, id, self:GetNameForNode(nodeType, nodeID))
+	if shared then
+		-- a node farmed by someone else: keep their timestamp and who farmed it
+		self:SetNodeTimestamp(zone, nodeType, id, shared.collected, shared.learned, shared.source)
+	else
+		-- a node we gathered ourselves: collected and learned right now
+		self:SetNodeTimestamp(zone, nodeType, id)
+	end
+	-- always report the primary node name (variants are remapped, see upstream 1f21fd8).
+	-- 'shared' is passed on so the sync module does not share the node again.
+	self:SendMessage("GatherMate2NodeAdded", zone, nodeType, id, self:GetNameForNode(nodeType, nodeID), shared)
 end
 
 --[[
 	Add an item to the DB, performing duplicate checks and cleanup
+
+	shared (optional) is used for nodes farmed by other players (Sync.lua):
+	  shared.collected, shared.learned - timestamps of the node
+	  shared.source                    - account key of the player who farmed it
+	For a shared node, a farmed node of the same type that we already know is kept and only its
+	timestamp is refreshed (if the shared one is newer). Imported nodes are still replaced by
+	the farmed position.
+
+	Returns: added, replacedSame (an existing node of the same type was replaced)
 ]]
-function GatherMate:AddNodeChecked(zone, x, y, nodeType, name)
+function GatherMate:AddNodeChecked(zone, x, y, nodeType, name, shared)
 	-- get the node id for what we're adding
 	local nid = GatherMate:GetIDForNode(nodeType, name)
 	if not nid then return end
@@ -417,21 +640,42 @@ function GatherMate:AddNodeChecked(zone, x, y, nodeType, name)
 
 	-- check for existing nodes
 	local skip = false
+	local replacedSame = false
+	local remove = {}
 	local rares = self.rareNodes
 	for coord, nodeID in GatherMate:FindNearbyNode(zone, x, y, nodeType, range, true) do
-		if (nodeID == nid or rares[nodeID] and rares[nodeID][nid]) then
-			GatherMate:RemoveNodeByID(zone, nodeType, coord)
+		local existingSource = shared and nodeID == nid and self:GetNodeSource(zone, nodeType, coord)
+		if existingSource then
+			-- shared node we already know as farmed: keep ours, refresh the timestamp if theirs is newer
+			local oldCollected = self:GetNodeTimestamp(zone, nodeType, coord)
+			if shared.collected > oldCollected then
+				self:SetNodeTimestamp(zone, nodeType, coord, shared.collected, shared.learned,
+					existingSource == "self" and "self" or shared.source)
+			end
+			skip = true
+		elseif (nodeID == nid or rares[nodeID] and rares[nodeID][nid]) then
+			remove[#remove + 1] = coord
+			if nodeID == nid then replacedSame = true end
 		-- we're trying to add a rare node, but there is already a normal node present, skip the adding
 		elseif rares[nid] and rares[nid][nodeID] then
 			skip = true
 		end
 	end
 
-	if not skip then
-		GatherMate:AddNode(zone, x, y, nodeType, name)
+	-- removed after the loop, so FindNearbyNode is not iterating a table we are changing.
+	-- Own nodes behave like before (duplicates are removed even when the add is skipped),
+	-- shared nodes change nothing when they are skipped.
+	if not (skip and shared) then
+		for _, coord in ipairs(remove) do
+			GatherMate:RemoveNodeByID(zone, nodeType, coord)
+		end
 	end
 
-	return not skip
+	if not skip then
+		GatherMate:AddNode(zone, x, y, nodeType, name, shared)
+	end
+
+	return not skip, replacedSame
 end
 
 --[[
@@ -450,6 +694,9 @@ function GatherMate:InjectNode2(zone, coords, nodeType, nodeID)
 	if (nodeType == "Mining" or nodeType == "Herb Gathering") and GatherMate.mapBlacklist[zone] then return end
 	nodedb[zone] = nodedb[zone] or {}
 	nodedb[zone][coords] = self.nodeIDReplacementMap[nodeID] or nodeID
+	-- injected (imported) data is not farmed: drop any timestamp on this spot.
+	-- The sync module sets a new timestamp right after injecting a farmed node.
+	self:ClearNodeTimestamp(zone, nodeType, coords)
 end
 function GatherMate:DeleteNode2(zone, coords, nodeType)
 	if not gmdbs[nodeType] then return end
@@ -461,6 +708,7 @@ function GatherMate:DeleteNode2(zone, coords, nodeType)
 	if nodedb then
 		nodedb[coords] = nil
 	end
+	self:ClearNodeTimestamp(zone, nodeType, coords)
 end
 
 -- Do-end block for iterator
@@ -559,6 +807,7 @@ function GatherMate:RemoveNode(zone, x, y, nodeType)
 	if nodedb[coord] then
 		local t = self.reverseNodeIDs[nodeType][nodedb[coord]]
 		nodedb[coord] = nil
+		self:ClearNodeTimestamp(zone, nodeType, coord)
 		self:SendMessage("GatherMate2NodeDeleted", zone, nodeType, coord, t)
 	end
 end
@@ -575,6 +824,7 @@ function GatherMate:RemoveNodeByID(zone, nodeType, coord)
 	if nodedb[coord] then
 		local t = self.reverseNodeIDs[nodeType][nodedb[coord]]
 		nodedb[coord] = nil
+		self:ClearNodeTimestamp(zone, nodeType, coord)
 		self:SendMessage("GatherMate2NodeDeleted", zone, nodeType, coord, t)
 	end
 end

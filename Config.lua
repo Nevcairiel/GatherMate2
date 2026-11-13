@@ -1200,6 +1200,190 @@ importOptions.args.GatherMateData = {
 	},
 }
 
+--[[
+	Node sharing options (Sync.lua)
+]]
+local function syncGet(info) return db.sync[info.arg] end
+local function syncSet(info, v) db.sync[info.arg] = v; Config:UpdateConfig() end
+local function getSync() return GatherMate:GetModule("Sync") end
+
+local sharingOptions = {
+	type = "group",
+	name = L["Node Sharing"],
+	get = syncGet,
+	set = syncSet,
+	args = {
+		desc = {
+			order = 0,
+			type = "description",
+			name = L["Share gathered nodes with your guild and your friends. Newly gathered nodes are sent to everyone online right away. When you log in, your guild and friends are asked for all nodes you are missing since your last sync."],
+			width = "full",
+		},
+		enableSend = {
+			order = 1,
+			type = "toggle",
+			name = L["Share Nodes"],
+			desc = L["Send your gathered nodes to guild members and friends, and answer their update requests."],
+			arg = "enableSend",
+		},
+		enableReceive = {
+			order = 2,
+			type = "toggle",
+			name = L["Receive Nodes"],
+			desc = L["Accept nodes from guild members and friends, and request updates when logging in."],
+			arg = "enableReceive",
+		},
+		notify = {
+			order = 3,
+			type = "toggle",
+			name = L["Chat Notifications"],
+			desc = L["Print a chat message when nodes were received or an update was requested."],
+			arg = "notify",
+		},
+		showTimestamp = {
+			order = 4,
+			type = "toggle",
+			name = L["Show Timestamp"],
+			desc = L["Show when a node was gathered in the node tooltip."],
+			get = function() return db.showTimestampInTooltip end,
+			set = function(info, v) db.showTimestampInTooltip = v; Config:UpdateConfig() end,
+		},
+		showPossibleSpawns = {
+			order = 4.5,
+			type = "toggle",
+			name = L["Show Possible Spawns"],
+			desc = L["Show in the node tooltip which other nodes (e.g. rare spawns) may also spawn at this spot."],
+			get = function() return db.showPossibleSpawnsInTooltip end,
+			set = function(info, v) db.showPossibleSpawnsInTooltip = v; Config:UpdateConfig() end,
+		},
+		relayOthers = {
+			order = 5,
+			type = "toggle",
+			name = L["Relay Nodes From Others"],
+			desc = L["Also pass on nodes that others farmed and shared with you. If disabled, only nodes you gathered yourself are shared."],
+			arg = "relayOthers",
+			disabled = function() return not db.sync.enableSend end,
+		},
+		farmedNote = {
+			order = 6,
+			type = "description",
+			name = L["Only nodes that were really gathered are shared. Imported databases (e.g. GatherMate2_Data from CurseForge) are never sent, and imported nodes are not accepted from others."],
+			width = "full",
+		},
+		shareWith = {
+			order = 10,
+			type = "group",
+			inline = true,
+			name = L["Share With"],
+			disabled = function() return not (db.sync.enableSend or db.sync.enableReceive) end,
+			args = {
+				guild = {
+					order = 1,
+					type = "toggle",
+					name = L["Guild"],
+					desc = L["Share with and receive from members of your guild."],
+					arg = "guild",
+				},
+				friends = {
+					order = 2,
+					type = "toggle",
+					name = L["Friends"],
+					desc = L["Share with and receive from characters on your friends list."],
+					arg = "friends",
+				},
+				bnetFriends = {
+					order = 3,
+					type = "toggle",
+					name = L["Battle.net Friends"],
+					desc = L["Share with and receive from your Battle.net friends. Only works while their character is on your realm or a realm connected to it."],
+					arg = "bnetFriends",
+				},
+			},
+		},
+		databases = {
+			order = 20,
+			type = "multiselect",
+			name = L["Shared Databases"],
+			desc = L["Select which node types are shared and accepted."],
+			values = function()
+				local labels = {
+					["Fishing"] = L["Fishes"],
+					["Treasure"] = L["Treasure"],
+					["Herb Gathering"] = L["Herb Bushes"],
+					["Mining"] = L["Mineral Veins"],
+					["Extract Gas"] = L["Gas Clouds"],
+					["Archaeology"] = L["Archaeology"],
+					["Logging"] = L["Timber"],
+				}
+				local t = {}
+				for _, name in ipairs(GatherMate.db_types) do
+					t[name] = labels[name] or name
+				end
+				return t
+			end,
+			get = function(info, key) return db.sync.databases[key] end,
+			set = function(info, key, v) db.sync.databases[key] = v; Config:UpdateConfig() end,
+			disabled = function() return not (db.sync.enableSend or db.sync.enableReceive) end,
+		},
+		blocked = {
+			order = 25,
+			type = "multiselect",
+			name = L["Blocked Players"],
+			desc = L["Nodes sent by or farmed by these players are ignored. Players appear here once they synced with you."],
+			values = function() return getSync():GetKnownPeers() end,
+			get = function(info, acct) return getSync():IsBlocked(acct) end,
+			set = function(info, acct, v) getSync():SetBlocked(acct, v) end,
+		},
+		deleteBlocked = {
+			order = 26,
+			type = "execute",
+			name = L["Delete Nodes From Blocked Players"],
+			desc = L["Delete all nodes that were farmed by the blocked players."],
+			confirm = true,
+			func = function() getSync():DeleteNodesFromBlocked() end,
+		},
+		requestUpdates = {
+			order = 30,
+			type = "execute",
+			name = L["Request Updates"],
+			desc = L["Ask your guild and friends for nodes you are missing since the last sync."],
+			func = function() getSync():RequestUpdates(false) end,
+			disabled = function() return not db.sync.enableReceive end,
+		},
+		forceUpdate = {
+			order = 31,
+			type = "execute",
+			name = L["Force Update Request"],
+			desc = L["Ask your guild and friends to send all of their shared nodes again, ignoring the last sync time."],
+			func = function() getSync():ForceUpdate() end,
+			disabled = function() return not db.sync.enableReceive end,
+		},
+		resetHistory = {
+			order = 32,
+			type = "execute",
+			name = L["Reset Sync History"],
+			desc = L["Forget when you last sent nodes to each player. Their next request will receive all shared nodes again."],
+			confirm = true,
+			func = function() getSync():ResetSyncHistory() end,
+		},
+		partners = {
+			order = 40,
+			type = "group",
+			inline = true,
+			name = L["Sync Partners"],
+			args = {
+				status = {
+					order = 1,
+					type = "description",
+					name = function() return getSync():GetStatusText() end,
+					width = "full",
+					fontSize = "medium",
+				},
+			},
+		},
+	},
+}
+
 local faqOptions = {
 	type = "group",
 	name = L["Frequently Asked Questions"],
@@ -1240,6 +1424,9 @@ function Config:OnInitialize()
 	acr:RegisterOptionsTable("GM2/Import", importOptions)
 	acd:AddToBlizOptions("GM2/Import", "Import", "GatherMate 2")
 
+	acr:RegisterOptionsTable("GM2/Sharing", sharingOptions)
+	acd:AddToBlizOptions("GM2/Sharing", L["Sharing"], "GatherMate 2")
+
 	acr:RegisterOptionsTable("GM2/Profiles", LibStub("AceDBOptions-3.0"):GetOptionsTable(GatherMate2.db))
 	acd:AddToBlizOptions("GM2/Profiles", "Profiles", "GatherMate 2")
 
@@ -1251,7 +1438,16 @@ function Config:OnInitialize()
 	end
 
 	SLASH_GatherMate21 = "/gathermate"
-	SlashCmdList.GatherMate2 = openOptions
+	SlashCmdList.GatherMate2 = function(msg)
+		msg = (msg or ""):lower():trim()
+		if msg == "sync" then
+			GatherMate:GetModule("Sync"):RequestUpdates(false)
+		elseif msg == "forcesync" then
+			GatherMate:GetModule("Sync"):ForceUpdate()
+		else
+			openOptions()
+		end
+	end
 
 	self:RegisterMessage("GatherMate2ConfigChanged")
 	if DataBroker then

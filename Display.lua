@@ -125,6 +125,18 @@ local function showPin(self)
 		end
 		dbtable = t[self.nodeType]
 		local text = format(tooltip_template, dbtable.Alpha*255, dbtable.Red*255, dbtable.Green*255, dbtable.Blue*255, self.title)
+		if db.showPossibleSpawnsInTooltip and self.zone and self.coords then
+			local possible = GatherMate:GetPossibleSpawnsText(self.zone, self.nodeType, self.coords)
+			if possible then
+				text = text .. "\n|cffaaaaaa" .. format(L["May also spawn: %s"], possible) .. "|r"
+			end
+		end
+		if db.showTimestampInTooltip and self.zone and self.coords then
+			local collected = GatherMate:GetNodeTimestamp(self.zone, self.nodeType, self.coords)
+			if collected then
+				text = text .. "\n|cffaaaaaa" .. format(L["Gathered: %s"], date("%Y-%m-%d %H:%M", collected)) .. "|r"
+			end
+		end
 
 		for pin, pin_text in pairs(mouseoveredPins) do
 			if pin ~= self then
