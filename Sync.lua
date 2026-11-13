@@ -150,7 +150,7 @@ function Sync:OnInitialize()
 end
 
 function Sync:OnEnable()
-	myName = UnitName("player") .. "-" .. (GetNormalizedRealmName() or "")
+	myName = Sync:GetMyFullName()
 
 	self:RegisterComm(PREFIX, "OnCommReceived")
 
@@ -207,6 +207,56 @@ function Sync:ExpireBatches()
 end
 
 --[[ ---------------------------------------------------------------------------------------
+	Player names
+
+	Retail:      "Name" or "Name-Realm"
+	WoW Forever: characters have a first and a last name, only the combination is unique.
+	             The full name is "First Last" (or "First Last-Realm").
+	UnitName("player") returns name, surname in WoW Forever and name, nil in Retail,
+	so the same code builds "Name-Realm" in Retail and "First Last-Realm" in WoW Forever.
+	Names never contain a hyphen, so everything after the last hyphen is the realm.
+------------------------------------------------------------------------------------------]]
+
+function Sync:GetMyFullName()
+	local first, last = UnitName("player")
+	local full = first
+	if type(last) == "string" and last ~= "" then
+		full = first .. " " .. last
+	end
+	return full .. "-" .. (GetNormalizedRealmName() or "")
+end
+
+-- "First Last-Realm" -> "First Last", "Realm" (realm is nil if the name has none)
+local function splitName(name)
+	local base, realm = strmatch(name, "^(.-)%-([^%-]+)$")
+	if base then return base, realm end
+	return name, nil
+end
+
+local function firstName(name)
+	return strmatch(splitName(name), "^(%S+)")
+end
+
+local function hasLastName(name)
+	return strmatch(splitName(name), "%s") ~= nil
+end
+
+-- all spellings a name can have in the game APIs: as given, without realm, with our realm
+local function nameVariants(name)
+	local base, realm = splitName(name)
+	local variants = { name }
+	if base ~= name then variants[#variants + 1] = base end
+	if not realm then variants[#variants + 1] = base .. "-" .. (GetNormalizedRealmName() or "") end
+	return variants
+end
+
+-- key to recognize the same character in different spellings
+local function nameKey(name)
+	local base, realm = splitName(name)
+	return (base .. "-" .. (realm or GetNormalizedRealmName() or "")):lower()
+end
+
+--[[ ---------------------------------------------------------------------------------------
 	Recipients
 ------------------------------------------------------------------------------------------]]
 
@@ -221,8 +271,10 @@ local function forEachOnlineFriend(callback)
 end
 
 local function isCharacterFriend(name)
-	local short = Ambiguate(name, "none")
-	return C_FriendList.GetFriendInfo(name) ~= nil or C_FriendList.GetFriendInfo(short) ~= nil
+	for _, n in ipairs(nameVariants(name)) do
+		if C_FriendList.GetFriendInfo(n) ~= nil then return true end
+	end
+	return false
 end
 
 -- Normalized names of our realm and all realms connected to it
@@ -267,17 +319,17 @@ end
 
 local function isBNetFriendCharacter(name)
 	local found = false
-	local full = strmatch(name, "%-") and name or (name .. "-" .. (GetNormalizedRealmName() or ""))
+	local key = nameKey(name)
 	forEachWhisperableBNetFriend(function(charName)
-		if charName == full then found = true end
+		if nameKey(charName) == key then found = true end
 	end)
 	return found
 end
 
 local function isGuildMember(name)
-	if not IsInGuild() then return false end
-	if C_GuildInfo.MemberExistsByName then
-		return C_GuildInfo.MemberExistsByName(name) or C_GuildInfo.MemberExistsByName(Ambiguate(name, "none"))
+	if not IsInGuild() or not C_GuildInfo.MemberExistsByName then return false end
+	for _, n in ipairs(nameVariants(name)) do
+		if C_GuildInfo.MemberExistsByName(n) then return true end
 	end
 	return false
 end
@@ -285,11 +337,23 @@ end
 --[[
 	Is a sender we got a WHISPER from allowed to talk to us?
 	Only guild members and friends are accepted, with respect to the options.
+
+	sender      - name the game reports for the whisper
+	claimedName - full name the sender put into the message (msg.c)
+	If the game reports a name without last name (WoW Forever), the claimed full name is checked
+	as well, but only if its first name is the one the game reported.
 ]]
-function Sync:IsTrustedWhisper(sender)
-	if profile.guild and isGuildMember(sender) then return true end
-	if profile.friends and isCharacterFriend(sender) then return true end
-	if profile.bnetFriends and isBNetFriendCharacter(sender) then return true end
+function Sync:IsTrustedWhisper(sender, claimedName)
+	local names = { sender }
+	if type(claimedName) == "string" and not hasLastName(sender) and hasLastName(claimedName)
+		and firstName(claimedName) == firstName(sender) then
+		names[#names + 1] = claimedName
+	end
+	for _, name in ipairs(names) do
+		if profile.guild and isGuildMember(name) then return true end
+		if profile.friends and isCharacterFriend(name) then return true end
+		if profile.bnetFriends and isBNetFriendCharacter(name) then return true end
+	end
 	return false
 end
 
@@ -320,18 +384,17 @@ function Sync:Broadcast(msg, prio)
 
 	local done = {}
 	local function whisper(name)
-		if done[name] then return end
-		done[name] = true
+		-- the same character can show up in the friend list and the Battle.net list
+		local key = nameKey(name)
+		if done[key] then return end
+		done[key] = true
 		-- guild members already got the guild message
 		if sentGuild and isGuildMember(name) then return end
 		self:SendTo({ kind = "WHISPER", name = name }, msg, prio)
 	end
 
 	if profile.friends then
-		forEachOnlineFriend(function(name)
-			if not strmatch(name, "%-") then name = name .. "-" .. (GetNormalizedRealmName() or "") end
-			whisper(name)
-		end)
+		forEachOnlineFriend(whisper)
 	end
 	if profile.bnetFriends then
 		forEachWhisperableBNetFriend(whisper)
@@ -340,24 +403,28 @@ end
 
 function Sync:OnCommReceived(prefix, payload, distribution, sender)
 	if prefix ~= PREFIX then return end
-	if distribution == "GUILD" then
-		if not profile.guild then return end
-		self:HandlePayload(payload, { kind = "WHISPER", name = sender }, true)
-	elseif distribution == "WHISPER" then
-		if not self:IsTrustedWhisper(sender) then return end
-		self:HandlePayload(payload, { kind = "WHISPER", name = sender })
-	end
-end
+	if distribution ~= "GUILD" and distribution ~= "WHISPER" then return end
+	if distribution == "GUILD" and not profile.guild then return end
 
-function Sync:HandlePayload(payload, replyTarget, viaGuild)
 	local ok, msg = self:Deserialize(payload)
 	if not ok or type(msg) ~= "table" then return end
+	-- whispers: the full name in the message is needed for the check in WoW Forever
+	if distribution == "WHISPER" and not self:IsTrustedWhisper(sender, msg.c) then return end
+
+	-- answers always go back to the name the game reported
+	self:HandleMessage(msg, { kind = "WHISPER", name = sender })
+end
+
+function Sync:HandleMessage(msg, replyTarget)
 	if type(msg.v) ~= "number" or msg.v < PROTOCOL then return end
 	if type(msg.a) ~= "string" or msg.a == myAccountKey then return end -- ignore ourselves / other clients of this account
 
 	local peer = getPeer(msg.a)
 	peer.lastSeen = now()
+	-- name: full name for display (first and last name in WoW Forever)
+	-- sender: name the game reported, used to whisper this player
 	if type(msg.c) == "string" then peer.name = msg.c end
+	if replyTarget.name then peer.sender = replyTarget.name end
 
 	if msg.k == "REQ" then
 		self:OnRequest(msg, replyTarget)
@@ -638,8 +705,9 @@ end
 -- Direct route back to an account we just heard from
 function Sync:TargetForPeer(acct)
 	local peer = global.peers[acct]
-	if not peer or not peer.name then return nil end
-	return { kind = "WHISPER", name = peer.name }
+	local name = peer and (peer.sender or peer.name)
+	if not name then return nil end
+	return { kind = "WHISPER", name = name }
 end
 
 --[[ ---------------------------------------------------------------------------------------
