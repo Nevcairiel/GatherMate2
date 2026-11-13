@@ -371,6 +371,8 @@ local node_ids = {
 			}
 		},
 		["Umbral Tin Seam"] = 1250,
+-- forever
+		["Heavy Thorium Vein"] = 4201,
 	},
 	["Extract Gas"] = {
 		["Windy Cloud"] 					= 301,
@@ -615,6 +617,9 @@ local node_ids = {
 				"Lush Tranquility Bloom", "Lightfused Tranquility Bloom", "Primal Tranquility Bloom", "Transplanted Tranquility Bloom", "Transplanted Lush Tranquility Bloom", "Voidbound Tranquility Bloom", "Wild Tranquility Bloom", "Cursed Tranquility Bloom", "Envenomated Tranquility Bloom"
 			}
 		},
+-- forever specific
+		["Demonsage"] = 4401,
+		["Marefoil"] = 4402,
 	},
 	["Treasure"] = {
 		["Giant Clam"] 						= 501,
@@ -1084,6 +1089,7 @@ local node_textures = {
 		[1248] = icon_path.."Mine\\refulgentcopper.tga",
 		[1249] = icon_path.."Mine\\umbraltin.tga",
 		[1250] = icon_path.."Mine\\umbraltin.tga",
+		[4201] = icon_path.."Mine\\rich_thorium.tga",
 	},
 	["Extract Gas"] = {
 		[301] = icon_path.."Gas\\windy_cloud.tga",
@@ -1209,6 +1215,9 @@ local node_textures = {
 		[1483] = icon_path.."Herb\\manalily.tga",
 		[1484] = icon_path.."Herb\\sanguithorn.tga",
 		[1485] = icon_path.."Herb\\tranquilitybloom.tga",
+
+		[4401] = icon_path.."Herb\\heartblossom.tga",
+		[4402] = icon_path.."Herb\\herbc.tga",
 	},
 	["Treasure"] = {
 		[501] = icon_path.."Treasure\\clam.tga",
@@ -1445,6 +1454,7 @@ local node_expansion = {
 		[1248] = MN,
 		[1249] = MN,
 		[1250] = MN,
+		[4201] = CLASSIC,
 	},
 	["Herb Gathering"] = {
 		[401] = CLASSIC,
@@ -1561,6 +1571,8 @@ local node_expansion = {
 		[1483] = MN,
 		[1484] = MN,
 		[1485] = MN,
+		[4401] = CLASSIC,
+		[4402] = CLASSIC,
 	},
 }
 GatherMate.nodeExpansion = node_expansion
