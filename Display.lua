@@ -97,6 +97,27 @@ end
 local tooltip_template = "|c%02x%02x%02x%02x%s|r"
 local mouseoveredPins = {}
 local checkMoused = false
+
+local function getPinText(pin)
+	local dbtable = db.trackColors[pin.nodeType]
+	local text = format(tooltip_template, dbtable.Alpha*255, dbtable.Red*255, dbtable.Green*255, dbtable.Blue*255, pin.title)
+	if pin.zone and pin.coords then
+		if db.showPossibleSpawnsInTooltip then
+			local possible = GatherMate:GetPossibleSpawnsText(pin.zone, pin.nodeType, pin.coords)
+			if possible then
+				text = text .. "\n|cffaaaaaa" .. format(L["May also spawn: %s"], possible) .. "|r"
+			end
+		end
+		if db.showTimestampInTooltip then
+			local collected = GatherMate:GetNodeTimestamp(pin.zone, pin.nodeType, pin.coords)
+			if collected then
+				text = text .. "\n|cffaaaaaa" .. format(L["Gathered: %s"], date("%Y-%m-%d %H:%M", collected)) .. "|r"
+			end
+		end
+	end
+	return text
+end
+
 local function showPin(self)
 	if (self.title) then
 		local x, _y = self:GetCenter()
@@ -106,8 +127,6 @@ local function showPin(self)
 		else
 			GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
 		end
-		local t = db.trackColors
-		local dbtable
 		if not checkMoused then
 			local pinset
 			if self.worldmap then
@@ -117,14 +136,12 @@ local function showPin(self)
 			end
 			for id, pin in pairs(pinset) do --Cache mouseovered pins to improve tooltip perf
 				if pin.title and pin:IsMouseOver() then
-					dbtable = t[pin.nodeType]
-					mouseoveredPins[pin] = format(tooltip_template, dbtable.Alpha*255, dbtable.Red*255, dbtable.Green*255, dbtable.Blue*255, pin.title)
+					mouseoveredPins[pin] = getPinText(pin)
 				end
 			end
 			checkMoused = true
 		end
-		dbtable = t[self.nodeType]
-		local text = format(tooltip_template, dbtable.Alpha*255, dbtable.Red*255, dbtable.Green*255, dbtable.Blue*255, self.title)
+		local text = mouseoveredPins[self] or getPinText(self)
 
 		for pin, pin_text in pairs(mouseoveredPins) do
 			if pin ~= self then
